@@ -12,7 +12,7 @@ $ npm install noot --save
 
 #### General
 ```javascript
-var NOOT = require('noot')( /* Dependencies list */ );
+var NOOT = require('noot')(dependencies);
 ```
 
 #### Requiring multiple NOOT modules
@@ -48,7 +48,7 @@ var Logger = NOOTManager.require('logger');
 
 
 #### Naming convention
-NOOT mainly provides classes and namespaces, and uses camelCase convention. However, you can require NOOT modules using dasherized names.
+NOOT provides classes and namespaces, and uses camelCase convention. However, you can require NOOT modules using dasherized names.
 ```javascript
 require('noot')('core-object');
 // is equivalent to
@@ -64,8 +64,14 @@ NOOT is not a framework, it is a toolset designed to help developers starting pr
 
 ## Modules
 
-### NOOT.CoreObject
-Core piece of this toolset, all NOOT modules are based on this object factory. With an Ember/Backbone style implementation, it allows you to create classes, with prototypal inheritance and a cool `_super()` feature.
+### NOOT.CoreObject [Class]
+Core piece of this toolset, all NOOT modules are based on this object factory. With an Ember/Backbone style implementation, it allows you to create classes using prototypal inheritance and has a cool `_super()` feature.
+
 [Documentation and examples](lib/core-object/README.md)
+
+### NOOT.Utils [Namespace]
+Urls, strings, arrays, objects, dates... A bench of useful methods to deal with common situations.
+
+[Documentation and examples](lib/utils/README.md)
 
 
