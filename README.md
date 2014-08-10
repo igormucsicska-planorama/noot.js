@@ -2,8 +2,6 @@
 Node.js Object Oriented Toolset
 
 
-
-
 ## Installation
 ```shell
 $ npm install noot --save
@@ -13,7 +11,7 @@ $ npm install noot --save
 ## Usage
 General
 ```javascript
-var NOOT = require('noot')( /* Dependencies */ );
+var NOOT = require('noot')( /* Dependencies list */ );
 ```
 
 ```javascript
@@ -40,4 +38,6 @@ var NOOT = require('noot')('core-object', ['utils', ['logger']], 'configurator')
 
 ## Modules
 
-[NOOT.CoreObject](lib/core-object/README.md)
+###NOOT.CoreObject [Documentation and examples](lib/core-object/README.md)
+
+
