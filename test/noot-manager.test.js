@@ -4,7 +4,7 @@ describe('NOOTManager', function() {
 
   describe('.require()', function() {
     it('should require NOOT module', function() {
-      NOOTManager.require('utils').should.have.keys(['Url', 'Time', 'Object']);
+      NOOTManager.require('utils').should.contain.keys(['Url', 'Time', 'Object']);
     });
   });
 
