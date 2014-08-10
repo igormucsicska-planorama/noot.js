@@ -1,0 +1,37 @@
+{
+  "name": "NOOT",
+  "version": "0.0.0",
+  "description": "Node.js Object Oriented Toolset",
+  "main": "index.js",
+  "directories": {
+    "example": "examples",
+    "test": "test"
+  },
+  "dependencies": {
+    "lodash": "~2.4.1",
+    "underscore.string": "^2.3.3",
+    "colors": "^0.6.2"
+  },
+  "devDependencies": {
+    "mocha": "~1.21.0",
+    "chai": "^1.9.1"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "keywords": [
+    "toolset",
+    "object",
+    "oojs",
+    "bootstrap",
+    "boilerplate"
+  ],
+  "author": "Planorama",
+  "contributors": [
+    {
+      "name": "Sylvain Estevez",
+      "email": "estevez.sylvain@gmail.com"
+    }
+  ],
+  "license": "MIT"
+}
