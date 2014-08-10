@@ -22,7 +22,7 @@
     "grunt-mocha-cov": "^0.3.0"
   },
   "scripts": {
-    "test": "grunt test"
+    "test": "grunt travis"
   },
   "config": {
     "blanket": {

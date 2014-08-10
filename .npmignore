@@ -5,3 +5,5 @@ npm-debug.log
 test/
 examples/
 .travis.yml
+jscs.json
+Gruntfile.js
