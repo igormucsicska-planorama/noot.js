@@ -1,4 +1,4 @@
-# NOOT.js
+# NOOT.js [![Build Status](https://travis-ci.org/planorama/noot.js.svg?branch=master)](https://travis-ci.org/planorama/noot.js)
 **High quality, well tested, lightweight object oriented toolset for Node.js.**
 
 
