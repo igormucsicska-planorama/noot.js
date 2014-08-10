@@ -14,6 +14,19 @@ $ npm install noot --save
 ```javascript
 var NOOT = require('noot')( /* Dependencies */ );
 ```
+Dependencies list as an array of strings
+```javascript
+var NOOT = require('noot')(['core-object', 'utils', 'logger']);
+```
+Dependencies list as an list of strings
+```javascript
+var NOOT = require('noot')('core-object', 'utils', 'logger');
+```
+Dependencies list as a mix of strings and arrays
+```javascript
+var NOOT = require('noot')('core-object', ['utils', 'logger'], 'configurator');
+```
+
 
 
 ### Modules
