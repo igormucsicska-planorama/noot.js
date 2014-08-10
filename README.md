@@ -1,4 +1,4 @@
-# NOOT.js [![Build Status](https://travis-ci.org/planorama/noot.js.svg?branch=master)](https://travis-ci.org/planorama/noot.js)
+# NOOT.js [![Build Status](https://travis-ci.org/planorama/noot.js.svg?branch=master)](https://travis-ci.org/planorama/noot.js) [![Coverage Status](https://coveralls.io/repos/planorama/noot.js/badge.png)](https://coveralls.io/r/planorama/noot.js)
 **High quality, well tested, lightweight object oriented toolset for Node.js.**
 
 
@@ -64,13 +64,13 @@ NOOT is not a framework, it is a toolset designed to help developers starting pr
 
 ## Modules
 
-### NOOT.CoreObject [Class]
+#### NOOT.CoreObject *Class*
 Core piece of this toolset, all NOOT modules are based on this object factory. With an Ember/Backbone style implementation, it allows you to create classes using prototypal inheritance and has a cool `_super()` feature.
 
 [Documentation and examples](lib/core-object/README.md)
 
-### NOOT.Utils [Namespace]
-Urls, strings, arrays, objects, dates... A bench of useful methods to deal with common situations.
+#### NOOT.Utils *Namespace*
+Urls, strings, arrays, objects, dates... Tons of useful methods to deal with recurrent needs.
 
 [Documentation and examples](lib/utils/README.md)
 

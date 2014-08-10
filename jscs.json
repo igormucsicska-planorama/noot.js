@@ -1,0 +1,26 @@
+{
+  "disallowSpaceAfterKeywords": ["if", "for", "while", "switch", "catch"],
+  "requireSpaceAfterKeywords": ["else", "do", "try", "return"],
+  "disallowMultipleVarDecl": true,
+  "disallowSpacesInsideArrayBrackets": true,
+  "requireSpacesInsideObjectBrackets": "all",
+  "disallowSpaceAfterObjectKeys": true,
+  "requireCommaBeforeLineBreak": true,
+  "requireOperatorBeforeLineBreak": ["?", "+", "-", "/", "*", "=", "==", "===", "!=", "!==", ">", ">=", "<", "<="],
+  "disallowLeftStickedOperators": ["?", "+", "-", "/", "*", "=", "==", "===", "!=", "!==", ">", ">=", "<", "<="],
+  "disallowRightStickedOperators": ["?", "+", "-", "/", "*", "=", "==", "===", "!=", "!==", ">", ">=", "<", "<=", ",", ";"],
+  "requireRightStickedOperators": ["!"],
+  "requireLeftStickedOperators": [",", ";"],
+  "disallowSpaceAfterPrefixUnaryOperators": ["++", "--", "+", "-", "~", "!"],
+  "disallowSpaceBeforePostfixUnaryOperators": ["++", "--"],
+  "requireSpacesInFunctionExpression": {
+    "beforeOpeningCurlyBrace": true
+  },
+  "disallowSpaceAfterObjectKeys": true,
+  "disallowMultipleLineStrings": true,
+  "validateIndentation": 2,
+  "validateQuoteMarks": "'",
+  "maximumLineLength": 120,
+  "requireCapitalizedConstructors": true,
+  "safeContextKeyword": ["self"]
+}

@@ -9,8 +9,8 @@ describe('NOOTManager', function() {
   });
 
   describe('._getModuleName()', function() {
-    it('should parse module name', function(){
-      [
+    it('should parse module name', function() {
+      var tests = [
         { before: 'utils', after: 'Utils' },
         { before: 'core-object', after: 'CoreObject' },
         { before: 'CoreObject', after: 'CoreObject' },
@@ -18,15 +18,17 @@ describe('NOOTManager', function() {
         { before: 'logger', after: 'Logger' },
         { before: 'configurator', after: 'Configurator' },
         { before: 'Dash-er-ized', after: 'DashErIzed' }
-      ].forEach(function(config) {
-          NOOTManager._getModuleName(config.before).should.equal(config.after);
-        });
+      ];
+
+      tests.forEach(function(config) {
+        NOOTManager._getModuleName(config.before).should.equal(config.after);
+      });
     });
   });
 
   describe('._getModulePath()', function() {
-    it('should parse module path', function(){
-      [
+    it('should parse module path', function() {
+      var tests = [
         { before: 'utils', after: 'utils' },
         { before: 'core-object', after: 'core-object' },
         { before: 'CoreObject', after: 'core-object' },
@@ -34,9 +36,10 @@ describe('NOOTManager', function() {
         { before: 'logger', after: 'logger' },
         { before: 'Configurator', after: 'configurator' },
         { before: 'Dash-er-ized', after: 'dash-er-ized' }
-      ].forEach(function(config) {
-          NOOTManager._getModulePath(config.before).should.equal(NOOTManager._LIB_PATH + config.after);
-        });
+      ];
+      tests.forEach(function(config) {
+        NOOTManager._getModulePath(config.before).should.equal(NOOTManager._LIB_PATH + config.after);
+      });
     });
   });
 
