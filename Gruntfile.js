@@ -1,7 +1,7 @@
 module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-githooks');
-  grunt.loadNpmTasks('grunt-jscs-checker');
+  grunt.loadNpmTasks('grunt-jscs');
   grunt.loadNpmTasks('grunt-mocha-cov');
 
 
@@ -60,7 +60,7 @@ module.exports = function(grunt) {
     jscs: {
       src: CHECKABLES,
       options: {
-        config: 'jscs.json'
+        config: '.jscsrc'
       }
     },
 
