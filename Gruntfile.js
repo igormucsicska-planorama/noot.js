@@ -68,32 +68,48 @@ module.exports = function(grunt) {
      * Mocha
      */
     mochacov: {
-      coveralls: {
-        options: {
-          coveralls: true,
-          serviceName: 'travis-ci',
-          repoToken: 'zt4SqTZh4UIbo6cFWlXkMTvPA0DNqlFcr'
-        }
-      },
-      coverage: {
+      test: {
         options: {
           reporter: 'spec',
-//          output: 'coverage.html',
-//          quiet: true,
           recursive: true,
           require: [
             'test/common.js'
           ]
         },
-        all: ['test/**/*.test.js']
+        src: ['test/**/*.test.js']
+      },
+      coveralls: {
+        options: {
+          coveralls: true,
+          serviceName: 'travis-ci',
+          repoToken: 'zt4SqTZh4UIbo6cFWlXkMTvPA0DNqlFcr',
+          recursive: true,
+          require: [
+            'test/common.js'
+          ]
+        },
+        src: ['test/**/*.test.js']
+      },
+      coverage: {
+        options: {
+          reporter: 'html-cov',
+          output: 'coverage.html',
+          quiet: true,
+          recursive: true,
+          require: [
+            'test/common.js'
+          ]
+        },
+        src: ['test/**/*.test.js']
       }
     }
 
   });
 
   grunt.registerTask('hook', 'githooks');
-  grunt.registerTask('test', 'mochacov:coverage');
+  grunt.registerTask('test', 'mochacov:test');
+  grunt.registerTask('cov', 'mochacov:coverage');
   grunt.registerTask('travis', 'mochacov:coveralls');
   grunt.registerTask('check', ['jshint', 'jscs', 'test']);
-  grunt.registerTask('default', ['hook', 'check']);
+  grunt.registerTask('default', 'check');
 };
