@@ -30,7 +30,8 @@
         "lib"
       ],
       "data-cover-never": "node_modules"
-    }
+    },
+    "travis-cov": { "threshold": 90 }
   },
   "keywords": [
     "toolset",
