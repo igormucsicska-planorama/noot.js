@@ -1,4 +1,4 @@
-# NOOT.js [![Build Status](https://travis-ci.org/planorama/noot.js.svg?branch=master)](https://travis-ci.org/planorama/noot.js) [![Coverage Status](https://coveralls.io/repos/planorama/noot.js/badge.png)](https://coveralls.io/r/planorama/noot.js)
+# NOOT.js [![Build Status](https://travis-ci.org/planorama/noot.js.svg?branch=master)](https://travis-ci.org/planorama/noot.js) [![Coverage Status](https://img.shields.io/coveralls/planorama/noot.js.svg)](https://coveralls.io/r/planorama/noot.js?branch=master)
 **High quality, well tested, lightweight object oriented toolset for Node.js.**
 
 
