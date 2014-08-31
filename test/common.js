@@ -1,4 +1,3 @@
 var chai = require('chai');
 global.should = chai.should();
-global.expect = chai.expect();
-global.nootrequire = require('../');
+global.nootrequire = require('../lib/noot');
