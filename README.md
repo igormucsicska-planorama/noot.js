@@ -38,6 +38,21 @@ NOOT.Configurator;
 ```
 
 
+#### Useful methods
+In addition to modules, NOOT also provides several useful methods such as custom `typeOf`, jQuery's style `makeArray`... Complete list documentation to be found [here](src/noot/README-utils.md). Those methods are directly attached to the NOOT namespace :
+
+```javascript
+var NOOT = require('noot')('logger');
+
+var logger = NOOT.Logger.extend({
+  list: function() {
+    var args = NOOT.makeArray(arguments);
+    return this.writeLog(args.join('\n'));
+  }
+});
+```
+
+
 #### Naming convention
 NOOT provides classes and namespaces, and uses PascalCase convention. However, you can require NOOT modules using dasherized or camelCased names.
 ```javascript
@@ -54,10 +69,10 @@ require('noot')('coreObject');
 #### NOOT.CoreObject *Class*
 Core piece of this toolset, all NOOT modules are based on this object factory. With an Ember/Backbone style implementation, it allows you to create classes using prototypal inheritance and has a cool `_super()` feature.
 
-[Documentation and examples](lib/core-object/README.md)
+[Documentation and examples](src/core-object/README.md)
 
 #### NOOT.Utils *Namespace*
 Urls, strings, arrays, objects, dates... Tons of useful methods to deal with recurrent needs.
 
-[Documentation and examples](lib/utils/README.md)
+[Documentation and examples](src/utils/README.md)
 
