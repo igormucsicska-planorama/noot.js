@@ -1,4 +1,4 @@
-# NOOT.js [![Build Status](https://travis-ci.org/planorama/noot.js.svg?branch=master)](https://travis-ci.org/planorama/noot.js) [![Coverage Status](https://img.shields.io/coveralls/planorama/noot.js.svg)](https://coveralls.io/r/planorama/noot.js?branch=master)
+# NOOT.js [![Build Status](https://travis-ci.org/planorama/noot.js.svg?branch=master)](https://travis-ci.org/planorama/noot.js) [![Coverage Status](https://img.shields.io/coveralls/planorama/noot.js.svg)](https://coveralls.io/r/planorama/noot.js?branch=master) (under development)
 **High quality, well tested, lightweight object oriented toolset for Node.js.**
 
 
@@ -6,6 +6,9 @@
 ```shell
 $ npm install noot --save
 ```
+
+## Philosophy
+NOOT is not a framework, it is a toolset designed to help developers starting projects with a common base of modules.
 
 
 ## Usage
@@ -27,28 +30,16 @@ var NOOT = require('noot')('core-object', 'utils', 'logger', 'configurator');
 var NOOT = require('noot')('core-object', ['utils', ['logger']], 'configurator');
 
 
-// All three previous methods will give you the same result, and attach to NOOT your desired modules :
+// All three previous methods will give you the exact same result, and attach to NOOT your desired modules :
 NOOT.CoreObject;
 NOOT.Utils;
 NOOT.Logger;
 NOOT.Configurator;
 ```
 
-#### Accessing the NOOTManager
-To access the NOOTManager, simply omit the `dependencies` argument.
-```javascript
-var NOOTManager = require('noot')();
-```
-
-#### Requiring a single NOOT module
-If you wish to only access a single NOOT module without getting an object, use the `NOOTManager.require()` function.
-```javascript
-var Logger = NOOTManager.require('logger');
-```
-
 
 #### Naming convention
-NOOT provides classes and namespaces, and uses camelCase convention. However, you can require NOOT modules using dasherized names.
+NOOT provides classes and namespaces, and uses PascalCase convention. However, you can require NOOT modules using dasherized or camelCased names.
 ```javascript
 require('noot')('core-object');
 // is equivalent to
@@ -56,10 +47,6 @@ require('noot')('CoreObject');
 // is equivalent to
 require('noot')('coreObject');
 ```
-
-
-## Philosophy
-NOOT is not a framework, it is a toolset designed to help developers starting projects with a common base of modules.
 
 
 ## Modules
@@ -73,5 +60,4 @@ Core piece of this toolset, all NOOT modules are based on this object factory. W
 Urls, strings, arrays, objects, dates... Tons of useful methods to deal with recurrent needs.
 
 [Documentation and examples](lib/utils/README.md)
-
 
