@@ -27,7 +27,7 @@
   },
   "config": {
     "blanket": {
-      "pattern": "src"
+      "pattern": ["src/"]
     },
     "travis-cov": {
       "threshold": 90

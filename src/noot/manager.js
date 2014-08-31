@@ -76,7 +76,7 @@ var DependenciesManager = NOOT.Namespace.create({
   _resolveIrregularPropertyName: function(name) {
     for (var i = 0; i < this.IRREGULAR_PROPERTY_NAMES.length; i++) {
       var item = this.IRREGULAR_PROPERTY_NAMES[i];
-      if(item.reg.test(name)) return item.name;
+      if (item.reg.test(name)) return item.name;
     }
     return null;
   },
@@ -93,7 +93,7 @@ var DependenciesManager = NOOT.Namespace.create({
     var args = Utils.makeArray(arguments);
 
     args.forEach(function(arg) {
-      if(!Array.isArray(arg)) ret.push(arg);
+      if (!Array.isArray(arg)) ret.push(arg);
       else ret = ret.concat(self._getArguments.apply(self, arg));
     });
 
