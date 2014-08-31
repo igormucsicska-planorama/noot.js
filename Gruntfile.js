@@ -109,7 +109,7 @@ module.exports = function(grunt) {
   grunt.registerTask('hook', 'githooks');
   grunt.registerTask('test', 'mochacov:test');
   grunt.registerTask('cov', ['mochacov:test', 'mochacov:coverage']);
-  grunt.registerTask('check', ['jshint', 'jscs', 'mochacov:test']);
+  grunt.registerTask('check', ['hook', 'jshint', 'jscs', 'mochacov:test']);
   grunt.registerTask('travis', ['check', 'mochacov:coveralls']);
   grunt.registerTask('default', 'check');
 };
