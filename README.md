@@ -37,6 +37,16 @@ NOOT.Logger;
 NOOT.Configurator;
 ```
 
+#### Naming convention
+NOOT provides classes and namespaces, and uses PascalCase convention. However, you can require NOOT modules using dasherized or camelCased names.
+```javascript
+require('noot')('core-object');
+// is equivalent to
+require('noot')('CoreObject');
+// is equivalent to
+require('noot')('coreObject');
+```
+
 
 #### Useful methods
 In addition to modules, NOOT also provides several useful methods such as custom `typeOf`, jQuery's style `makeArray`... Complete list documentation to be found [here](src/noot/README-utils.md). Those methods are directly attached to the NOOT namespace :
@@ -52,18 +62,6 @@ var logger = NOOT.Logger.extend({
 });
 ```
 
-
-#### Naming convention
-NOOT provides classes and namespaces, and uses PascalCase convention. However, you can require NOOT modules using dasherized or camelCased names.
-```javascript
-require('noot')('core-object');
-// is equivalent to
-require('noot')('CoreObject');
-// is equivalent to
-require('noot')('coreObject');
-```
-
-
 ## Modules
 
 #### NOOT.CoreObject *Class*
@@ -76,3 +74,6 @@ Urls, strings, arrays, objects, dates... Tons of useful methods to deal with rec
 
 [Documentation and examples](src/utils/README.md)
 
+
+##License
+Copyright (c) 2014 CDVM Solutions, released under the MIT license.
