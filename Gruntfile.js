@@ -3,6 +3,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-githooks');
   grunt.loadNpmTasks('grunt-jscs');
   grunt.loadNpmTasks('grunt-mocha-cov');
+  grunt.loadNpmTasks('grunt-blanket');
 
 
   var CHECKABLES = [
@@ -94,21 +95,21 @@ module.exports = function(grunt) {
         options: {
           reporter: 'html-cov',
           output: 'coverage.html',
+          instrument: false,
+          coverage: true,
           quiet: true,
           recursive: true,
           require: [
             'test/common.js'
           ]
-        },
-        src: ['test/**/*.test.js']
+        }
       }
     }
-
   });
 
   grunt.registerTask('hook', 'githooks');
   grunt.registerTask('test', 'mochacov:test');
-  grunt.registerTask('cov', 'mochacov:coverage');
+  grunt.registerTask('cov', ['mochacov:test', 'mochacov:coverage']);
   grunt.registerTask('travis', 'mochacov:coveralls');
   grunt.registerTask('check', ['jshint', 'jscs', 'test']);
   grunt.registerTask('default', 'check');

@@ -19,17 +19,15 @@
     "grunt-jscs": "^0.6.2",
     "grunt-mocha-cov": "^0.3.0",
     "jshint-stylish": "^0.1.5",
-    "mocha": "~1.21.0"
+    "mocha": "~1.21.0",
+    "grunt-blanket": "0.0.8"
   },
   "scripts": {
     "test": "grunt travis"
   },
   "config": {
     "blanket": {
-      "pattern": [
-        "lib"
-      ],
-      "data-cover-never": "node_modules"
+      "pattern": "src"
     },
     "travis-cov": {
       "threshold": 90
@@ -40,9 +38,17 @@
     "object",
     "oojs",
     "bootstrap",
-    "boilerplate"
+    "boilerplate",
+    "framework",
+    "rest",
+    "api",
+    "resource",
+    "tastypie",
+    "logger",
+    "lightweight",
+    "config"
   ],
-  "author": "Planorama",
+  "author": "The Planorama Group",
   "contributors": [
     {
       "name": "Sylvain Estevez",

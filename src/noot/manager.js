@@ -1,18 +1,17 @@
 /**
  * Dependencies
  */
-var NOOT = {
-  Namespace: require('./../namespace/index'),
-  Utils: require('./../utils/index')
-};
-
 var _ = require('lodash');
 var changeCase = require('change-case');
+var Utils = require('./utils');
+var NOOT = {
+  Namespace: require('../namespace')
+};
 
 
 var DependenciesManager = NOOT.Namespace.create({
   IRREGULAR_PROPERTY_NAMES: [
-    { reg: /rest/, name: 'REST' }
+    { reg: /^rest$/i, name: 'REST' }
   ],
 
   /**
@@ -91,7 +90,7 @@ var DependenciesManager = NOOT.Namespace.create({
   _getArguments: function() {
     var self = this;
     var ret = [];
-    var args = NOOT.Utils.makeArray(arguments);
+    var args = Utils.makeArray(arguments);
 
     args.forEach(function(arg) {
       if(!Array.isArray(arg)) ret.push(arg);
