@@ -1,12 +1,9 @@
 /**
  * Dependencies
  */
-var NOOT = {
-  Namespace: require('../namespace')
-};
+var _ = require('lodash');
 
-
-var Utils = NOOT.Namespace.create({
+var Utils = {
 
   /**
    *
@@ -17,6 +14,7 @@ var Utils = NOOT.Namespace.create({
   makeArray: function(arg) {
     return Array.isArray(arg) ? arg : Array.prototype.slice.call(arg, 0);
   },
+
 
   /**
    * Rename an object's property
@@ -46,6 +44,18 @@ var Utils = NOOT.Namespace.create({
     return obj;
   }
 
+};
+
+
+/**
+ * Attach other libraries
+ */
+['types'].forEach(function(file) {
+  _.extend(Utils, require('./lib/' + file));
 });
 
+
+/**
+ * @module
+ */
 module.exports = Utils;

@@ -3,7 +3,7 @@
  */
 var path = require('path');
 var _ = require('lodash');
-var NOOT = require('../../')('core-object');
+var NOOT = require('../../')('object');
 
 /***********************************************************************************************************************
  * Configurator Class
@@ -11,147 +11,83 @@ var NOOT = require('../../')('core-object');
  *
  *
  **********************************************************************************************************************/
-var Configurator = NOOT.CoreObject.extend({
+var Configurator = NOOT.Object.extend({
   directory: null,
   env: null,
 
   /**
-   * Constructor
+   * @constructor
    */
   init: function() {
-    if (!this.env) throw new Error('');
-    this.directory = this.directory || path.join(process.cwd(), 'config');
+    if (!this.env) throw new Error('No environment defined for NOOT.Configurator');
+    this.directory = this.directory || Configurator.DEFAULTS.DIRECTORY;
   },
 
   /**
-   * Check includes
+   * Get a configuration or configuration field
    *
-   * Browse the config object, if there is an "include" key,
-   * replace the value of the key by the loaded configuration.
-   *
-   * @param {Object} config
+   * @param {String} fileName
+   * @param {...String} [fields]
+   * @returns {*}
    */
-  includes: function(config) {
-    for (var k in config) {
-      if ('object' === typeof config[k]) {
-        if (config[k].include) {
-          config[k] = this.get(config[k].include);
-        } else {
-          this.includes(config[k]);
-        }
-      }
-    }
+  get: function() {
+    var args = NOOT.makeArray(arguments);
+    var ret = this._load(args.pop());
+    args.forEach(function(arg) {
+      ret = ret[arg];
+    });
+    return ret;
   },
 
   /**
-   * Extend
+   * Retrieve the configuration
    *
-   * Load the files in the list and extend the configuration
-   *
-   * @param {String|Array} list
-   * @returns {Object} extension
+   * @param {String} fileName
    */
-  extend: function(list) {
-    var extension = {};
-    if (_.isArray(list)) {
-      _.each(list, function(cfg) {
-        extension = _.merge(extension, this.get(cfg));
-      }, this);
-    } else {
-      extension = this.get(list);
-    }
-    return extension;
-  },
-
-  /**
-   * Retrieve the configuration named *name*
-   * It looks for a config file with the same name in the directory
-   *
-   * If reload is true, does not check the cache (e.g. you can force reload
-   * in a different environment).
-   *
-   * @param {String} name
-   */
-  load: function(name) {
-    var config = {};
+  _load: function(fileName) {
+    var ret;
     try {
-      // If name starts with . or .. look for file where we are
-      var loaded = /^(\/|\.)/.test(name) ?
-                   require(name) :
-                   require(path.join(this.directory, name));
+      var config = require(path.join(this.directory, fileName));
+      ret = this._merge(config.all || {}, config[this.env] || {});
+    } catch (e) {
+      throw new Error('Could not load configuration : ' + fileName);
+    }
+    return ret;
+  },
 
-      // Check extension
-      if (loaded.extend) {
-        config = this.extend(loaded.extend);
+  /**
+   *
+   *
+   * @param {Object} left
+   * @param {Object} right
+   * @returns {Object}
+   * @private
+   */
+  _merge: function(left, right) {
+    var ret = {};
+    for (var key in right) {
+      var leftValue = left[key];
+      var rightValue = right[key];
+
+      switch (NOOT.typeOf(leftValue)) {
+        case 'object':
+          if (NOOT.typeOf(rightValue) === 'object') ret[key] = this._merge(leftValue, rightValue);
+          break;
+        case 'array':
+          if (NOOT.typeOf(rightValue) === 'array') ret[key] = _.union(leftValue, rightValue);
+          break;
+        default:
+          ret[key] = rightValue;
       }
 
-      // Merge all with env
-      config = _(config)
-        .merge(loaded.all || {})
-        .merge(loaded[this.env] || {})
-        .value();
-
-      // Check includes
-      this.includes(config);
-    } catch (e) {
-      throw new Error('Could not load configuration: ' + e.message);
+      if (NOOT.isNone(ret[key])) ret[key] = rightValue;
     }
-    return config;
-  },
 
-  /**
-   * Solver used to create the cache key for memoize
-   *
-   * @param name
-   * @returns {string}
-   */
-  solver: function(name) {
-    return this.env + '_' + name;
-  },
-
-  /**
-   * Get a configuration or configuration field
-   *
-   * @param name
-   * @param [field]
-   * @returns {*}
-   */
-  get: function(name, field) {
-    var config = this.load(name);
-    return field ? config[field] : config;
-  },
-
-  /**
-   * Get a configuration or configuration field
-   *
-   * @param name
-   * @param [field]
-   * @returns {*}
-   */
-  reload: function(name, field) {
-    var config = this.load(name);
-    return field ? config[field] : config;
-  },
-
-  /**
-   * Reset directory
-   *
-   * @param dir
-   * @returns {*}
-   */
-  setDirectory: function(dir) {
-    this.directory = dir;
-  },
-
-  /**
-   * Reset environment
-   *
-   * @param env
-   * @returns {*}
-   */
-  setEnv: function(env) {
-    this.env = env;
+    return ret;
   }
+
+}, {
+  DEFAULTS: { DIRECTORY: path.join(process.cwd(), 'config') }
 });
 
 /**

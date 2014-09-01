@@ -9,7 +9,8 @@
   "dependencies": {
     "lodash": "~2.4.1",
     "colors": "^0.6.2",
-    "change-case": "~2.1.4"
+    "change-case": "~2.1.4",
+    "underscore.string": "~2.3.3"
   },
   "devDependencies": {
     "chai": "^1.9.1",
@@ -27,7 +28,9 @@
   },
   "config": {
     "blanket": {
-      "pattern": ["src/"]
+      "pattern": [
+        "src/"
+      ]
     },
     "travis-cov": {
       "threshold": 90

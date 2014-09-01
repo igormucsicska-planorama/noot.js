@@ -4,7 +4,7 @@
 require('colors');
 var _ = require('lodash');
 var util = require('util');
-var NOOT = nootrequire('core-object');
+var NOOT = require('../../')('object');
 
 /**
  * Default values for styling
@@ -27,7 +27,7 @@ var DEFAULT_STYLES = {
  * - Configurable transport method : simply override 'writeLog' method, default is console logging
  *
  **********************************************************************************************************************/
-var Logger = NOOT.CoreObject.extend({
+var Logger = NOOT.Object.extend({
   level: null,
 
   /**

@@ -3,13 +3,8 @@
  */
 var _ = require('lodash');
 var changeCase = require('change-case');
-var Utils = require('./utils');
-var NOOT = {
-  Namespace: require('../namespace')
-};
 
-
-var DependenciesManager = NOOT.Namespace.create({
+var DependenciesManager = {
   IRREGULAR_PROPERTY_NAMES: [
     { reg: /^rest$/i, name: 'REST' }
   ],
@@ -91,14 +86,14 @@ var DependenciesManager = NOOT.Namespace.create({
     var self = this;
     var ret = [];
 
-    Utils.makeArray(arguments).forEach(function(arg) {
+    Array.prototype.slice.call(arguments, 0).forEach(function(arg) {
       if (!Array.isArray(arg)) ret.push(arg);
       else ret = ret.concat(self._getArguments.apply(self, arg));
     });
 
     return ret;
   }
-});
+};
 
 /**
  * @module
