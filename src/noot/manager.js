@@ -21,11 +21,11 @@ var DependenciesManager = NOOT.Namespace.create({
    */
   require: function() {
     var ret = {};
-    var args = this._getArguments.apply(this, arguments).map(this._resolve.bind(this));
 
-    args.forEach(function(resolved) {
-      ret = _.merge(ret, resolved);
-    });
+    this._getArguments
+      .apply(this, arguments)
+      .map(this._resolve.bind(this))
+      .forEach(function(resolved) { ret = _.merge(ret, resolved); });
 
     return ret;
   },
@@ -90,9 +90,8 @@ var DependenciesManager = NOOT.Namespace.create({
   _getArguments: function() {
     var self = this;
     var ret = [];
-    var args = Utils.makeArray(arguments);
 
-    args.forEach(function(arg) {
+    Utils.makeArray(arguments).forEach(function(arg) {
       if (!Array.isArray(arg)) ret.push(arg);
       else ret = ret.concat(self._getArguments.apply(self, arg));
     });
