@@ -35,6 +35,10 @@ Main function to retrieve a configuration. Optionnal `properties` names can be p
 
 	Nested properties to get from main config object.
 
+#### Returns
 
+If only `name` is provided, the configuration object.
+
+If one or many `properties` are provided, the value obtained by recursively getting next property name from the previous result.
 
 ## Examples
