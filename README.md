@@ -74,6 +74,11 @@ Urls, strings, arrays, objects, dates... Tons of useful methods to deal with rec
 
 [Documentation and examples](src/utils/README.md)
 
+#### NOOT.Configurator *Class*
+Lightweight module to deal with environments configurations.
+
+[Documentation and examples](src/configurator/README.md)
+
 
 ##License
 Copyright (c) 2014 CDVM Solutions, released under the MIT license.

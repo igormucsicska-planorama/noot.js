@@ -9,6 +9,7 @@ var NOOT = require('../../')('object');
  * Configurator Class
  ***********************************************************************************************************************
  *
+ * @info Lightweight module to deal with environments configurations
  *
  **********************************************************************************************************************/
 var Configurator = NOOT.Object.extend({
