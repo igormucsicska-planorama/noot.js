@@ -45,14 +45,13 @@ var Configurator = NOOT.Object.extend({
    * @param {String} fileName
    */
   _load: function(fileName) {
-    var ret;
+    var config;
     try {
-      var config = require(path.join(this.directory, fileName));
-      ret = this._merge(config.all || {}, config[this.env] || {});
+      config = require(path.join(this.directory, fileName));
     } catch (e) {
       throw new Error('Could not load configuration : ' + fileName);
     }
-    return ret;
+    return this._merge(config.all || {}, config[this.env] || {});
   },
 
   /**

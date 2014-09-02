@@ -48,9 +48,11 @@ var Utils = {
 /**
  *
  */
-_.forIn(TYPES_MAP, function(str, type) {
+_.forIn(TYPES_MAP, function(type) {
   Utils['is' + _str.classify(type)] = function(value) { return this.typeOf(value) === type; }.bind(Utils);
 });
+
+console.log(Utils);
 
 /**
  * @module
