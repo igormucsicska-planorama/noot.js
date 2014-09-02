@@ -32,7 +32,7 @@ var Configurator = NOOT.Object.extend({
    */
   get: function() {
     var args = NOOT.makeArray(arguments);
-    var ret = this._load(args.pop());
+    var ret = this._load(args.shift());
     args.forEach(function(arg) {
       ret = ret[arg];
     });
@@ -55,7 +55,7 @@ var Configurator = NOOT.Object.extend({
   },
 
   /**
-   *
+   * Deeply merge 2 objects
    *
    * @param {Object} left
    * @param {Object} right
@@ -63,14 +63,19 @@ var Configurator = NOOT.Object.extend({
    * @private
    */
   _merge: function(left, right) {
+    var self = this;
     var ret = {};
-    for (var key in right) {
+
+    var leftKeys = Object.keys(left);
+    var rightKeys = Object.keys(right);
+
+    rightKeys.forEach(function(key) {
       var leftValue = left[key];
       var rightValue = right[key];
 
       switch (NOOT.typeOf(leftValue)) {
         case 'object':
-          if (NOOT.typeOf(rightValue) === 'object') ret[key] = this._merge(leftValue, rightValue);
+          if (NOOT.typeOf(rightValue) === 'object') ret[key] = self._merge(leftValue, rightValue);
           break;
         case 'array':
           if (NOOT.typeOf(rightValue) === 'array') ret[key] = _.union(leftValue, rightValue);
@@ -80,7 +85,10 @@ var Configurator = NOOT.Object.extend({
       }
 
       if (NOOT.isNone(ret[key])) ret[key] = rightValue;
-    }
+    });
+
+    _.pull.apply(_, [leftKeys].concat(rightKeys));
+    leftKeys.forEach(function(key) { ret[key] = left[key]; });
 
     return ret;
   }
