@@ -8,10 +8,10 @@ var path = require('path');
 var CustomRequire = NOOT.CoreObject.extend({
   root: null,
   name: null,
-  global: false,
+  makeGlobal: false,
 
   init: function() {
-    if (!this.name) throw new Error('CustomRequire needs a `name`');
+    if (this.makeGlobal && !this.name) throw new Error('CustomRequire needs a `name`');
     this.root = this.root || process.cwd();
   }
 }, {
@@ -22,7 +22,7 @@ var CustomRequire = NOOT.CoreObject.extend({
       return require(path.join(instance.root, moduleName));
     };
 
-    if (instance.global) global[instance.name] = customrequire;
+    if (instance.makeGlobal) global[instance.name] = customrequire;
 
     return customrequire;
   }

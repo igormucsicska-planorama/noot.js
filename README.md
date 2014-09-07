@@ -79,6 +79,10 @@ Simple logger that supports level configuration and custom/multiple transport me
 #### [NOOT.Utils](src/utils/README.md) *Namespace*
 Urls, strings, arrays, objects, dates... Tons of useful methods to deal with recurrent needs.
 
+#### [NOOT.CustomRequire](src/custom-require/README.md) *Factory*
+Create a custom `require` function to avoid dealing with relative paths.
+
+
 
 ##License
 Copyright (c) 2014 CDVM Solutions, released under the MIT license.

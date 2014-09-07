@@ -1,7 +1,7 @@
 {
   "name": "NOOT",
   "version": "0.0.0",
-  "description": "Node.js Object Oriented Toolset",
+  "description": "High quality, well tested, lightweight object oriented toolset for Node.js",
   "main": "index.js",
   "directories": {
     "test": "test"
@@ -31,9 +31,6 @@
       "pattern": [
         "src/"
       ]
-    },
-    "travis-cov": {
-      "threshold": 90
     }
   },
   "keywords": [
@@ -51,11 +48,15 @@
     "lightweight",
     "config"
   ],
-  "author": "The Planorama Group",
+  "author": "CVDM Solutions",
   "contributors": [
     {
       "name": "Sylvain Estevez",
       "email": "estevez.sylvain@gmail.com"
+    },
+    {
+      "name": "Sylvain Estevez",
+      "email": "sylvain.estevez@planorama.com"
     }
   ],
   "license": "MIT"

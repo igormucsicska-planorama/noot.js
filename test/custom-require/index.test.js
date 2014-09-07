@@ -10,14 +10,14 @@ describe('NOOT.CustomRequire', function() {
   it('should attach `testrequire` to global context', function() {
     var testrequire = NOOT.CustomRequire.create({
       name: 'testrequire',
-      global: true,
+      makeGlobal: true,
       root: path.resolve(__dirname, '../')
     });
 
     global.testrequire.should.equal(testrequire);
   });
   it('should require module from /test directory', function() {
-    var fakemodule = testrequire('custom-require/fake-module');
+    var fakemodule = global.testrequire('custom-require/fake-module');
     fakemodule.should.have.key('foo');
   });
 });
