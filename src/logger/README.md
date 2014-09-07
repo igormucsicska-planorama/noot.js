@@ -216,7 +216,7 @@ var logger = NOOT.Logger.create({
   	console.log(message);
     
     // Log to files
-    if (level === 'error' || level === 'warn) {
+    if (level === 'error' || level === 'warn') {
       return fs.appendFile(files[level], message, callback);
     } else {
       return callback();
