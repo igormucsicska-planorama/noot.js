@@ -11,7 +11,7 @@ describe('NOOT.CustomRequire', function() {
     var testrequire = NOOT.CustomRequire.create({
       name: 'testrequire',
       global: true,
-      rootDirectory: path.resolve(__dirname, '../')
+      root: path.resolve(__dirname, '../')
     });
 
     global.testrequire.should.equal(testrequire);
