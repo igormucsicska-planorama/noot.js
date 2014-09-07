@@ -49,7 +49,8 @@ module.exports = function(grunt) {
           beforeEach: false,
           after: false,
           afterEach: false,
-          nootrequire: false
+          nootrequire: false,
+          testrequire: false
         },
         reporter: require('jshint-stylish')
       },
