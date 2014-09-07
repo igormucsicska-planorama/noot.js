@@ -151,3 +151,77 @@ Define logging level.
 ## Examples
 
 #### Basic example
+
+```javascript
+var NOOT = require('noot')('logger');
+
+var logger = NOOT.Logger.create({
+  level: 'info'
+});
+
+logger.info('Eval is evil');
+// Will print 'Eval is evil' to the console
+
+logger.debug('Eval is evil');
+// Will not be printed
+```
+
+#### Customize messages
+
+```javascript
+var NOOT = require('noot')('logger');
+
+var logger = NOOT.Logger.create({
+  level: 'info',
+  formatMessage: function(message, level) {
+    return ['[', level.toUpperCase(), '] ', message].join('');
+  }
+});
+
+logger.info('Eval is evil');
+// [INFO] Eval is evil
+
+logger.warn('Eval is evil');
+// [WARN] Eval is evil
+
+logger.debug('Eval is evil');
+// Still not printed
+```
+
+#### Customize transport
+
+```javascript
+var NOOT = require('noot')('logger');
+var fs = require('fs');
+var path = require('path');
+
+var files = {
+  error: path.resolve(process.cwd(), '../logs/errors.log'),
+  warn: path.resolve(process.cwd(), '../logs/warnings.log')
+};
+
+var logger = NOOT.Logger.create({
+  level: 'info',
+  
+  formatMessage: function(message) {
+    return new Date().toISOString() + ' ' + message;
+  },
+  
+  transportCallback: function(err) {
+    if (err) // Send an alert
+  },
+  
+  transport: function(message, level, callback) {
+    // Log to the console
+  	console.log(message);
+    
+    // Log to files
+    if (level === 'error' || level === 'warn) {
+      return fs.appendFile(files[level], message, callback);
+    } else {
+      return callback();
+    }
+    
+  }
+});
+```
