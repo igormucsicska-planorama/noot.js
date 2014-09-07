@@ -76,10 +76,10 @@ var Configurator = NOOT.Object.extend({
 
       switch (NOOT.typeOf(leftValue)) {
         case 'object':
-          if (NOOT.typeOf(rightValue) === 'object') ret[key] = self._merge(leftValue, rightValue);
+          if (NOOT.isObject(rightValue)) ret[key] = self._merge(leftValue, rightValue);
           break;
         case 'array':
-          if (NOOT.typeOf(rightValue) === 'array') ret[key] = _.union(leftValue, rightValue);
+          if (NOOT.isArray(rightValue)) ret[key] = _.union(leftValue, rightValue);
           break;
         default:
           ret[key] = rightValue;

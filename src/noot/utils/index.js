@@ -42,7 +42,9 @@ var Utils = {
       this.renameProperty(obj, key, map[key]);
     }
     return obj;
-  }
+  },
+
+  noop: function() {}
 
 };
 
