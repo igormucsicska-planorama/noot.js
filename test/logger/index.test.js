@@ -20,11 +20,11 @@ describe('NOOT.Logger', function() {
     });
     it('should set level by name', function() {
       logger.setLevel('debug');
-      logger.level.should.equal(NOOT.Logger.levels.DEBUG);
+      logger._level.should.equal(NOOT.Logger.levels.DEBUG);
     });
     it('should set level by number', function() {
       logger.setLevel(0);
-      logger.level.should.equal(NOOT.Logger.levels.TRACE);
+      logger._level.should.equal(NOOT.Logger.levels.TRACE);
     });
   });
 
@@ -39,13 +39,13 @@ describe('NOOT.Logger', function() {
       logger.setStyles({ trace: { color: 'grey' } });
       logger._styles.trace.should.deep.equal({ color: 'grey' });
     });
-    it('should set `underline` style option for `verbose`', function() {
-      logger.setStyles({ verbose: { underline: true } });
-      logger._styles.verbose.should.deep.equal({ color: 'cyan', underline: true, bold: true });
+    it('should set `underline` style option for `announce`', function() {
+      logger.setStyles({ announce: { underline: true } });
+      logger._styles.announce.should.deep.equal({ color: 'cyan', underline: true, bold: true });
     });
-    it('should unset `underline` style option for `verbose`', function() {
-      logger.setStyles({ verbose: { underline: false } });
-      logger._styles.verbose.should.deep.equal({ color: 'cyan', bold: true });
+    it('should unset `underline` style option for `announce`', function() {
+      logger.setStyles({ announce: { underline: false } });
+      logger._styles.announce.should.deep.equal({ color: 'cyan', bold: true });
     });
   });
 
@@ -110,8 +110,8 @@ describe('NOOT.Logger', function() {
       it('should `error`', function() {
         logger.error('message');
       });
-      it('should `verbose`', function() {
-        logger.verbose('message');
+      it('should `announce`', function() {
+        logger.announce('message');
       });
       it('should `highlight`', function() {
         logger.highlight('message');
@@ -122,7 +122,7 @@ describe('NOOT.Logger', function() {
       var logger = NOOT.Logger.create({
         level: 'warn',
         transport: function(message, level) {
-          if (!~['verbose', 'highlight', 'warn', 'error'].indexOf(level)) {
+          if (!~['announce', 'highlight', 'warn', 'error'].indexOf(level)) {
             throw new Error('Should not have logged this message');
           } else {
             message.should.be.a('string');
@@ -145,8 +145,8 @@ describe('NOOT.Logger', function() {
       it('should `error`', function() {
         logger.error('message');
       });
-      it('should `verbose`', function() {
-        logger.verbose('message');
+      it('should `announce`', function() {
+        logger.announce('message');
       });
       it('should `highlight`', function() {
         logger.highlight('message');
@@ -176,8 +176,8 @@ describe('NOOT.Logger', function() {
       it('should not `error`', function() {
         logger.error('message');
       });
-      it('should not `verbose`', function() {
-        logger.verbose('message');
+      it('should not `announce`', function() {
+        logger.announce('message');
       });
       it('should not `highlight`', function() {
         logger.highlight('message');

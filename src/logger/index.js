@@ -22,6 +22,7 @@ var Logger = NOOT.Object.extend({
   transportCallback: NOOT.noop,
   shouldStyle: true,
 
+  _level: null,
   _styles: null,
 
   /**
@@ -36,7 +37,7 @@ var Logger = NOOT.Object.extend({
    * Trace logging level
    */
   trace: function() {
-    if (this.level <= Logger.levels.TRACE) {
+    if (this._level <= Logger.levels.TRACE) {
       return this._buildAndSend(arguments, 'trace');
     }
   },
@@ -45,7 +46,7 @@ var Logger = NOOT.Object.extend({
    * Debug log level
    */
   debug: function() {
-    if (this.level <= Logger.levels.DEBUG) {
+    if (this._level <= Logger.levels.DEBUG) {
       return this._buildAndSend(arguments, 'debug');
     }
   },
@@ -54,7 +55,7 @@ var Logger = NOOT.Object.extend({
    * Info log level
    */
   info: function() {
-    if (this.level <= Logger.levels.INFO) {
+    if (this._level <= Logger.levels.INFO) {
       return this._buildAndSend(arguments, 'info');
     }
   },
@@ -63,7 +64,7 @@ var Logger = NOOT.Object.extend({
    * Warn log level
    */
   warn: function() {
-    if (this.level <= Logger.levels.WARN) {
+    if (this._level <= Logger.levels.WARN) {
       return this._buildAndSend(arguments, 'warn');
 
     }
@@ -73,7 +74,7 @@ var Logger = NOOT.Object.extend({
    * Error level log
    */
   error: function() {
-    if (this.level <= Logger.levels.ERROR) {
+    if (this._level <= Logger.levels.ERROR) {
       return this._buildAndSend(arguments, 'error');
     }
   },
@@ -81,9 +82,9 @@ var Logger = NOOT.Object.extend({
   /**
    * Application level log
    */
-  verbose: function() {
-    if (this.level !== Logger.levels.OFF) {
-      return this._buildAndSend(arguments, 'verbose');
+  announce: function() {
+    if (this._level !== Logger.levels.OFF) {
+      return this._buildAndSend(arguments, 'announce');
     }
   },
 
@@ -91,7 +92,7 @@ var Logger = NOOT.Object.extend({
    * High visibility log
    */
   highlight: function() {
-    if (this.level !== Logger.levels.OFF) {
+    if (this._level !== Logger.levels.OFF) {
       return this._buildAndSend(arguments, 'highlight');
     }
   },
@@ -149,7 +150,7 @@ var Logger = NOOT.Object.extend({
 
     if (NOOT.isNone(level)) throw new Error('Invalid logging level');
 
-    this.level = level;
+    this._level = level;
   },
 
   /**
@@ -196,7 +197,7 @@ var Logger = NOOT.Object.extend({
       info: 'magenta',
       warn: 'yellow',
       error: 'red',
-      verbose: { color: 'cyan', bold: true },
+      announce: { color: 'cyan', bold: true },
       highlight: 'inverse'
     }
   },
@@ -239,7 +240,7 @@ var Logger = NOOT.Object.extend({
     var ret = {};
     for (var styleName in styles) {
       ret[styleName] = NOOT.isNone(styles[styleName].color) ? { color: styles[styleName] } : styles[styleName];
-      ret[styleName] = _.pick(ret[styleName], ['color', 'bold', 'underline', 'invert']);
+      ret[styleName] = _.pick(ret[styleName], ['color', 'bold', 'underline']);
       _.forIn(ret[styleName], function(value, key) { if (!value) delete ret[styleName][key]; });
     }
     return ret;
