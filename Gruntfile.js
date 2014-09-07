@@ -9,6 +9,7 @@ module.exports = function(grunt) {
   var CHECKABLES = [
     'src/**/*.js',
     'test/**/*.js',
+    'index.js',
     'Gruntfile.js'
   ];
 
