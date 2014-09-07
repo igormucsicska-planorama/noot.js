@@ -82,20 +82,25 @@ var Logger = NOOT.Object.extend({
    * Application level log
    */
   verbose: function() {
-    return this._buildAndSend(arguments, 'verbose');
+    if (this.level !== Logger.levels.OFF) {
+      return this._buildAndSend(arguments, 'verbose');
+    }
   },
 
   /**
    * High visibility log
    */
   highlight: function() {
-    return this._buildAndSend(arguments, 'highlight');
+    if (this.level !== Logger.levels.OFF) {
+      return this._buildAndSend(arguments, 'highlight');
+    }
   },
 
   /**
    * Format message before logging
    *
    * @param message
+   * @param [level]
    * @returns {String}
    */
   formatMessage: function(message) {
@@ -105,10 +110,11 @@ var Logger = NOOT.Object.extend({
   /**
    * Transport method(s)
    *
-   * @param message
-   * @param callback
+   * @param {String} message
+   * @param {String} level
+   * @param {Function} callback
    */
-  transport: function(message, callback) {
+  transport: function(message, level, callback) {
     console.log(message);
     return callback();
   },
@@ -125,10 +131,10 @@ var Logger = NOOT.Object.extend({
   /**
    * Define logging level
    *
-   * @param levelName
+   * @param level
    */
   setLevel: function(level) {
-    if (NOOT.isNone(level) || NOOT.isEmpty(level)) throw new Error('Missing logging level');
+    if (NOOT.isNone(level) || level === '') throw new Error('Missing logging level');
 
     switch (typeof level) {
       case 'string':
@@ -150,14 +156,14 @@ var Logger = NOOT.Object.extend({
    *
    *
    * @param args
-   * @param styleName
+   * @param level
    * @private
    */
-  _buildAndSend: function(args, styleName) {
+  _buildAndSend: function(args, level) {
     var message = Logger._joinMessages(NOOT.makeArray(args));
-    message = this.format(message);
+    message = this.formatMessage(message, level);
 
-    var styles = this._styles[styleName];
+    var styles = this._styles[level];
     if (styles) {
       for (var style in styles) {
         if (style === 'color') message = message[styles[style]];
@@ -165,7 +171,7 @@ var Logger = NOOT.Object.extend({
       }
     }
 
-    return this.transport(message, this.transportCallback);
+    return this.transport(message, level, this.transportCallback);
   }
 
 
@@ -205,15 +211,18 @@ var Logger = NOOT.Object.extend({
   _joinMessages: function(args) {
     return NOOT.makeArray(args)
       .map(function(part) {
-        switch (typeof part) {
-          case 'function':
-          case 'object':
-            if (NOOT.isError(part)) return part.stack.toString();
-            return util.inspect(part, { depth: null });
+        switch (NOOT.typeOf(part)) {
+          case 'error':
+            return part.stack.toString();
           case 'undefined':
-            return 'undefined';
-          default:
+          case 'null':
+            return NOOT.typeOf(part);
+          case 'string':
+          case 'number':
+          case 'boolean':
             return part.toString();
+          default:
+            return util.inspect(part, { depth: null });
         }
       })
       .join(this.JOINER);
