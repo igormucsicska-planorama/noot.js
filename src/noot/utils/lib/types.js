@@ -51,7 +51,7 @@ var Utils = {
    * @param {*} value
    * @returns {Boolean}
    */
-  isError: function(value) { return this.typeOf(value) === 'error'; },
+  isError: function(value) { return this.typeOf(value) === 'error' || value instanceof Error; },
 
   /**
    *
