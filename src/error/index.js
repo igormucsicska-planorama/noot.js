@@ -31,7 +31,7 @@ var NOOTError = function(options) {
 
 
 /**
- * Inheritance
+ * Inherit from Error
  */
 NOOTError.prototype = Error.prototype;
 NOOTError.prototype.constructor = NOOTError;
@@ -58,26 +58,28 @@ NOOTError.prototype.toJSON = function() {
 /**
  *
  *
- * @param [options]
- * @param [Parent]
+ * @param [proto]
  * @returns {Object}
  */
-NOOTError.extend = function(proto, Parent) {
-  if (!Parent || !(Parent.prototype instanceof NOOTError)) Parent = NOOTError;
+NOOTError.extend = function(proto) {
+  var self = this;
 
   var ErrorClass = function() {
-    Parent.apply(this, arguments);
+    self.apply(this, arguments);
     Error.captureStackTrace(this, ErrorClass);
   };
 
-  ErrorClass.prototype = Parent.prototype;
+  var Surrogate = function() { this.constructor = ErrorClass; };
+  Surrogate.prototype = this.prototype;
+
+  ErrorClass.prototype = new Surrogate();
   ErrorClass.prototype.constructor = ErrorClass;
 
   for (var key in proto) {
     ErrorClass.prototype[key] = proto[key];
   }
 
-  ErrorClass.extend = function(options) { return Parent.extend(options, this); }.bind(ErrorClass);
+  _.extend(ErrorClass, this);
 
   return ErrorClass;
 };
