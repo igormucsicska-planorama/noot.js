@@ -1,5 +1,5 @@
 {
-  "name": "NOOT",
+  "name": "noot",
   "version": "0.1.0",
   "description": "High quality, well tested, lightweight object oriented toolset for Node.js",
   "main": "index.js",
