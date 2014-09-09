@@ -1,10 +1,14 @@
 {
   "name": "NOOT",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "High quality, well tested, lightweight object oriented toolset for Node.js",
   "main": "index.js",
   "directories": {
     "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/planorama/noot.js"
   },
   "dependencies": {
     "lodash": "~2.4.1",
