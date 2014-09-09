@@ -2,7 +2,7 @@
  * Dependencies
  */
 var path = require('path');
-var NOOT = require('../../../')('namespace');
+var NOOT = require('../../')('namespace');
 
 
 /***********************************************************************************************************************
@@ -35,15 +35,16 @@ var Url = NOOT.Namespace.create({
    *
    *
    * @param url
-   * @param useHTTPS
-   * @returns {*|string}
+   * @param [useHTTPS]
+   * @returns {String}
    */
   ensureProtocol: function(url, useHTTPS) {
-    var forceProtocol = arguments[1] !== undefined;
+    var forceProtocol = useHTTPS !== undefined;
     var protocol = url.match(this.PROTOCOL_REG);
     protocol = protocol ? protocol[0] : '';
     if (protocol) url = url.replace(protocol, '');
     else protocol = ['http', useHTTPS ? 's' : '', '://'].join('');
+    console.log(useHTTPS, protocol);
     if (useHTTPS) protocol = protocol.replace(/^http(s)?/, 'https');
     else if (forceProtocol) protocol = protocol.replace(/^http(s)?/, 'http');
     return Url.join(protocol, url);
