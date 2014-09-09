@@ -13,8 +13,7 @@
   "dependencies": {
     "lodash": "~2.4.1",
     "colors": "^0.6.2",
-    "change-case": "~2.1.4",
-    "underscore.string": "~2.3.3"
+    "change-case": "~2.1.4"
   },
   "devDependencies": {
     "chai": "^1.9.1",
