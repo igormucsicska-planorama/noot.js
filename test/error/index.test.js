@@ -36,15 +36,15 @@ describe('NOOT.Error', function() {
     });
 
     it('should inherit properties from parent', function() {
-      var ChildError = TestError.extend({ name: 'ChildError' });
+      var ChildError = TestError.extend({ name: 'ChildError', code: 'Error' });
       var err = new ChildError('Error message');
       NOOT.isError(err).should.equal(true);
       err.message.should.equal('Error message');
       err.statusCode.should.equal(404);
       err.name.should.equal('ChildError');
+      err.code.should.equal('Error');
       err.loggingLevel.should.equal('warn');
     });
-
   });
 
 });

@@ -35,21 +35,21 @@ describe('NOOT (manager)', function() {
     it('should return an object with right module name (CoreObject)', function() {
       NOOTManager._resolve('CoreObject').should.contain.key('CoreObject');
     });
-    it('should recognize irregular namespace name (REST)', function() {
-      NOOTManager._resolve('REST').should.contain.key('REST');
-    });
-    it('should recognize irregular namespace name (Rest)', function() {
-      NOOTManager._resolve('Rest').should.contain.key('REST');
-    });
-    it('should recognize irregular namespace name (rest)', function() {
-      NOOTManager._resolve('rest').should.contain.key('REST');
-    });
-    it('should ignore nested module name (slash)', function() {
-      NOOTManager._resolve('rest/resource').REST.should.contain.keys(['Resource', 'Response']);
-    });
-    it('should ignore nested module name (dot)', function() {
-      NOOTManager._resolve('rest.resource').REST.should.contain.keys(['Resource', 'Response']);
-    });
+//    it('should recognize irregular namespace name (REST)', function() {
+//      NOOTManager._resolve('REST').should.contain.key('REST');
+//    });
+//    it('should recognize irregular namespace name (Rest)', function() {
+//      NOOTManager._resolve('Rest').should.contain.key('REST');
+//    });
+//    it('should recognize irregular namespace name (rest)', function() {
+//      NOOTManager._resolve('rest').should.contain.key('REST');
+//    });
+//    it('should ignore nested module name (slash)', function() {
+//      NOOTManager._resolve('rest/resource').REST.should.contain.keys(['Resource', 'Response']);
+//    });
+//    it('should ignore nested module name (dot)', function() {
+//      NOOTManager._resolve('rest.resource').REST.should.contain.keys(['Resource', 'Response']);
+//    });
   });
 
   describe('.require()', function() {
