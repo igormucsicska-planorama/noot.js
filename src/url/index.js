@@ -44,7 +44,6 @@ var Url = NOOT.Namespace.create({
     protocol = protocol ? protocol[0] : '';
     if (protocol) url = url.replace(protocol, '');
     else protocol = ['http', useHTTPS ? 's' : '', '://'].join('');
-    console.log(useHTTPS, protocol);
     if (useHTTPS) protocol = protocol.replace(/^http(s)?/, 'https');
     else if (forceProtocol) protocol = protocol.replace(/^http(s)?/, 'http');
     return Url.join(protocol, url);
