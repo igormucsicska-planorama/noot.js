@@ -1,10 +1,12 @@
 language: node_js
-node_js: "0.10"
+node_js: '0.10'
 before_install:
-  - npm install -g grunt-cli
+- npm install -g grunt-cli
 deploy:
   provider: npm
-  email: "estevez.sylvain@gmail.com"
-  api_key: "c3lsdmFpbmVzdGV2ZXo6YW1uZXNpazE="
+  email: estevez.sylvain@gmail.com
+  api_key:
+    secure: Ofy1jV3BDamuAeoGos5uGC2Gd7gki+H2+c3LxjGdljOGBleFYFpyd2a54oo7M6y7FyFSbpKkr4SthGIuJRf4nsEntPXIfq1jN35lKBZWgz83JeJPQD+JE4l8BwOGmvvRqkjfhJDJW6Wz4y7R8l78JphwNfq1aKHGptW6Sas8pxc=
   on:
+    branch: "master"
     tags: true
