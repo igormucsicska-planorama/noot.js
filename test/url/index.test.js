@@ -26,25 +26,25 @@ describe('NOOT.Url', function() {
 
   describe('.ensureProtocol()', function() {
     it('should add HTTP protocol', function() {
-      /^http:\/\//.test(NOOT.Url.ensureProtocol('my-site.com/wonderful/url')).should.equal(true);
+      /^http:\/\//.test(NOOT.Url.ensureHTTPProtocol('my-site.com/wonderful/url')).should.equal(true);
     });
     it('should add HTTPS protocol', function() {
-      /^https:\/\//.test(NOOT.Url.ensureProtocol('my-site.com/wonderful/url', true)).should.equal(true);
+      /^https:\/\//.test(NOOT.Url.ensureHTTPProtocol('my-site.com/wonderful/url', true)).should.equal(true);
     });
     it('should not modify protocol', function() {
-      /^https:\/\//.test(NOOT.Url.ensureProtocol('http://my-site.com/wonderful/url')).should.equal(false);
+      /^https:\/\//.test(NOOT.Url.ensureHTTPProtocol('http://my-site.com/wonderful/url')).should.equal(false);
     });
     it('should not modify protocol', function() {
-      /^https:\/\//.test(NOOT.Url.ensureProtocol('https://my-site.com/wonderful/url', true)).should.equal(true);
+      /^https:\/\//.test(NOOT.Url.ensureHTTPProtocol('https://my-site.com/wonderful/url', true)).should.equal(true);
     });
     it('should not modify protocol', function() {
-      /^https:\/\//.test(NOOT.Url.ensureProtocol('http://my-site.com/wonderful/url', false)).should.equal(false);
+      /^https:\/\//.test(NOOT.Url.ensureHTTPProtocol('http://my-site.com/wonderful/url', false)).should.equal(false);
     });
     it('should force HTTPS protocol', function() {
-      /^https:\/\//.test(NOOT.Url.ensureProtocol('http://my-site.com/wonderful/url', true)).should.equal(true);
+      /^https:\/\//.test(NOOT.Url.ensureHTTPProtocol('http://my-site.com/wonderful/url', true)).should.equal(true);
     });
     it('should force HTTP protocol', function() {
-      var ensured = NOOT.Url.ensureProtocol('https://my-site.com/wonderful/url', false);
+      var ensured = NOOT.Url.ensureHTTPProtocol('https://my-site.com/wonderful/url', false);
       /^https:\/\//.test(ensured).should.equal(false);
       /^http:\/\//.test(ensured).should.equal(true);
     });

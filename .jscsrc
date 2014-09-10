@@ -19,8 +19,6 @@
   "disallowMultipleLineStrings": true,
   "disallowMixedSpacesAndTabs": true,
   "disallowTrailingWhitespace": true,
-
-
   "requireSpaceAfterKeywords": [
     "if",
     "else",
@@ -50,9 +48,9 @@
   "disallowSpacesInsideArrayBrackets": "all",
   "disallowSpacesInsideParentheses": true,
   "requireCapitalizedConstructors": true,
-  "safeContextKeyword": ["self"]
-//  "validateJSDoc": {
-//    "checkParamNames": true,
-//    "requireParamTypes": true
-//  }
+  "safeContextKeyword": ["self"],
+  "validateJSDoc": {
+    "checkParamNames": true,
+    "requireParamTypes": true
+  }
 }

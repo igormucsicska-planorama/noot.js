@@ -14,12 +14,14 @@ var NOOT = require('../../')('namespace');
  *
  **********************************************************************************************************************/
 var Url = NOOT.Namespace.create({
-  PROTOCOL_REG: /^http(s)?:\/\//,
+  PROTOCOL_REG: /^(file:\/|(http(s)?|s?ftp|smb):)(\/){2}/i,
+  HTTP_PROTOCOL_REG: /^http(s)?:\/{2}/i,
 
   /**
+   * join
    *
-   *
-   * @returns {*}
+   * parts {...String}
+   * @returns {String}
    */
   join: function() {
     var args = Array.prototype.slice.call(arguments, 0);
@@ -32,15 +34,15 @@ var Url = NOOT.Namespace.create({
   },
 
   /**
+   * ensureHTTPProtocol
    *
-   *
-   * @param url
-   * @param [useHTTPS]
+   * @param {String} url
+   * @param {Boolean} [useHTTPS]
    * @returns {String}
    */
-  ensureProtocol: function(url, useHTTPS) {
+  ensureHTTPProtocol: function(url, useHTTPS) {
     var forceProtocol = useHTTPS !== undefined;
-    var protocol = url.match(this.PROTOCOL_REG);
+    var protocol = url.match(this.HTTP_PROTOCOL_REG);
     protocol = protocol ? protocol[0] : '';
     if (protocol) url = url.replace(protocol, '');
     else protocol = ['http', useHTTPS ? 's' : '', '://'].join('');

@@ -7,9 +7,9 @@ var K = function() { return this; }; // Empty function
 /**
  * Build "_super" implementation
  *
- * @param dest Object to contain the resulting properties
- * @param parent Parent properties
- * @param child Child properties
+ * @param {Object} dest Object to contain the resulting properties
+ * @param {Object} parent Parent properties
+ * @param {Object} child Child properties
  */
 var buildSuper = function(dest, parent, child) {
   for (var prop in child) {
@@ -53,8 +53,8 @@ var Obj = function () { };
 /**
  * extend
  *
- * @param proto
- * @param statics
+ * @param {Object} [proto]
+ * @param {Object} [stat]
  * @returns {child}
  */
 Obj.extend = function (proto, stat) {
@@ -90,7 +90,7 @@ Obj.extend = function (proto, stat) {
 /**
  * create
  *
- * @param def
+ * @param {Object} def
  * @returns {Object.constructor}
  */
 Obj.create = function(def) {

@@ -28,7 +28,7 @@ var DependenciesManager = {
   /**
    *
    *
-   * @param moduleName
+   * @param {String} moduleName
    * @returns {Object}
    * @private
    */
@@ -39,7 +39,7 @@ var DependenciesManager = {
   /**
    *
    *
-   * @param name
+   * @param {String} name
    * @returns {Object}
    * @private
    */
@@ -53,7 +53,7 @@ var DependenciesManager = {
   /**
    *
    *
-   * @param name
+   * @param {String} name
    * @returns {String}
    * @private
    */
@@ -64,7 +64,7 @@ var DependenciesManager = {
   /**
    *
    *
-   * @param name
+   * @param {String} name
    * @returns {String}
    * @private
    */

@@ -100,8 +100,8 @@ var Logger = NOOT.Object.extend({
   /**
    * Format message before logging
    *
-   * @param message
-   * @param [level]
+   * @param {String} message
+   * @param {String} [level]
    * @returns {String}
    */
   formatMessage: function(message) {
@@ -123,7 +123,7 @@ var Logger = NOOT.Object.extend({
   /**
    * Define logging styles
    *
-   * @param value
+   * @param {Object} value
    */
   setStyles: function(value) {
     this._styles = Logger._buildStylesConfig(_.merge({}, Logger.DEFAULTS.styles, value));
@@ -132,7 +132,7 @@ var Logger = NOOT.Object.extend({
   /**
    * Define logging level
    *
-   * @param level
+   * @param {String|Number} level
    */
   setLevel: function(level) {
     if (NOOT.isNone(level) || level === '') throw new Error('Missing logging level');
@@ -156,8 +156,8 @@ var Logger = NOOT.Object.extend({
   /**
    *
    *
-   * @param args
-   * @param level
+   * @param {Array|arguments} args
+   * @param {String|Number} level
    * @private
    */
   _buildAndSend: function(args, level) {
@@ -205,7 +205,7 @@ var Logger = NOOT.Object.extend({
   /**
    * Concatenate arguments into a single valid string
    *
-   * @param args
+   * @param {Array|arguments} args
    * @returns {string}
    * @private
    */
@@ -232,7 +232,7 @@ var Logger = NOOT.Object.extend({
   /**
    * Build an object containing all styles properties
    *
-   * @param styles
+   * @param {Object} styles
    * @returns {Object}
    * @private
    */

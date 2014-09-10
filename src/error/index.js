@@ -58,7 +58,7 @@ NOOTError.prototype.toJSON = function() {
 /**
  *
  *
- * @param [proto]
+ * @param {Object} [proto]
  * @returns {Object}
  */
 NOOTError.extend = function(proto) {
