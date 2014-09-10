@@ -4,17 +4,34 @@
 var NOOT = require('../../')('core-object');
 var path = require('path');
 
-
+/***********************************************************************************************************************
+ * NOOT.CustomRequire
+ ***********************************************************************************************************************
+ *
+ *
+ *
+ *
+ **********************************************************************************************************************/
 var CustomRequire = NOOT.CoreObject.extend({
   root: null,
   name: null,
   makeGlobal: false,
 
+  /**
+   * @constructor
+   */
   init: function() {
     if (this.makeGlobal && !this.name) throw new Error('CustomRequire needs a `name`');
     this.root = this.root || process.cwd();
   }
+
 }, {
+
+  /**
+   * Create a new instance
+   *
+   * @returns {NOOT.CustomRequire}
+   */
   create: function() {
     var instance = this._super.apply(this, arguments);
 
@@ -26,6 +43,10 @@ var CustomRequire = NOOT.CoreObject.extend({
 
     return customrequire;
   }
+
 });
 
+/**
+ * @module
+ */
 module.exports = CustomRequire;

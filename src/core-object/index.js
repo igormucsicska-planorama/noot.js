@@ -90,7 +90,7 @@ Obj.extend = function (proto, stat) {
 /**
  * create
  *
- * @param {Object} def
+ * @param {Object} [def]
  * @returns {Object.constructor}
  */
 Obj.create = function(def) {

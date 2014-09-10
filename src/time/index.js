@@ -2,6 +2,7 @@
  * Dependencies
  */
 var NOOT = require('../../')('namespace');
+var _ = require('lodash');
 
 /***********************************************************************************************************************
  * NOOT.Utils.Time
@@ -24,7 +25,8 @@ Time.DAY = Time.HOUR * 24;
 Time.WEEK = Time.DAY * 7;
 
 
+
 /**
  * @module
  */
-module.exports = Time;
+module.exports = _.extend(Time, { Measure: require('./lib/measure') });
