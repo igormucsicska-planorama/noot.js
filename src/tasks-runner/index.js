@@ -17,24 +17,41 @@ var cron = require('cron');
 var TasksRunner = NOOT.Object.extend({
   _tasks: [],
 
+  /**
+   * Register a new task
+   *
+   * @param {TasksRunner.Task} task
+   */
   registerTask: function(task) {
     if (!task instanceof Task) throw new Error('Task must be an instance of TasksRunner.Task');
-    this._tasks.push(this._schedule(task));
+    var scheduled = this._schedule(task);
+    this._tasks.push(scheduled);
+    return scheduled;
   },
 
+  /**
+   *
+   *
+   * @param {TasksRunner.Task} task
+   * @returns {exports.CronJob}
+   * @private
+   */
   _schedule: function(task) {
     var scheduled = new cron.CronJob({
       cronTime: task.cronPattern,
       onTick: task.run.bind(task),
-      start: task.startNow,
-      timeZone: 'Europe/Paris'
+      timeZone: task.timeZone
     });
+    if (task.startNow) task.run.call(task);
     scheduled.start();
     return scheduled;
   }
-}, {
-  Task: Task
 });
+
+/**
+ * Attach Task class
+ */
+TasksRunner.Task = Task;
 
 
 /**

@@ -18,6 +18,7 @@ var _ = require('lodash');
 var Task = NOOT.Object.extend(_.extend({
   job: null,
   cronPattern: null,
+  timeZone: null,
 
   /**
    * @constructor
