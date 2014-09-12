@@ -24,9 +24,22 @@ var TasksRunner = NOOT.Object.extend({
    */
   registerTask: function(task) {
     if (!task instanceof Task) throw new Error('Task must be an instance of TasksRunner.Task');
-    var scheduled = this._schedule(task);
-    this._tasks.push(scheduled);
-    return scheduled;
+
+    var cronJob = this._buildCronJob(task);
+    task._scheduler = this;
+    task._cronJob = cronJob;
+    this._tasks.push(task);
+    cronJob.start();
+
+    if (task.startNow) task.run.call(task);
+
+    return this;
+  },
+
+  _stopTask: function(task) {
+    var cronJob = task._cronJob;
+    this._tasks.splice(this._tasks.indexOf(cronJob), 1);
+    cronJob.stop();
   },
 
   /**
@@ -36,15 +49,12 @@ var TasksRunner = NOOT.Object.extend({
    * @returns {exports.CronJob}
    * @private
    */
-  _schedule: function(task) {
-    var scheduled = new cron.CronJob({
+  _buildCronJob: function(task) {
+    return new cron.CronJob({
       cronTime: task.cronPattern,
       onTick: task.run.bind(task),
       timeZone: task.timeZone
     });
-    if (task.startNow) task.run.call(task);
-    scheduled.start();
-    return scheduled;
   }
 });
 

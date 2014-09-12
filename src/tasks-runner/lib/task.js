@@ -19,6 +19,8 @@ var Task = NOOT.Object.extend(_.extend({
   job: null,
   cronPattern: null,
   timeZone: null,
+  _scheduler: null,
+  _cronJob: null,
 
   /**
    * @constructor
@@ -39,12 +41,19 @@ var Task = NOOT.Object.extend(_.extend({
       return self.emit('error', err);
     });
     domain.run(function() {
+      self.emit('start', new Date());
       self.job.call(self, function(err) {
         if (err) throw err; // Will be handled by domain
         return self.emit.apply(self, ['done'].concat(NOOT.makeArray(arguments).slice(1)));
       });
     });
+  },
+
+  stop: function() {
+    this._scheduler._stopTask(this);
+    this.emit('stop');
   }
+
 }, events.EventEmitter.prototype));
 
 
