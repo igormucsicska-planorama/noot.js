@@ -12,6 +12,8 @@
   "maxlen": 120,
   "globals": {
     "describe": false,
+    "require": false,
+    "module": false,
     "it": false,
     "before": false,
     "beforeEach": false,
