@@ -21,18 +21,18 @@ var NOOT = require('noot')(dependencies);
 #### Requiring multiple NOOT modules
 ```javascript
 // Require NOOT modules using an array of strings
-var NOOT = require('noot')(['core-object', 'utils', 'logger', 'configurator']);
+var NOOT = require('noot')(['core-object', 'url', 'logger', 'configurator']);
 
 // Require NOOT modules using a list of strings
-var NOOT = require('noot')('core-object', 'utils', 'logger', 'configurator');
+var NOOT = require('noot')('core-object', 'url', 'logger', 'configurator');
 
 // Require NOOT modules using a mix of strings and arrays
-var NOOT = require('noot')('core-object', ['utils', ['logger']], 'configurator');
+var NOOT = require('noot')('core-object', ['url', ['logger']], 'configurator');
 
 
 // All three previous methods will give you the exact same result, and attach to NOOT your desired modules :
 NOOT.CoreObject;
-NOOT.Utils;
+NOOT.Url;
 NOOT.Logger;
 NOOT.Configurator;
 ```
@@ -52,9 +52,9 @@ require('noot')('coreObject');
 In addition to modules, NOOT also provides several useful methods such as custom `typeOf`, jQuery's style `makeArray`... Complete list and documentation to be found [here](src/noot/utils/README.md). Those methods are directly attached to the NOOT namespace :
 
 ```javascript
-var NOOT = require('noot')('core-object');
+var NOOT = require('noot')('object');
 
-var Person = NOOT.CoreObject.extend({
+var Person = NOOT.Object.extend({
   firstName: null,
   init: function() {
     if (NOOT.isString(this.firstName)) console.log('Hi, my name is', this.firstName);
@@ -70,17 +70,30 @@ Main Noot namespace.
 #### [NOOT.CoreObject](src/core-object/README.md) *Class*
 Core piece of this toolset, all NOOT modules are based on this object factory. With an Ember/Backbone style implementation, it allows you to create classes using prototypal inheritance and has a cool `_super()` feature.
 
+#### [NOOT.Object](src/core-object/README.md) *Class*
+For now, same as NOOT.CoreObject. In the future, this class will implement compted properties.
+
+#### [NOOT.Namespace](src/namespace/README.md) *Class*
+
 #### [NOOT.Configurator](src/configurator/README.md) *Class*
 Lightweight module to deal with environments configurations.
 
 #### [NOOT.Logger](src/logger/README.md) *Class*
 Simple logger that supports level configuration and custom/multiple transport methods.
 
-#### [NOOT.Utils](src/utils/README.md) *Namespace*
-Urls, strings, arrays, objects, dates... Tons of useful methods to deal with recurrent needs.
+#### [NOOT.Url](src/url/README.md) *Namespace*
+
+#### [NOOT.Time](src/time/README.md) *Namespace*
+Time related utils such as time constants.
 
 #### [NOOT.CustomRequire](src/custom-require/README.md) *Factory*
 Create a custom `require` function to avoid dealing with relative paths.
+
+#### [NOOT.TasksRunner](src/tasks-runner/README.md) *Class*
+Croned tasks for your applicaton and workers.
+
+#### [NOOT.Mongoose](src/mongoose/README.md) *Namespace*
+Mongoose types and plugins.
 
 
 
