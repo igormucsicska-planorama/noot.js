@@ -30,27 +30,7 @@ module.exports = function(grunt) {
      */
     jshint: {
       options: {
-        '-W030': true,
-        newcap: true,
-        noempty: true,
-        indent: 2,
-        unused: true,
-        eqeqeq: true,
-        loopfunc: true,
-        node: true,
-        undef: true,
-        maxparams: 4,
-        maxlen: 120,
-        globals: {
-          /* MOCHA */
-          describe: false,
-          it: false,
-          before: false,
-          beforeEach: false,
-          after: false,
-          afterEach: false,
-          nootrequire: false
-        },
+        jshintrc: true,
         reporter: require('jshint-stylish')
       },
       target: CHECKABLES
