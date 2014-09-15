@@ -92,9 +92,6 @@ Create a custom `require` function to avoid dealing with relative paths.
 #### [NOOT.TasksRunner](src/tasks-runner/README.md) *Class*
 Croned tasks for your applicaton and workers.
 
-#### [NOOT.Mongoose](src/mongoose/README.md) *Namespace*
-Mongoose types and plugins.
-
 
 
 ##License
