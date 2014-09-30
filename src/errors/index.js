@@ -19,6 +19,7 @@ var Errors = NOOT.Namespace.create({
    */
   InternalServerError: NOOT.Error.extend({ name: 'InternalServerError', statusCode: 500 }),
   NotImplemented: NOOT.Error.extend({ name: 'NotImplementedError', statusCode: 501 }),
+  Unavailable: NOOT.Error.extend({ name: 'UnavailableError', statusCode: 503 }),
 
   /**
    * 40? errors

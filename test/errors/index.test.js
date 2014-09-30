@@ -13,6 +13,12 @@ describe('NOOT.Errors', function() {
     err.name.should.equal('NotImplementedError');
     err.code.should.equal('NotImplementedError');
   });
+  it('Unavailable should have right properties', function() {
+    var err = new NOOT.Errors.Unavailable('Bad things happened');
+    err.statusCode.should.equal(503);
+    err.name.should.equal('UnavailableError');
+    err.code.should.equal('UnavailableError');
+  });
   it('BadRequest should have right properties', function() {
     var err = new NOOT.Errors.BadRequest('Bad things happened');
     err.statusCode.should.equal(400);
