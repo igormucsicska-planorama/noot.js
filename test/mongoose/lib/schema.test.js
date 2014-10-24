@@ -108,7 +108,7 @@ describe('NOOT.Mongoose.Schema', function() {
       her: function(cb) { return her.save(cb); }
     }, function(err, results) {
       if (err) return done(err);
-      console.log(results);
+      results.me[0].name.should.be.eql('Jean-Baptiste');
 
       // TODO test each property for each result
       return done();

@@ -148,7 +148,6 @@ var oldInit = Model.prototype.init;
  */
 Model.prototype.init = function (doc, query, fn) {
   var model = this.db.model(doc.__type);
-  console.log(fn + '');
   var newFn = function() {
     process.nextTick(function() {
       fn.apply(this, arguments);
