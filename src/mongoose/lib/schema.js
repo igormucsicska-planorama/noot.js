@@ -4,6 +4,8 @@ var MongooseSchema = mongoose.Schema;
 var Model = mongoose.Model;
 var _ = require('lodash');
 var Schema = NOOT.noop;
+var oldFindOne = Model.findOne;
+var oldFind = Model.find;
 
 var K = function() { return this; }; // Empty function
 
@@ -74,48 +76,9 @@ Schema.extend = function(definition) {
   return schema;
 };
 
-var oldFindOne = Model.findOne;
-/**
- * Override findOne method to handle inheritance and find the right document based on the modelName
- *
- * @param {Object} conditions
- * @param {Object} fields
- * @param {Object} options
- * @param {function} callback
- * @returns {*}
- */
-Model.findOne = function findOne (conditions, fields, options, callback) {
-  if ('function' === typeof options) {
-    callback = options;
-    options = null;
-  } else if ('function' === typeof fields) {
-    callback = fields;
-    fields = null;
-    options = null;
-  } else if ('function' === typeof conditions) {
-    callback = conditions;
-    conditions = {};
-    fields = null;
-    options = null;
-  }
 
-  if (!conditions) conditions = {};
-  conditions.__types = this.modelName;
 
-  return oldFindOne.call(this, conditions, fields, options, callback);
-};
-
-var oldFind = Model.find;
-/**
- *Override find method to handle inheritance and find the right documents based on the modelName
- *
- * @param {Object} conditions
- * @param {Object} fields
- * @param {Object} options
- * @param {function} callback
- * @returns {*}
- */
-Model.find = function(conditions, fields, options, callback) {
+var checkParamsFind = function (conditions, fields, options, callback) {
 
   if ('function' === typeof conditions) {
     callback = conditions;
@@ -129,12 +92,51 @@ Model.find = function(conditions, fields, options, callback) {
   } else if ('function' === typeof options) {
     callback = options;
     options = null;
+    fields = fields + ' __type';
+  } else if ('function' !== typeof callback) {
+    fields = fields + ' __type';
   }
 
   if (!conditions) conditions = {};
   conditions.__types = this.modelName;
 
-  return oldFind.call(this, conditions, fields, options, callback);
+  var params = [conditions, fields, options, callback];
+  return params;
+
+};
+
+/**
+ * Override findOne method to handle inheritance and find the right document based on the modelName
+ *
+ * @param {Object} conditions
+ * @param {Object} fields
+ * @param {Object} options
+ * @param {function} callback
+ * @returns {*}
+ */
+
+
+Model.findOne = function findOne (conditions, fields, options, callback) {
+
+  return oldFindOne.apply(this, checkParamsFind.call(this, conditions, fields, options, callback));
+
+};
+
+/**
+ *Override find method to handle inheritance and find the right documents based on the modelName
+ *
+ * @param {Object} conditions
+ * @param {Object} fields
+ * @param {Object} options
+ * @param {function} callback
+ * @returns {*}
+ */
+
+
+Model.find = function(conditions, fields, options, callback) {
+
+  return oldFind.apply(this, checkParamsFind.call(this, conditions, fields, options, callback));
+
 };
 
 var oldInit = Model.prototype.init;

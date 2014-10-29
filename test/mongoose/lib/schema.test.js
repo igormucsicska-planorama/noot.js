@@ -2,6 +2,7 @@ var NOOT = nootrequire('mongoose');
 var Schema = NOOT.Mongoose.Schema;
 var mongoose = require('mongoose');
 var async = require('async');
+var _ = require('lodash');
 
 describe('NOOT.Mongoose.Schema', function() {
   before(function(done) {
@@ -14,7 +15,8 @@ describe('NOOT.Mongoose.Schema', function() {
   var PersonSchema = Schema.extend({
     modelName: 'Person',
     schema: {
-      name: { type: String, required: true }
+      name: { type: String, required: true },
+      age: { type: Number, required: true }
     },
     methods: {
       sayHello: function() {
@@ -68,16 +70,19 @@ describe('NOOT.Mongoose.Schema', function() {
 
   var me = new Developer({
     name: 'Jean-Baptiste',
-    job: 'Developer'
+    job: 'Developer',
+    age: 28
   });
 
   var him = new Person({
-    name: 'John Doe'
+    name: 'John Doe',
+    age: 42
   });
 
   var her = new Employee({
     name: 'Jane Doe',
-    job: 'Category expert'
+    job: 'Category expert',
+    age: 38
   });
 
 
@@ -109,8 +114,14 @@ describe('NOOT.Mongoose.Schema', function() {
     }, function(err, results) {
       if (err) return done(err);
       results.me[0].name.should.be.eql('Jean-Baptiste');
+      results.me[0].job.should.be.eql('Developer');
+      results.me[0].age.should.be.eql(28);
+      results.him[0].name.should.be.eql('John Doe');
+      results.him[0].age.should.be.eql(42);
+      results.her[0].name.should.be.eql('Jane Doe');
+      results.her[0].job.should.be.eql('Category expert');
+      results.her[0].age.should.be.eql(38);
 
-      // TODO test each property for each result
       return done();
     });
   });
@@ -119,7 +130,6 @@ describe('NOOT.Mongoose.Schema', function() {
     Person.find().sort('_id').exec(function(err, results) {
       if (err) return done(err);
       results.length.should.eql(3);
-
       (results[0] instanceof Developer).should.eql(true);
       (results[1] instanceof Person).should.eql(true);
       (results[2] instanceof Employee).should.eql(true);
@@ -128,9 +138,43 @@ describe('NOOT.Mongoose.Schema', function() {
   });
 
   it('should find all Person', function(done) {
-    Person.find().exec(function(err, items) {
+    Person.find(function(err, items) {
       if (err) return done(err);
       items.length.should.eql(3);
+      return done();
+    });
+  });
+
+  it('should find all Person at least 38 years old', function(done) {
+    Person.find({ age: { $gte: 38 } }, function(err, items) {
+      if (err) return done(err);
+      items.length.should.eql(2);
+      return done();
+    });
+  });
+
+  it('should find all Person (name field only) at least 40 years old', function(done) {
+    Person.find({ age: { $gte: 40 } }, 'name', function(err, items) {
+      if (err) return done(err);
+      items.length.should.eql(1);
+      _.size(items[0]._doc).should.be.eql(3);
+      items[0]._doc.name.should.be.eql('John Doe');
+      items[0]._doc.__type.should.be.eql('Person');
+
+      return done();
+    });
+  });
+
+  it('should find all Person (name field only) at least 36 years old with sort option', function(done) {
+    Person.find({ age: { $gte: 36 } }, 'name', { sort : 'name' }).exec(function(err, items) {
+      if (err) return done(err);
+      items.length.should.eql(2);
+      _.size(items[0]._doc).should.be.eql(3);
+      items[0]._doc.name.should.be.eql('Jane Doe');
+      items[0]._doc.__type.should.be.eql('Employee');
+      items[1]._doc.name.should.be.eql('John Doe');
+      items[1]._doc.__type.should.be.eql('Person');
+
       return done();
     });
   });
@@ -183,4 +227,5 @@ describe('NOOT.Mongoose.Schema', function() {
       return done();
     });
   });
+
 });
