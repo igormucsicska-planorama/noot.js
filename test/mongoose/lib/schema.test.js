@@ -8,6 +8,9 @@ var async = require('async');
 var _ = require('lodash');
 
 
+var TEST_DB_NAME = 'noot-mongoose-schema-test';
+
+
 /**
  * PersonSchema
  */
@@ -119,12 +122,15 @@ var getItemFromList = function(item, list) {
 
 describe('NOOT.Mongoose.Schema', function() {
   before(function(done) {
-    return mongoose.connect('mongodb://localhost:27017/noot-mongoose-schema-test', function() {
-      try {
-        return mongoose.connection.collection('person').drop(done);
-      } catch (ex) {
-        return done();
-      }
+    return mongoose.connect('mongodb://localhost:27017/' + TEST_DB_NAME, function() {
+      return mongoose.connection.db.collectionNames(function(err, names) {
+        if (err) return done(err);
+        if (_.find(names, { name: TEST_DB_NAME + '.' + 'person' })) {
+          return mongoose.connection.collection('person').drop(done);
+        } else {
+          return done();
+        }
+      });
     });
   });
 
