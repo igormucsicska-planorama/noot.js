@@ -88,7 +88,9 @@ var parseArguments = function(conditions, fields, options, callback) {
   }
 
   if (!conditions) conditions = {};
-  conditions.__types = this.modelName;
+  if (!options) options = {};
+  if (options.strict) conditions.__type = this.modelName;
+  else conditions.__types = this.modelName;
 
   return [conditions, fields, options, callback];
 };

@@ -212,10 +212,13 @@ describe('NOOT.Mongoose.Schema', function() {
   it('should find all Person (name field only) at least 40 years old', function(done) {
     Person.find({ age: { $gte: 40 } }, 'name', function(err, items) {
       if (err) return done(err);
+
       items.length.should.eql(1);
-      _.size(items[0]._doc).should.be.eql(3);
-      items[0]._doc.name.should.be.eql('John Doe');
-      items[0]._doc.__type.should.be.eql('Person');
+
+      var retrievedHim = items[0];
+
+      retrievedHim.toObject().should.have.keys('name', '_id', '__type');
+      retrievedHim.name.should.eql('John Doe');
 
       return done();
     });
@@ -226,11 +229,40 @@ describe('NOOT.Mongoose.Schema', function() {
       if (err) return done(err);
 
       items.length.should.eql(2);
-      _.size(items[0]._doc).should.be.eql(3);
-      items[0]._doc.name.should.be.eql('Jane Doe');
-      items[0]._doc.__type.should.be.eql('Employee');
-      items[1]._doc.name.should.be.eql('John Doe');
-      items[1]._doc.__type.should.be.eql('Person');
+
+      var retrievedHer = getItemFromList(her, items);
+      var retrievedHim = getItemFromList(him, items);
+
+      retrievedHer.should.eql(items[0]);
+      retrievedHim.should.eql(items[1]);
+
+      retrievedHer.toObject().should.have.keys('name', '_id', '__type');
+      retrievedHim.toObject().should.have.keys('name', '_id', '__type');
+
+      retrievedHer.name.should.be.eql('Jane Doe');
+      retrievedHim.name.should.be.eql('John Doe');
+
+      return done();
+    });
+  });
+
+  it('should find all Person (name field only) at least 36 years old with sort option (inverted sort)', function(done) {
+    Person.find({ age: { $gte: 36 } }, 'name', { sort : '-name' }).exec(function(err, items) {
+      if (err) return done(err);
+
+      items.length.should.eql(2);
+
+      var retrievedHer = getItemFromList(her, items);
+      var retrievedHim = getItemFromList(him, items);
+
+      retrievedHer.should.eql(items[1]);
+      retrievedHim.should.eql(items[0]);
+
+      retrievedHer.toObject().should.have.keys('name', '_id', '__type');
+      retrievedHim.toObject().should.have.keys('name', '_id', '__type');
+
+      retrievedHer.name.should.be.eql('Jane Doe');
+      retrievedHim.name.should.be.eql('John Doe');
 
       return done();
     });
