@@ -135,19 +135,19 @@ describe('NOOT.Mongoose.Schema', function() {
   });
 
   it('should inherit instance method', function() {
-    me.sayHello().should.eql('Hello, my name is Jean-Baptiste, I work as a Developer');
+    return me.sayHello().should.eql('Hello, my name is Jean-Baptiste, I work as a Developer');
   });
 
   it('should inherit static method', function() {
-    Employee.joinCompany().should.eql('You joined');
+    return Employee.joinCompany().should.eql('You joined');
   });
 
   it('should merge options', function() {
-    EmployeeSchema.options.strict.should.eql(true);
+    return EmployeeSchema.options.strict.should.eql(true);
   });
 
   it('should inherit schema properties', function() {
-    DeveloperSchema.__nootDef.schema.name.should.deep.eql({ type: String, required: true });
+    return DeveloperSchema.__nootDef.schema.name.should.deep.eql({ type: String, required: true });
   });
 
   it('should insert documents with right values', function(done) {
@@ -156,7 +156,7 @@ describe('NOOT.Mongoose.Schema', function() {
     }, function(err) {
       if (err) return done(err);
 
-      Person.find(function(err, results) {
+      return Person.find(function(err, results) {
         if (err) return done(err);
 
         var retrievedMe = getItemFromList(me, results);
@@ -180,7 +180,7 @@ describe('NOOT.Mongoose.Schema', function() {
   });
 
   it('should associate right model', function(done) {
-    Person.find(function(err, results) {
+    return Person.find(function(err, results) {
       if (err) return done(err);
       results.length.should.eql(3);
 
@@ -194,7 +194,7 @@ describe('NOOT.Mongoose.Schema', function() {
   });
 
   it('should find all Person', function(done) {
-    Person.find(function(err, items) {
+    return Person.find(function(err, items) {
       if (err) return done(err);
       items.length.should.eql(3);
       return done();
@@ -202,7 +202,7 @@ describe('NOOT.Mongoose.Schema', function() {
   });
 
   it('should find all Person at least 38 years old', function(done) {
-    Person.find({ age: { $gte: 38 } }, function(err, items) {
+    return Person.find({ age: { $gte: 38 } }, function(err, items) {
       if (err) return done(err);
       items.length.should.eql(2);
       return done();
@@ -210,7 +210,7 @@ describe('NOOT.Mongoose.Schema', function() {
   });
 
   it('should find all Person (name field only) at least 40 years old', function(done) {
-    Person.find({ age: { $gte: 40 } }, 'name', function(err, items) {
+    return Person.find({ age: { $gte: 40 } }, 'name', function(err, items) {
       if (err) return done(err);
 
       items.length.should.eql(1);
@@ -225,7 +225,7 @@ describe('NOOT.Mongoose.Schema', function() {
   });
 
   it('should find all Person (name field only) at least 36 years old with sort option', function(done) {
-    Person.find({ age: { $gte: 36 } }, 'name', { sort : 'name' }).exec(function(err, items) {
+    return Person.find({ age: { $gte: 36 } }, 'name', { sort : 'name' }).exec(function(err, items) {
       if (err) return done(err);
 
       items.length.should.eql(2);
@@ -247,7 +247,7 @@ describe('NOOT.Mongoose.Schema', function() {
   });
 
   it('should find all Person (name field only) at least 36 years old with sort option (inverted sort)', function(done) {
-    Person.find({ age: { $gte: 36 } }, 'name', { sort : '-name' }).exec(function(err, items) {
+    return Person.find({ age: { $gte: 36 } }, 'name', { sort : '-name' }).exec(function(err, items) {
       if (err) return done(err);
 
       items.length.should.eql(2);
@@ -269,7 +269,7 @@ describe('NOOT.Mongoose.Schema', function() {
   });
 
   it('should find only developers', function(done) {
-    Developer.find().exec(function(err, items) {
+    return Developer.find().exec(function(err, items) {
       if (err) return done(err);
       items.length.should.eql(1);
       return done();
@@ -277,7 +277,7 @@ describe('NOOT.Mongoose.Schema', function() {
   });
 
   it('should find only employees', function(done) {
-    Employee.find(function(err, items) {
+    return Employee.find(function(err, items) {
       if (err) return done(err);
       items.length.should.eql(2);
       return done();
@@ -285,15 +285,24 @@ describe('NOOT.Mongoose.Schema', function() {
   });
 
   it('should find all persons', function(done) {
-    Person.find(function(err, items) {
+    return Person.find(function(err, items) {
       if (err) return done(err);
       items.length.should.eql(3);
       return done();
     });
   });
 
+  it('should find only persons (strict mode)', function(done) {
+    return Person.find({}, '', { strict: true }, function(err, results) {
+      if (err) return done(err);
+      results.length.should.eql(1);
+      results[0].name.should.eql('John Doe');
+      return done();
+    });
+  });
+
   it('should not find one employee with __type=Person ', function(done) {
-    Person.find({ __type : 'Person' }).exec(function(err, results) {
+    return Person.find({ __type : 'Person' }).exec(function(err, results) {
       if (err) return done(err);
       Employee.findOne({ '_id': results[0]._id }).exec(function(err, item) {
         if (err) return done(err);
@@ -304,7 +313,7 @@ describe('NOOT.Mongoose.Schema', function() {
   });
 
   it('should find one employee with __type=Developer ', function(done) {
-    Person.find({ __type : 'Developer' }).exec(function(err, results) {
+    return Person.find({ __type : 'Developer' }).exec(function(err, results) {
       if (err) return done(err);
       Employee.findOne({ '_id': results[0]._id }).exec(function(err, item) {
         if (err) return done(err);
@@ -315,7 +324,7 @@ describe('NOOT.Mongoose.Schema', function() {
   });
 
   it('should find one employee with __type=Employee ', function(done) {
-    Person.find({ __type : 'Employee' }).exec(function(err, results) {
+    return Person.find({ __type : 'Employee' }).exec(function(err, results) {
       if (err) return done(err);
       Employee.findOne({ '_id': results[0]._id }).exec(function(err, item) {
         if (err) return done(err);
