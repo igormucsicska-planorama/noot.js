@@ -1,50 +1,31 @@
-var NOOT = require('../../../')('object');
+/**
+ * Dependencies
+ */
+var NOOT = require('../../../')('object', 'internal-utils');
 var mongoose = require('mongoose');
+var _ = require('lodash');
+
+
+/**
+ * Variables
+ */
 var MongooseSchema = mongoose.Schema;
 var Model = mongoose.Model;
-var _ = require('lodash');
 var Schema = NOOT.noop;
+
 var oldFindOne = Model.findOne;
 var oldFind = Model.find;
+var oldInit = Model.prototype.init;
 
-var K = function() { return this; }; // Empty function
-
-/**
- * Build "_super" implementation
- *
- * @param {Object} dest Object to contain the resulting properties
- * @param {Object} parent Parent properties
- * @param {Object} child Child properties
- */
-var buildSuper = function(dest, parent, child) {
-  for (var prop in child) {
-    dest[prop] = (typeof child[prop] === 'function') ?
-                 (function (name, fn) {
-                   return function () {
-                     var tmp = this._super;
-                     this._super = ('function' === typeof parent[name]) ? parent[name] : K;
-                     var ret = fn.apply(this, arguments);
-                     this._super = tmp;
-                     return ret;
-                   };
-                 })(prop, child[prop]) :
-                 child[prop];
-  }
-
-  for (var parentProp in parent) {
-    if (NOOT.isUndefined(dest[parentProp])) dest[parentProp] = parent[parentProp];
-  }
-};
 
 /**
- * extend schema, def discriminator, create model
+ * Extend schema, define discriminator, create model
  *
  * @param {Object} definition Schema properties
  * @returns {MongooseSchema}
  */
 Schema.extend = function(definition) {
-
-  if (!definition.modelName) throw new Error('You must have a modelName in the schema properties');
+  if (!definition.modelName) throw new Error('Missing `modelName` property');
 
   var properties = definition.schema || {};
   var parentProperties = (this.__nootDef && this.__nootDef.schema) || {};
@@ -53,33 +34,42 @@ Schema.extend = function(definition) {
   }
 
   var schema = new MongooseSchema(properties, _.merge({}, this.options || {}, definition.options));
-  buildSuper(schema.methods, this.methods || {}, definition.methods);
-  buildSuper(schema.statics, this.statics || {}, definition.statics);
+
+  NOOT.InternalUtils.buildSuper(schema.methods, this.methods || {}, definition.methods);
+  NOOT.InternalUtils.buildSuper(schema.statics, this.statics || {}, definition.statics);
+
   schema.extend = Schema.extend.bind(schema);
+
   definition.parents = (this.__nootDef && this.__nootDef.parents.slice(0)) || [];
+
   if (this.__nootDef) definition.parents.push(this.__nootDef.modelName);
   schema.__nootDef = definition;
 
+  var identificator = { __type: { type: String, default: definition.modelName } };
+
   var discriminator = {
-    __types: {
-      type: Array, default: function() { return definition.parents.concat(definition.modelName); }
-    }
+    __types: { type: Array, default: function() { return definition.parents.concat(definition.modelName); } }
   };
 
   schema.add(discriminator);
-
-  var identificator = { __type: { type: String, default: definition.modelName } };
   schema.add(identificator);
 
-  (definition.connection || mongoose).model(definition.modelName, schema);
+  (definition.db || mongoose).model(definition.modelName, schema);
 
   return schema;
 };
 
 
-
-var checkParamsFind = function (conditions, fields, options, callback) {
-
+/**
+ * Parse incoming arguments for find and findOne
+ *
+ * @param {Object} conditions
+ * @param {String} fields
+ * @param {Object} options
+ * @param {Function} callback
+ * @returns {Array}
+ */
+var parseArguments = function(conditions, fields, options, callback) {
   if ('function' === typeof conditions) {
     callback = conditions;
     conditions = {};
@@ -100,46 +90,26 @@ var checkParamsFind = function (conditions, fields, options, callback) {
   if (!conditions) conditions = {};
   conditions.__types = this.modelName;
 
-  var params = [conditions, fields, options, callback];
-  return params;
-
+  return [conditions, fields, options, callback];
 };
+
 
 /**
  * Override findOne method to handle inheritance and find the right document based on the modelName
- *
- * @param {Object} conditions
- * @param {Object} fields
- * @param {Object} options
- * @param {function} callback
- * @returns {*}
  */
-
-
-Model.findOne = function findOne (conditions, fields, options, callback) {
-
-  return oldFindOne.apply(this, checkParamsFind.call(this, conditions, fields, options, callback));
-
+Model.findOne = function() {
+  return oldFindOne.apply(this, parseArguments.apply(this, arguments));
 };
+
 
 /**
- *Override find method to handle inheritance and find the right documents based on the modelName
- *
- * @param {Object} conditions
- * @param {Object} fields
- * @param {Object} options
- * @param {function} callback
- * @returns {*}
+ * Override find method to handle inheritance and find the right documents based on the modelName
  */
-
-
-Model.find = function(conditions, fields, options, callback) {
-
-  return oldFind.apply(this, checkParamsFind.call(this, conditions, fields, options, callback));
-
+Model.find = function() {
+  return oldFind.apply(this, parseArguments.apply(this, arguments));
 };
 
-var oldInit = Model.prototype.init;
+
 /**
  * Set the prototype based on the discriminator __type
  *
@@ -148,7 +118,7 @@ var oldInit = Model.prototype.init;
  * @param {function} fn
  * @returns {*}
  */
-Model.prototype.init = function (doc, query, fn) {
+Model.prototype.init = function(doc, query, fn) {
   var model = this.db.model(doc.__type);
   var newFn = function() {
     process.nextTick(function() {
@@ -161,4 +131,8 @@ Model.prototype.init = function (doc, query, fn) {
   return obj;
 };
 
+
+/**
+ * @module
+ */
 module.exports = Schema;
