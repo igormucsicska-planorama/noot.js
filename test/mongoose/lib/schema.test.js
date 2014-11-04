@@ -7,7 +7,6 @@ var mongoose = require('mongoose');
 var async = require('async');
 var _ = require('lodash');
 
-
 var TEST_DB_NAME = 'noot-mongoose-schema-test';
 
 
@@ -79,12 +78,14 @@ var DeveloperSchema = EmployeeSchema.extend({
   }
 });
 
+
 /**
  * Models
  */
 var Person = mongoose.model('Person');
 var Employee = mongoose.model('Employee');
 var Developer = mongoose.model('Developer');
+
 
 /**
  * @type {Person}
@@ -111,7 +112,6 @@ var me = new Developer({
   age: 28
 });
 
-
 var getItemFromList = function(item, list) {
   var id = item._id.toString();
   return list.filter(function(result) {
@@ -121,18 +121,119 @@ var getItemFromList = function(item, list) {
 
 
 describe('NOOT.Mongoose.Schema', function() {
+
+  var dbs = {
+    one: null,
+    two: null
+  };
+
+  var Obj1Schema, Obj2Schema;
+  var Obj1, Obj2;
+  var obj1, obj2;
+
   before(function(done) {
-    return mongoose.connect('mongodb://localhost:27017/' + TEST_DB_NAME, function() {
-      return mongoose.connection.db.collectionNames(function(err, names) {
-        if (err) return done(err);
+    mongoose.connect('mongodb://localhost:27017/' + TEST_DB_NAME, function() {
+      mongoose.connection.db.collectionNames(function(err, names) {
+        if (err) done(err);
         if (_.find(names, { name: TEST_DB_NAME + '.' + 'person' })) {
-          return mongoose.connection.collection('person').drop(done);
+          mongoose.connection.collection('person').drop(done);
         } else {
-          return done();
+          done();
         }
       });
     });
   });
+
+  before(function(done) {
+    async.each([
+      { name: TEST_DB_NAME + 'db1', reference: 'one' },
+      { name: TEST_DB_NAME + 'db2', reference: 'two' }
+    ], function(item, cb) {
+      dbs[item.reference] = mongoose.createConnection('mongodb://localhost:27017/' + item.name, function () {
+        dbs[item.reference].db.collectionNames(function (err, names) {
+          if (err) done(err);
+          if (_.find(names, { name: item.name + '.' + 'obj' })) {
+            dbs[item.reference].collection('obj').drop(cb);
+          } else {
+            return cb();
+          }
+        });
+      });
+    }, done);
+  });
+
+  before(function(done) {
+
+
+    done();
+  });
+
+
+  before(function(done) {
+
+    /**
+     * Obj1Schema
+     *
+     */
+    Obj1Schema = Schema.extend({
+      modelName: 'Obj',
+
+      schema: {
+        title: { type: String, required: true }
+      },
+
+      options: {
+        strict: false,
+        collection: 'obj',
+        versionKey: false
+      },
+
+      db: dbs.one
+
+    });
+
+    /**
+     * Obj2Schema
+     *
+     */
+    Obj2Schema = Obj1Schema.extend({
+      modelName: 'Obj',
+      db: dbs.two
+    });
+
+    /**
+     * Models
+     */
+    Obj1 = dbs.one.model('Obj');
+    Obj2 = dbs.two.model('Obj');
+
+    /**
+     * @type {Obj1}
+     */
+    obj1 = new Obj1({
+      title: 'Object 1'
+    });
+
+    obj1.save(function(err) {
+      if (err) done(err);
+    });
+
+    /**
+     * @type {Obj2}
+     */
+
+    obj2 = new Obj2({
+      title: 'Object2'
+    });
+
+    obj2.save(function(err) {
+      if (err) done(err);
+    });
+
+    done();
+  });
+
+
 
   it('should inherit instance method', function() {
     return me.sayHello().should.eql('Hello, my name is Jean-Baptiste, I work as a Developer');
@@ -301,36 +402,19 @@ describe('NOOT.Mongoose.Schema', function() {
     });
   });
 
-  it('should not find one employee with __type=Person ', function(done) {
-    return Person.find({ __type : 'Person' }).exec(function(err, results) {
+  it('should find one Obj in db1', function(done) {
+    return Obj1.find(function(err, items) {
       if (err) return done(err);
-      Employee.findOne({ '_id': results[0]._id }).exec(function(err, item) {
-        if (err) return done(err);
-        (item === null).should.eql(true);
-        return done();
-      });
+      items.length.should.eql(1);
+      return done();
     });
   });
 
-  it('should find one employee with __type=Developer ', function(done) {
-    return Person.find({ __type : 'Developer' }).exec(function(err, results) {
+  it('should find one Obj in db2', function(done) {
+    return Obj2.find(function(err, items) {
       if (err) return done(err);
-      Employee.findOne({ '_id': results[0]._id }).exec(function(err, item) {
-        if (err) return done(err);
-        (item instanceof Developer).should.eql(true);
-        return done();
-      });
-    });
-  });
-
-  it('should find one employee with __type=Employee ', function(done) {
-    return Person.find({ __type : 'Employee' }).exec(function(err, results) {
-      if (err) return done(err);
-      Employee.findOne({ '_id': results[0]._id }).exec(function(err, item) {
-        if (err) return done(err);
-        (item instanceof Employee).should.eql(true);
-        return done();
-      });
+      items.length.should.eql(1);
+      return done();
     });
   });
 
