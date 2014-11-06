@@ -2,30 +2,7 @@
  * Dependencies
  **********************************************************************************************************************/
 var _ = require('lodash');
-var K = function() { return this; }; // Empty function
-
-/**
- * Build "_super" implementation
- *
- * @param {Object} dest Object to contain the resulting properties
- * @param {Object} parent Parent properties
- * @param {Object} child Child properties
- */
-var buildSuper = function(dest, parent, child) {
-  for (var prop in child) {
-    dest[prop] = (typeof child[prop] === 'function') ?
-      (function (name, fn) {
-        return function () {
-          var tmp = this._super;
-          this._super = ('function' === typeof parent[name]) ? parent[name] : K;
-          var ret = fn.apply(this, arguments);
-          this._super = tmp;
-          return ret;
-        };
-      })(prop, child[prop]) :
-      child[prop];
-  }
-};
+var InternalUtils = require('../internal-utils');
 
 /***********************************************************************************************************************
  * NOOT.Object
@@ -66,7 +43,7 @@ Obj.extend = function (proto, stat) {
   var prototype = {};
 
   // 'super' implementation
-  buildSuper(prototype, this.prototype, proto);
+  InternalUtils.buildSuper(prototype, this.prototype, proto);
 
   // Prototypal inheritance
   var Surrogate = function () { this.constructor = child; };
@@ -74,7 +51,7 @@ Obj.extend = function (proto, stat) {
 
   // Static properties
   var statics = {};
-  buildSuper(statics, this, stat);
+  InternalUtils.buildSuper(statics, this, stat);
   _.extend(child, this, statics);
 
   child.prototype = new Surrogate();
@@ -109,4 +86,4 @@ Obj.create = function(def) {
 /**
  * @ignore
  */
-module.exports = Obj.extend({ init: K });
+module.exports = Obj.extend({ init: function() { return this; } });

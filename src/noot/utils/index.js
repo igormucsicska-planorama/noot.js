@@ -44,7 +44,7 @@ var Utils = {
     return obj;
   },
 
-  noop: function() {}
+  noop: function() { return this; }
 
 };
 
