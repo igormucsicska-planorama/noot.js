@@ -391,6 +391,15 @@ describe('NOOT.Mongoose.Schema', function() {
     });
   });
 
+  it('should find one Developer', function(done) {
+    return Developer.findOne(function(err, item) {
+      if (err) return done(err);
+      (item !== null).should.eql(true);
+      item.name.should.eql('Jean-Baptiste');
+      return done();
+    });
+  });
+
   it('should find one Obj in db1', function(done) {
     return Obj1.find(function(err, items) {
       if (err) return done(err);
