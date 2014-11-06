@@ -132,13 +132,13 @@ describe('NOOT.Mongoose.Schema', function() {
   var obj1, obj2;
 
   before(function(done) {
-    mongoose.connect('mongodb://localhost:27017/' + TEST_DB_NAME, function() {
-      mongoose.connection.db.collectionNames(function(err, names) {
+    return mongoose.connect('mongodb://localhost:27017/' + TEST_DB_NAME, function() {
+      return mongoose.connection.db.collectionNames(function(err, names) {
         if (err) done(err);
         if (_.find(names, { name: TEST_DB_NAME + '.' + 'person' })) {
-          mongoose.connection.collection('person').drop(done);
+          return mongoose.connection.collection('person').drop(done);
         } else {
-          done();
+          return done();
         }
       });
     });
@@ -150,10 +150,10 @@ describe('NOOT.Mongoose.Schema', function() {
       { name: TEST_DB_NAME + 'db2', reference: 'two' }
     ], function(item, cb) {
       dbs[item.reference] = mongoose.createConnection('mongodb://localhost:27017/' + item.name, function () {
-        dbs[item.reference].db.collectionNames(function (err, names) {
+        return dbs[item.reference].db.collectionNames(function (err, names) {
           if (err) done(err);
           if (_.find(names, { name: item.name + '.' + 'obj' })) {
-            dbs[item.reference].collection('obj').drop(cb);
+            return dbs[item.reference].collection('obj').drop(cb);
           } else {
             return cb();
           }
@@ -161,13 +161,6 @@ describe('NOOT.Mongoose.Schema', function() {
       });
     }, done);
   });
-
-  before(function(done) {
-
-
-    done();
-  });
-
 
   before(function(done) {
 
@@ -189,7 +182,6 @@ describe('NOOT.Mongoose.Schema', function() {
       },
 
       db: dbs.one
-
     });
 
     /**
@@ -214,23 +206,20 @@ describe('NOOT.Mongoose.Schema', function() {
       title: 'Object 1'
     });
 
-    obj1.save(function(err) {
-      if (err) done(err);
-    });
-
     /**
      * @type {Obj2}
      */
-
     obj2 = new Obj2({
       title: 'Object2'
     });
 
-    obj2.save(function(err) {
-      if (err) done(err);
-    });
+    async.each([obj1, obj2], function(item, cb) {
+      item.save(function(err) {
+        if (err) done(err);
+        return cb();
+      });
+    }, done);
 
-    done();
   });
 
 
