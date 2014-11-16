@@ -65,7 +65,7 @@ describe('NOOT.Time.Measure', function() {
     it('should measure interval', function(done) {
       var measure = NOOT.Time.Measure.create();
       var duration = NOOT.Time.SECOND * 1.3;
-      var delta = 2;
+      var delta = 5;
       measure.start();
       setTimeout(function() {
         measure.stop();
