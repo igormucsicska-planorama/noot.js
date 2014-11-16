@@ -6,11 +6,9 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-blanket');
 
 
-  var CHECKABLES = [
-    'src/**/*.js',
-    'test/**/*.js',
-    'index.js',
-    'Gruntfile.js'
+  var TO_IGNORE = [
+    '**/*.js',
+    '!**/node_modules/**'
   ];
 
 
@@ -33,14 +31,14 @@ module.exports = function(grunt) {
         jshintrc: true,
         reporter: require('jshint-stylish')
       },
-      target: CHECKABLES
+      all: TO_IGNORE
     },
 
     /**
      * JS Code Sniffer
      */
     jscs: {
-      src: CHECKABLES,
+      all: TO_IGNORE,
       options: {
         config: '.jscsrc'
       }

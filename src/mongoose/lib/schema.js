@@ -4,6 +4,9 @@
 var NOOT = require('../../../')('object', 'internal-utils');
 var mongoose = require('mongoose');
 var _ = require('lodash');
+var path = require('path');
+var fs = require('fs');
+var Case = require('case');
 
 
 /**
@@ -12,6 +15,8 @@ var _ = require('lodash');
 var MongooseSchema = mongoose.Schema;
 var Model = mongoose.Model;
 var Schema = NOOT.noop;
+
+var MIDDLEWARES_PATH = './middlewares';
 
 var oldFindOne = Model.findOne;
 var oldFind = Model.find;
@@ -33,7 +38,7 @@ Schema.extend = function(definition) {
     if (NOOT.isUndefined(properties[key])) properties[key] = _.cloneDeep(parentProperties[key]);
   }
 
-  var schema = new MongooseSchema(properties, _.merge({}, this.options || {}, definition.options));
+  var schema = this.mongooseSchema = new MongooseSchema(properties, _.merge({}, this.options || {}, definition.options));
 
   NOOT.InternalUtils.buildSuper(schema.methods, this.methods || {}, definition.methods);
   NOOT.InternalUtils.buildSuper(schema.statics, this.statics || {}, definition.statics);
@@ -132,6 +137,20 @@ Model.prototype.init = function(doc, query, fn) {
   obj.__proto__ = model.prototype;
   return obj;
 };
+
+
+/**
+ * Attach middlewares functions
+ */
+fs.readdirSync(path.resolve(__dirname, MIDDLEWARES_PATH)).forEach(function(middleware) {
+  var middlewareName = Case.camel(path.basename(middleware, '.js'));
+  middleware = require(path.join(__dirname, MIDDLEWARES_PATH, middleware));
+  MongooseSchema.prototype[middlewareName] = function() {
+    var args = NOOT.makeArray(arguments);
+    args.unshift(this);
+    return middleware.apply(middleware, args);
+  };
+});
 
 
 /**

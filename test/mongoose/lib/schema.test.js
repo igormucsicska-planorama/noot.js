@@ -416,4 +416,8 @@ describe('NOOT.Mongoose.Schema', function() {
     });
   });
 
+  it('should have middleware function attached', function() {
+    DeveloperSchema.useTimestamps.should.be.a('function');
+  });
+
 });
