@@ -410,4 +410,10 @@ describe('NOOT.Mongoose.Schema', function() {
     DeveloperSchema.useTimestamps.should.be.a('function');
   });
 
+  after(function(done) {
+    return async.each([mongoose, dbs.one, dbs.two], function(db, cb) {
+      return (db.connection || db).close(cb);
+    }, done);
+  });
+
 });

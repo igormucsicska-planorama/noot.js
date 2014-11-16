@@ -38,7 +38,7 @@ Schema.extend = function(definition) {
     if (NOOT.isUndefined(properties[key])) properties[key] = _.cloneDeep(parentProperties[key]);
   }
 
-  var schema = this.mongooseSchema = new MongooseSchema(properties, _.merge({}, this.options || {}, definition.options));
+  var schema = new MongooseSchema(properties, _.merge({}, this.options || {}, definition.options));
 
   NOOT.InternalUtils.buildSuper(schema.methods, this.methods || {}, definition.methods);
   NOOT.InternalUtils.buildSuper(schema.statics, this.statics || {}, definition.statics);
