@@ -33,6 +33,8 @@ describe('NOOT.Mongoose.useTimestamps()', function() {
 
     NOOT.Mongoose.useTimestamps(schema);
 
+    console.log(mongoose.model('UseTimestampsAll'));
+
     mongoose.model('UseTimestampsAll').create({}, function(err, doc) {
       if (err) return done(err);
 

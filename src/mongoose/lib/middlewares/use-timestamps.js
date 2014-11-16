@@ -16,17 +16,11 @@ var useTimestamps = function(schema, timings) {
 
   schema.add(paths);
 
-  console.log(schema);
-
   schema.pre('save', function(next) {
     var now = new Date();
 
-    if (!this.createdOn) this.createdOn = now;
-    if (!this.updatedOn) this.updatedOn = now;
-
-    if (this.isModified) this.updatedOn = now;
-
-    console.log(this);
+    if (!this.createdOn) this.createdOn = this.updatedOn = now;
+    else if (this.isModified()) this.updatedOn = now;
 
     return next();
   });

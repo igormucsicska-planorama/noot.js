@@ -21,6 +21,7 @@ var MIDDLEWARES_PATH = './middlewares';
 var oldFindOne = Model.findOne;
 var oldFind = Model.find;
 var oldInit = Model.prototype.init;
+var oldModel = mongoose.model;
 
 
 /**
@@ -30,8 +31,7 @@ var oldInit = Model.prototype.init;
  * @returns {MongooseSchema}
  */
 Schema.extend = function(definition) {
-  if (!definition.modelName) throw new Error('Missing `modelName` property');
-
+  definition = definition || {};
   var properties = definition.schema || {};
   var parentProperties = (this.__nootDef && this.__nootDef.schema) || {};
   for (var key in parentProperties) {
@@ -45,21 +45,8 @@ Schema.extend = function(definition) {
 
   schema.extend = Schema.extend.bind(schema);
 
-  definition.parents = (this.__nootDef && this.__nootDef.parents.slice(0)) || [];
-
-  if (this.__nootDef) definition.parents.push(this.__nootDef.modelName);
   schema.__nootDef = definition;
-
-  var identificator = { __type: { type: String, default: definition.modelName } };
-
-  var discriminator = {
-    __types: { type: Array, default: function() { return definition.parents.concat(definition.modelName); } }
-  };
-
-  schema.add(discriminator);
-  schema.add(identificator);
-
-  (definition.db || mongoose).model(definition.modelName, schema);
+  schema.__nootParent = this;
 
   return schema;
 };
@@ -151,6 +138,50 @@ fs.readdirSync(path.resolve(__dirname, MIDDLEWARES_PATH)).forEach(function(middl
     return middleware.apply(middleware, args);
   };
 });
+
+
+/**
+ * Redefine model creation to attach discriminators
+ *
+ * @param {String} modelName
+ * @param {Object} schema
+ * @returns {Object}
+ */
+mongoose.model = function(modelName, schema) {
+
+  if (schema) {
+
+    var definition = schema.__nootDef;
+
+    if (definition) {
+      var parent = schema.__nootParent;
+      var parentDef = parent.__nootDef;
+
+      definition.parents = [modelName];
+
+      for (var registeredModelName in this.models) {
+        if (this.models[registeredModelName].schema === parent) {
+          definition.parents.push(registeredModelName);
+          break;
+        }
+      }
+
+      definition.parents = ((parentDef && parentDef.parents) || []).concat(definition.parents);
+      definition.parents = _.uniq(definition.parents);
+
+      var identificator = { __type: { type: String, default: modelName } };
+
+      var discriminator = {
+        __types: { type: Array, default: function() { return definition.parents; } }
+      };
+
+      schema.add(discriminator);
+      schema.add(identificator);
+    }
+  }
+
+  return oldModel.apply(this, arguments);
+};
 
 
 /**

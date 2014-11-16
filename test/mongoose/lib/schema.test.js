@@ -14,8 +14,6 @@ var TEST_DB_NAME = 'noot-mongoose-schema-test';
  * PersonSchema
  */
 var PersonSchema = Schema.extend({
-  modelName: 'Person',
-
   schema: {
     name: { type: String, required: true },
     age: { type: Number, required: true }
@@ -40,12 +38,11 @@ var PersonSchema = Schema.extend({
   }
 });
 
+
 /**
  * EmployeeSchema
  */
 var EmployeeSchema = PersonSchema.extend({
-  modelName: 'Employee',
-
   schema: {
     job: String
   },
@@ -67,12 +64,11 @@ var EmployeeSchema = PersonSchema.extend({
   }
 });
 
+
 /**
  * DeveloperSchema
  */
 var DeveloperSchema = EmployeeSchema.extend({
-  modelName: 'Developer',
-
   schema: {
     job: { type: String, default: 'Developer' }
   }
@@ -82,9 +78,9 @@ var DeveloperSchema = EmployeeSchema.extend({
 /**
  * Models
  */
-var Person = mongoose.model('Person');
-var Employee = mongoose.model('Employee');
-var Developer = mongoose.model('Developer');
+var Person = mongoose.model('Person', PersonSchema);
+var Employee = mongoose.model('Employee', EmployeeSchema);
+var Developer = mongoose.model('Developer', DeveloperSchema);
 
 
 /**
@@ -111,6 +107,7 @@ var me = new Developer({
   name: 'Jean-Baptiste',
   age: 28
 });
+
 
 var getItemFromList = function(item, list) {
   var id = item._id.toString();
@@ -169,8 +166,6 @@ describe('NOOT.Mongoose.Schema', function() {
      *
      */
     Obj1Schema = Schema.extend({
-      modelName: 'Obj',
-
       schema: {
         title: { type: String, required: true }
       },
@@ -179,25 +174,20 @@ describe('NOOT.Mongoose.Schema', function() {
         strict: false,
         collection: 'obj',
         versionKey: false
-      },
-
-      db: dbs.one
+      }
     });
 
     /**
      * Obj2Schema
      *
      */
-    Obj2Schema = Obj1Schema.extend({
-      modelName: 'Obj',
-      db: dbs.two
-    });
+    Obj2Schema = Obj1Schema.extend();
 
     /**
      * Models
      */
-    Obj1 = dbs.one.model('Obj');
-    Obj2 = dbs.two.model('Obj');
+    Obj1 = dbs.one.model('Obj', Obj1Schema);
+    Obj2 = dbs.two.model('Obj', Obj2Schema);
 
     /**
      * @type {Obj1}
