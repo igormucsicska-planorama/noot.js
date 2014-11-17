@@ -112,6 +112,6 @@ Set CreatedOn and UpdatedOn automatically
 ** From schema method **
 
 ```javascript
- var schema = Schema.extend({}).useTimestamps();;
+ var schema = Schema.extend({}).useTimestamps();
 
 ```
