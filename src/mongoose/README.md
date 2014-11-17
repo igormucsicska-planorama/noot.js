@@ -1,6 +1,6 @@
-# NOOT.Mongoose
+# NOOT.Mongoose.Schema
 
-Implements schema inheritance
+Implements schema inheritance 
 
 ## Usage
 
@@ -28,8 +28,9 @@ var yourSchema = Schema.extend({
 ## Example
 ```javascript
 var NOOT = require('noot')('mongoose');
-
 var Schema = NOOT.Mongoose.Schema;
+
+var mongoose = require('mongoose');
 ```
 
 ### Create your first Schema
@@ -87,6 +88,8 @@ var EmployeeSchema = PersonSchema.extend({
 });
 ```
 
+
+
 ### Declare your models
 ```javascript
 var Person = mongoose.model('Person', PersonSchema);
@@ -94,24 +97,55 @@ var Employee = mongoose.model('Employee', EmployeeSchema);
 ```
 
 
-## Middleware
+# NOOT.Mongoose.useTimestamps 
 
-###use-timestamps###
+ Middleware to set createdOn and updatedOn automatically 
 
-Set CreatedOn and UpdatedOn automatically
+##Usage
 
-** From namescpace **
+### From namespace
 
 ```javascript
  var schema = Schema.extend({});
-
+ 
  NOOT.Mongoose.useTimestamps(schema);
 
 ```
 
-** From schema method **
+### From schema method 
 
 ```javascript
  var schema = Schema.extend({}).useTimestamps();
+
+```
+
+##Example
+
+```javascript
+var ObjSchema = Schema.extend({
+  schema: { foo: String, bar: Number }
+}).useTimestamps();
+
+var Obj = mongoose.model('Obj', ObjSchema);
+
+Obj.create({}, function(err, item){  // Set createdOn and updatedOn to date1 = Date.now()
+  if (err) throw(err);
+  
+  console.log(item.createdOn); // => print date1
+  console.log(item.updatedOn); // => print date1
+  
+  item.foo = 'toto';
+  
+  // a timeout to simulate an update afterward
+  setTimeout(function() {
+    item.save(function(err){ // Set updatedOn to date2 = Date.now() = date1 + ~1000 
+      if(err) throw(err);
+      
+      console.log(item.createdOn) // => print date1
+      console.log(item.updatedOn) // => print date2
+      
+    }); 
+  }, 1000);
+});
 
 ```
