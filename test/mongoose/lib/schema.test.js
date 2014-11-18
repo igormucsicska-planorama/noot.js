@@ -74,6 +74,19 @@ var DeveloperSchema = EmployeeSchema.extend({
   }
 });
 
+/**
+ * ArtistSchema
+ */
+var ArtistSchema = PersonSchema.extend({});
+
+/**
+ * SingerSchema
+ */
+var SingerSchema = ArtistSchema.extend({
+  schema: {
+    type: { type: String }
+  }
+});
 
 /**
  * Models
@@ -82,6 +95,8 @@ var Person = mongoose.model('Person', PersonSchema);
 var Employee = mongoose.model('Employee', EmployeeSchema);
 var Developer = mongoose.model('Developer', DeveloperSchema);
 
+var Artist = mongoose.model('Artiste', ArtistSchema);
+var Singer = mongoose.model('Singer', SingerSchema);
 
 /**
  * @type {Person}
@@ -106,6 +121,17 @@ var her = new Employee({
 var me = new Developer({
   name: 'Jean-Baptiste',
   age: 28
+});
+
+var artist = new Artist({
+  name: 'Alice Doe',
+  age: 19
+});
+
+var singer = new Singer({
+  name: 'Frank Doe',
+  type: 'Rock',
+  age: 26
 });
 
 
@@ -227,11 +253,12 @@ describe('NOOT.Mongoose.Schema', function() {
   });
 
   it('should inherit schema properties', function() {
+    SingerSchema.__nootDef.schema.name.should.deep.eql({ type: String, required: true });
     return DeveloperSchema.__nootDef.schema.name.should.deep.eql({ type: String, required: true });
   });
 
   it('should insert documents with right values', function(done) {
-    return async.each([me, her, him], function(item, cb) {
+    return async.each([me, her, him, artist, singer], function(item, cb) {
       return item.save(cb);
     }, function(err) {
       if (err) return done(err);
@@ -242,6 +269,8 @@ describe('NOOT.Mongoose.Schema', function() {
         var retrievedMe = getItemFromList(me, results);
         var retrievedHer = getItemFromList(her, results);
         var retrievedHim = getItemFromList(him, results);
+        var retrievedArtist = getItemFromList(artist, results);
+        var retrievedSinger = getItemFromList(singer, results);
 
         retrievedMe.name.should.be.eql('Jean-Baptiste');
         retrievedMe.job.should.be.eql('Developer');
@@ -254,6 +283,13 @@ describe('NOOT.Mongoose.Schema', function() {
         retrievedHer.job.should.be.eql('Category expert');
         retrievedHer.age.should.be.eql(38);
 
+        retrievedArtist.name.should.be.eql('Alice Doe');
+        retrievedArtist.age.should.be.eql(19);
+
+        retrievedSinger.name.should.be.eql('Frank Doe');
+        retrievedSinger.type.should.be.eql('Rock');
+        retrievedSinger.age.should.be.eql(26);
+
         return done();
       });
     });
@@ -262,21 +298,14 @@ describe('NOOT.Mongoose.Schema', function() {
   it('should associate right model', function(done) {
     return Person.find(function(err, results) {
       if (err) return done(err);
-      results.length.should.eql(3);
+      results.length.should.eql(5);
 
-      [{ person: him, class: Person }, { person: her, class: Employee }, { person: me, class: Developer }]
+      [{ person: him, class: Person }, { person: her, class: Employee }, { person: me, class: Developer },
+      { person: artist, class: Artist }, { person: singer, class: Singer }]
         .forEach(function(item) {
           (getItemFromList(item.person, results) instanceof item.class).should.eql(true);
         });
 
-      return done();
-    });
-  });
-
-  it('should find all Person', function(done) {
-    return Person.find(function(err, items) {
-      if (err) return done(err);
-      items.length.should.eql(3);
       return done();
     });
   });
@@ -367,7 +396,7 @@ describe('NOOT.Mongoose.Schema', function() {
   it('should find all persons', function(done) {
     return Person.find(function(err, items) {
       if (err) return done(err);
-      items.length.should.eql(3);
+      items.length.should.eql(5);
       return done();
     });
   });
@@ -407,7 +436,7 @@ describe('NOOT.Mongoose.Schema', function() {
   });
 
   it('should have middleware function attached', function() {
-    DeveloperSchema.useTimestamps.should.be.a('function');
+    return DeveloperSchema.useTimestamps.should.be.a('function');
   });
 
   after(function(done) {

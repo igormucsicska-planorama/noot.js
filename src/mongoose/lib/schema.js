@@ -31,7 +31,11 @@ var oldModel = mongoose.model;
  * @returns {MongooseSchema}
  */
 Schema.extend = function(definition) {
+
   definition = definition || {};
+
+  if (_.isUndefined(definition.schema)) definition.schema = {};
+
   var properties = definition.schema || {};
   var parentProperties = (this.__nootDef && this.__nootDef.schema) || {};
   for (var key in parentProperties) {
@@ -46,6 +50,7 @@ Schema.extend = function(definition) {
   schema.extend = Schema.extend.bind(schema);
 
   schema.__nootDef = definition;
+
   schema.__nootParent = this;
 
   return schema;
