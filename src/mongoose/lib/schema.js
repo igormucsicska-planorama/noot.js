@@ -37,7 +37,7 @@ MongooseSchema.extend = function(definition, ownStatics) {
 
   if (_.isUndefined(definition.schema)) definition.schema = {};
 
-  var properties = definition.schema || {};
+  var properties = definition.schema;
   var parentProperties = (this.__nootDef && this.__nootDef.schema) || {};
   for (var key in parentProperties) {
     if (NOOT.isUndefined(properties[key])) properties[key] = _.cloneDeep(parentProperties[key]);
