@@ -30,8 +30,13 @@ var oldModel = mongoose.model;
  * @param {Object} [ownStatics] Schema static properties
  * @returns {MongooseSchema}
  */
+
 MongooseSchema.extend = function(definition, ownStatics) {
+
   definition = definition || {};
+
+  if (_.isUndefined(definition.schema)) definition.schema = {};
+
   var properties = definition.schema || {};
   var parentProperties = (this.__nootDef && this.__nootDef.schema) || {};
   for (var key in parentProperties) {
@@ -49,6 +54,7 @@ MongooseSchema.extend = function(definition, ownStatics) {
   }
 
   schema.__nootDef = definition;
+
   schema.__nootParent = this;
 
   return schema;
