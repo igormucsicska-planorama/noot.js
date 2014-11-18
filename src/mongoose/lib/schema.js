@@ -48,7 +48,6 @@ Schema.extend = function(definition) {
   NOOT.InternalUtils.buildSuper(schema.statics, this.statics || {}, definition.statics);
 
   schema.extend = Schema.extend.bind(schema);
-
   schema.__nootDef = definition;
 
   schema.__nootParent = this;
