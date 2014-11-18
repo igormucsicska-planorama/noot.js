@@ -48,7 +48,7 @@ MongooseSchema.extend = function(definition, ownStatics) {
   NOOT.InternalUtils.buildSuper(schema.methods, this.methods || {}, definition.methods);
   NOOT.InternalUtils.buildSuper(schema.statics, this.statics || {}, definition.statics);
   NOOT.InternalUtils.buildSuper(schema, this, ownStatics);
-
+  
   for (var virtual in this.virtuals) {
     if (NOOT.isUndefined(schema.virtuals[virtual])) schema.virtuals[virtual] = this.virtuals[virtual];
   }
