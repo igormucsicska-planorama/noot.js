@@ -2,12 +2,12 @@
  * Dependencies
  */
 var NOOT = require('../../../')('object', 'internal-utils');
-var mongoose = require('mongoose');
+
 var _ = require('lodash');
 var path = require('path');
 var fs = require('fs');
 var Case = require('case');
-
+var mongoose = require('mongoose');
 
 /**
  * Variables
@@ -85,9 +85,13 @@ var parseArguments = function(conditions, fields, options, callback) {
 
   if (!conditions) conditions = {};
   if (!options) options = {};
-  if (options.strict) conditions.__type = this.modelName;
-  else conditions.__types = this.modelName;
 
+  if (!_.isEmpty(this.schema.__nootDef.parents)) {
+    if (options.strict) conditions.__type = this.modelName;
+    else conditions.__types = this.modelName;
+  } else {
+    if (options.strict) conditions.__type = { $exists : false };
+  }
   return [conditions, fields, options, callback];
 };
 
@@ -116,23 +120,30 @@ Model.find = function() {
  * @param {function} fn
  * @returns {*}
  */
+
 Model.prototype.init = function(doc, query, fn) {
-  var model = this.db.model(doc.__type);
-  var newFn = function() {
-    process.nextTick(function() {
-      fn.apply(this, arguments);
-    });
-  };
-  this.schema = model.schema;
-  var obj = oldInit.call(this, doc, query, newFn);
-  obj.__proto__ = model.prototype;
-  return obj;
+  if (doc.__type) {
+    var model = this.db.model(doc.__type);
+    var newFn = function() {
+      process.nextTick(function() {
+        fn.apply(this, arguments);
+      });
+    };
+    this.schema = model.schema;
+    var obj = oldInit.call(this, doc, query, newFn);
+    obj.__proto__ = model.prototype;
+    return obj;
+  }
+
+  return oldInit.apply(this, arguments);
+
 };
 
 
 /**
  * Attach middlewares functions
  */
+
 fs.readdirSync(path.resolve(__dirname, MIDDLEWARES_PATH)).forEach(function(middleware) {
   var middlewareName = Case.camel(path.basename(middleware, '.js'));
   middleware = require(path.join(__dirname, MIDDLEWARES_PATH, middleware));
@@ -155,32 +166,33 @@ mongoose.model = function(modelName, schema) {
 
   if (schema) {
 
-    var definition = schema.__nootDef;
+    var definition = {};
+    definition.parents = [];
 
-    if (definition) {
+    if (schema.__nootDef) {
       var parent = schema.__nootParent;
       var parentDef = parent.__nootDef;
 
-      definition.parents = [modelName];
-
       for (var registeredModelName in this.models) {
         if (this.models[registeredModelName].schema === parent) {
-          definition.parents.push(registeredModelName);
+          definition.parents = [registeredModelName];
           break;
         }
       }
 
       definition.parents = ((parentDef && parentDef.parents) || []).concat(definition.parents);
-      definition.parents = _.uniq(definition.parents);
+      schema.__nootDef.parents = _.cloneDeep(definition.parents);
+      definition.parents.push(modelName);
 
       var identificator = { __type: { type: String, default: modelName } };
-
       var discriminator = {
         __types: { type: Array, default: function() { return definition.parents; } }
       };
 
-      schema.add(discriminator);
-      schema.add(identificator);
+      if (!_.isEmpty(schema.__nootDef.parents)) {
+        schema.add(discriminator);
+        schema.add(identificator);
+      }
     }
   }
 
