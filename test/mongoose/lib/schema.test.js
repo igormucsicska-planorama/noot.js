@@ -375,7 +375,7 @@ describe('NOOT.Mongoose.Schema', function() {
       retrievedHim.should.eql(items[2]);
 
       retrievedLegacyPerson.toObject().should.have.keys('name', '_id');
-      retrievedHer.toObject().should.have.keys('name', '_id', '__type');
+      retrievedHer.toObject().should.have.keys('name', '_id', '__t');
       retrievedHim.toObject().should.have.keys('name', '_id');
 
       retrievedLegacyPerson.name.should.be.eql('Carol Doe');
@@ -401,7 +401,7 @@ describe('NOOT.Mongoose.Schema', function() {
       retrievedHim.should.eql(items[0]);
 
       retrievedLegacyPerson.toObject().should.have.keys('name', '_id');
-      retrievedHer.toObject().should.have.keys('name', '_id', '__type');
+      retrievedHer.toObject().should.have.keys('name', '_id', '__t');
       retrievedHim.toObject().should.have.keys('name', '_id');
 
       retrievedLegacyPerson.name.should.be.eql('Carol Doe');
