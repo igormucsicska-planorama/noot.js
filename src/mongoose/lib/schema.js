@@ -2,12 +2,11 @@
  * Dependencies
  */
 var NOOT = require('../../../')('object', 'internal-utils');
-
+var mongoose = require('mongoose');
 var _ = require('lodash');
 var path = require('path');
 var fs = require('fs');
 var Case = require('case');
-var mongoose = require('mongoose');
 
 /**
  * Variables
@@ -78,19 +77,19 @@ var parseArguments = function(conditions, fields, options, callback) {
   } else if ('function' === typeof options) {
     callback = options;
     options = null;
-    fields = fields + ' __type';
+    fields = fields + ' __t';
   } else if ('function' !== typeof callback) {
-    fields = fields + ' __type';
+    fields = fields + ' __t';
   }
 
   if (!conditions) conditions = {};
   if (!options) options = {};
 
   if (!_.isEmpty(this.schema.__nootDef.parents)) {
-    if (options.strict) conditions.__type = this.modelName;
-    else conditions.__types = this.modelName;
+    if (options.strict) conditions.__t = this.modelName;
+    else conditions.__ts = this.modelName;
   } else {
-    if (options.strict) conditions.__type = { $exists : false };
+    if (options.strict) conditions.__t = { $exists : false };
   }
   return [conditions, fields, options, callback];
 };
@@ -113,7 +112,7 @@ Model.find = function() {
 
 
 /**
- * Set the prototype based on the discriminator __type
+ * Set the prototype based on the discriminator __t
  *
  * @param {Object} doc
  * @param {Object} query
@@ -122,8 +121,8 @@ Model.find = function() {
  */
 
 Model.prototype.init = function(doc, query, fn) {
-  if (doc.__type) {
-    var model = this.db.model(doc.__type);
+  if (doc.__t) {
+    var model = this.db.model(doc.__t);
     var newFn = function() {
       process.nextTick(function() {
         fn.apply(this, arguments);
@@ -184,9 +183,9 @@ mongoose.model = function(modelName, schema) {
       schema.__nootDef.parents = _.cloneDeep(definition.parents);
       definition.parents.push(modelName);
 
-      var identificator = { __type: { type: String, default: modelName } };
+      var identificator = { __t: { type: String, default: modelName } };
       var discriminator = {
-        __types: { type: Array, default: function() { return definition.parents; } }
+        __ts: { type: Array, default: function() { return definition.parents; } }
       };
 
       if (!_.isEmpty(schema.__nootDef.parents)) {
