@@ -32,7 +32,6 @@ var oldModel = mongoose.model;
 Schema.extend = function(definition) {
 
   definition = definition || {};
-
   if (NOOT.isUndefined(definition.schema)) definition.schema = {};
 
   var properties = definition.schema;
@@ -47,8 +46,8 @@ Schema.extend = function(definition) {
   NOOT.InternalUtils.buildSuper(schema.statics, this.statics || {}, definition.statics);
 
   schema.extend = Schema.extend.bind(schema);
-  schema.__nootDef = definition;
 
+  schema.__nootDef = definition;
   schema.__nootParent = this;
 
   return schema;
@@ -154,7 +153,7 @@ fs.readdirSync(path.resolve(__dirname, MIDDLEWARES_PATH)).forEach(function(middl
 });
 
 /**
- * Check if the parent schema is already registered in a model
+ * Check if parent schema is already registered in a model
  *
  * @param {Object} parent
  * @param {Object} models
