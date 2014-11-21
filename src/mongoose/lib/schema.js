@@ -33,7 +33,7 @@ Schema.extend = function(definition) {
 
   definition = definition || {};
 
-  if (_.isUndefined(definition.schema)) definition.schema = {};
+  if (NOOT.isUndefined(definition.schema)) definition.schema = {};
 
   var properties = definition.schema;
   var parentProperties = (this.__nootDef && this.__nootDef.schema) || {};
@@ -77,9 +77,9 @@ var parseArguments = function(conditions, fields, options, callback) {
   } else if ('function' === typeof options) {
     callback = options;
     options = null;
-    fields = fields + ' __t';
-  } else if ('function' !== typeof callback) {
-    fields = fields + ' __t';
+    fields = fields;
+  } else if ('function' === typeof callback) {
+    fields = fields;
   }
 
   if (!conditions) conditions = {};
@@ -153,15 +153,33 @@ fs.readdirSync(path.resolve(__dirname, MIDDLEWARES_PATH)).forEach(function(middl
   };
 });
 
+/**
+ * Check if the parent schema is already registered in a model
+ *
+ * @param {Object} parent
+ * @param {Object} models
+ * @returns {Array}
+ */
+function checkRegisteredModel(parent, models) {
+  for (var registeredModelName in models) {
+    if (models[registeredModelName].schema === parent) {
+      return [registeredModelName];
+    }
+  }
+  return [];
+}
+
 
 /**
  * Redefine model creation to attach discriminators
  *
  * @param {String} modelName
  * @param {Object} schema
+ * @param {String} collection
+ * @param {Object} options
  * @returns {Object}
  */
-mongoose.model = function(modelName, schema) {
+mongoose.model = function(modelName, schema, collection, options) {
 
   if (schema) {
 
@@ -172,11 +190,11 @@ mongoose.model = function(modelName, schema) {
       var parent = schema.__nootParent;
       var parentDef = parent.__nootDef;
 
-      for (var registeredModelName in this.models) {
-        if (this.models[registeredModelName].schema === parent) {
-          definition.parents = [registeredModelName];
-          break;
-        }
+      if (options && NOOT.isObject(options)) {
+        definition.parents = checkRegisteredModel(parent, options.connection.models);
+
+      } else {
+        definition.parents = checkRegisteredModel(parent, this.models);
       }
 
       definition.parents = ((parentDef && parentDef.parents) || []).concat(definition.parents);
@@ -185,10 +203,12 @@ mongoose.model = function(modelName, schema) {
 
       var identificator = { __t: { type: String, default: modelName } };
       var discriminator = {
-        __ts: { type: Array, default: function() { return definition.parents; } }
+        __ts: { type: Array, default: function () {
+          return definition.parents;
+        } }
       };
 
-      if (!_.isEmpty(schema.__nootDef.parents)) {
+      if (!NOOT.isEmpty(schema.__nootDef.parents)) {
         schema.add(discriminator);
         schema.add(identificator);
       }

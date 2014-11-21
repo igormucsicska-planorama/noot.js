@@ -172,9 +172,9 @@ describe('NOOT.Mongoose.Schema', function() {
     two: null
   };
 
-  var Obj1Schema, Obj2Schema;
-  var Obj1, Obj2;
-  var obj1, obj2;
+  var Obj1Schema, Obj2Schema, ExtendObjSchema;
+  var Obj1, Obj2, ExtendObj;
+  var obj1, obj2, extendObj;
 
   before(function(done) {
     return mongoose.connect('mongodb://localhost:27017/' + TEST_DB_NAME, function() {
@@ -232,10 +232,17 @@ describe('NOOT.Mongoose.Schema', function() {
     Obj2Schema = Obj1Schema.extend();
 
     /**
+     * Obj2Schema
+     *
+     */
+    ExtendObjSchema = Obj1Schema.extend();
+
+    /**
      * Models
      */
     Obj1 = dbs.one.model('Obj', Obj1Schema);
     Obj2 = dbs.two.model('Obj', Obj2Schema);
+    ExtendObj = dbs.one.model('extendObj', ExtendObjSchema);
 
     /**
      * @type {Obj1}
@@ -251,7 +258,14 @@ describe('NOOT.Mongoose.Schema', function() {
       title: 'Object2'
     });
 
-    async.each([obj1, obj2], function(item, cb) {
+    /**
+     * @type {Obj3}
+     */
+    extendObj = new ExtendObj({
+      title: 'Object3'
+    });
+
+    async.each([obj1, obj2, extendObj], function(item, cb) {
       item.save(function(err) {
         if (err) done(err);
         return cb();
@@ -375,7 +389,7 @@ describe('NOOT.Mongoose.Schema', function() {
       retrievedHim.should.eql(items[2]);
 
       retrievedLegacyPerson.toObject().should.have.keys('name', '_id');
-      retrievedHer.toObject().should.have.keys('name', '_id', '__t');
+      retrievedHer.toObject().should.have.keys('name', '_id');
       retrievedHim.toObject().should.have.keys('name', '_id');
 
       retrievedLegacyPerson.name.should.be.eql('Carol Doe');
@@ -401,7 +415,7 @@ describe('NOOT.Mongoose.Schema', function() {
       retrievedHim.should.eql(items[0]);
 
       retrievedLegacyPerson.toObject().should.have.keys('name', '_id');
-      retrievedHer.toObject().should.have.keys('name', '_id', '__t');
+      retrievedHer.toObject().should.have.keys('name', '_id');
       retrievedHim.toObject().should.have.keys('name', '_id');
 
       retrievedLegacyPerson.name.should.be.eql('Carol Doe');
@@ -460,8 +474,16 @@ describe('NOOT.Mongoose.Schema', function() {
     });
   });
 
-  it('should find one Obj in db1', function(done) {
+  it('should find two Obj in db1', function(done) {
     return Obj1.find(function(err, items) {
+      if (err) return done(err);
+      items.length.should.eql(2);
+      return done();
+    });
+  });
+
+  it('should find one extend of Obj in db1', function(done) {
+    return ExtendObj.find(function(err, items) {
       if (err) return done(err);
       items.length.should.eql(1);
       return done();
