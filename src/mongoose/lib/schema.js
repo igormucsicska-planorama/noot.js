@@ -33,7 +33,6 @@ var oldModel = mongoose.model;
 MongooseSchema.extend = function(definition, ownStatics) {
 
   definition = definition || {};
-
   if (NOOT.isUndefined(definition.schema)) definition.schema = {};
 
   var properties = definition.schema;
@@ -51,9 +50,8 @@ MongooseSchema.extend = function(definition, ownStatics) {
   for (var virtual in this.virtuals) {
     if (NOOT.isUndefined(schema.virtuals[virtual])) schema.virtuals[virtual] = this.virtuals[virtual];
   }
-
+  
   schema.__nootDef = definition;
-
   schema.__nootParent = this;
 
   return schema;
@@ -159,7 +157,7 @@ fs.readdirSync(path.resolve(__dirname, MIDDLEWARES_PATH)).forEach(function(middl
 });
 
 /**
- * Check if the parent schema is already registered in a model
+ * Check if parent schema is already registered in a model
  *
  * @param {Object} parent
  * @param {Object} models
