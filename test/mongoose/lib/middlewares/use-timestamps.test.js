@@ -102,6 +102,21 @@ describe('NOOT.Mongoose.useTimestamps()', function() {
     });
   });
 
+  it('should take properties names from options', function(done) {
+    var schema = Schema
+      .extend({ options: { collection: TEST_COLLECTION_NAME } })
+      .useTimestamps({ createdOn: 'creaOn', updatedOn: 'modOn' });
+
+    var UseTimestampsOptions = mongoose.model('UseTimestampsOptions', schema);
+
+    return UseTimestampsOptions.create({}, function(err, doc) {
+      if (err) return done(err);
+      doc.creaOn.should.be.a('date');
+      doc.modOn.should.be.a('date');
+      return done();
+    });
+  });
+
   after(function(done) {
     return mongoose.connection.close(done);
   });
