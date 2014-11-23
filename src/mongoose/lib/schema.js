@@ -14,7 +14,6 @@ var Case = require('case');
  */
 var MongooseSchema = mongoose.Schema;
 var Model = mongoose.Model;
-var Schema = NOOT.noop;
 
 var MIDDLEWARES_PATH = './middlewares';
 
@@ -28,9 +27,10 @@ var oldModel = mongoose.model;
  * Extend schema, define discriminator, create model
  *
  * @param {Object} definition Schema properties
+ * @param {Object} [ownStatics] Schema static properties
  * @returns {MongooseSchema}
  */
-Schema.extend = function(definition) {
+MongooseSchema.extend = function(definition, ownStatics) {
   definition = definition || {};
   var properties = definition.schema || {};
   var parentProperties = (this.__nootDef && this.__nootDef.schema) || {};
@@ -42,8 +42,7 @@ Schema.extend = function(definition) {
 
   NOOT.InternalUtils.buildSuper(schema.methods, this.methods || {}, definition.methods);
   NOOT.InternalUtils.buildSuper(schema.statics, this.statics || {}, definition.statics);
-
-  schema.extend = Schema.extend.bind(schema);
+  NOOT.InternalUtils.buildSuper(schema, this, ownStatics);
 
   schema.__nootDef = definition;
   schema.__nootParent = this;
@@ -187,4 +186,4 @@ mongoose.model = function(modelName, schema) {
 /**
  * @module
  */
-module.exports = Schema;
+module.exports = MongooseSchema;
