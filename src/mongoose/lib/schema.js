@@ -7,6 +7,7 @@ var _ = require('lodash');
 var path = require('path');
 var fs = require('fs');
 var Case = require('case');
+var async = require('async');
 
 /**
  * Variables
@@ -57,6 +58,45 @@ MongooseSchema.extend = function(definition, ownStatics) {
   return schema;
 };
 
+var SchemaBase = MongooseSchema.extend({
+  statics : {
+    migrate : function (match, options, callback) {
+      var offset = 0;
+      var self = this;
+      var findLimit = options.limit || this.LOAD_LIMIT;
+      var shouldContinue = false;
+
+      function ondata(results, done) {
+        async.each(results, function(result, cb) {
+          result.__ts = self.schema.__nootDef.parents;
+          result.__ts.push(self.modelName);
+          result.__t = self.modelName;
+          result.save(function(err) {
+            if (err) cb(err);
+            else cb();
+          });
+        }, function(err) {
+          if (err) done(err);
+          else done();
+        });
+      }
+
+      return async.doWhilst(function(done) {
+        return self.find(match || {}, null, { bypass : true })
+            .limit(findLimit)
+            .skip(offset)
+            .exec(function(err, results) {
+              if (err) return done(err);
+              shouldContinue = results.length === findLimit;
+              offset += findLimit;
+              return ondata(results, done);
+            });
+      }, function() {
+        return shouldContinue;
+      }, callback);
+    }
+  }
+});
 
 /**
  * Parse incoming arguments for find and findOne
@@ -87,6 +127,8 @@ var parseArguments = function(conditions, fields, options, callback) {
 
   if (!conditions) conditions = {};
   if (!options) options = {};
+
+  if (options.bypass === true) return [conditions, fields, options, callback];
 
   if (!_.isEmpty(this.schema.__nootDef.parents)) {
     if (options.strict) conditions.__t = this.modelName;
@@ -124,6 +166,7 @@ Model.find = function() {
  */
 
 Model.prototype.init = function(doc, query, fn) {
+
   if (doc.__t) {
     var model = this.db.model(doc.__t);
     var newFn = function() {
@@ -225,4 +268,4 @@ mongoose.model = function(modelName, schema, collection, options) {
 /**
  * @module
  */
-module.exports = MongooseSchema;
+module.exports = SchemaBase;
