@@ -7,7 +7,6 @@ var _ = require('lodash');
 var path = require('path');
 var fs = require('fs');
 var Case = require('case');
-var async = require('async');
 
 /**
  * Variables
@@ -47,11 +46,11 @@ MongooseSchema.extend = function(definition, ownStatics) {
   NOOT.InternalUtils.buildSuper(schema.methods, this.methods || {}, definition.methods);
   NOOT.InternalUtils.buildSuper(schema.statics, this.statics || {}, definition.statics);
   NOOT.InternalUtils.buildSuper(schema, this, ownStatics);
-  
+
   for (var virtual in this.virtuals) {
     if (NOOT.isUndefined(schema.virtuals[virtual])) schema.virtuals[virtual] = this.virtuals[virtual];
   }
-  
+
   schema.__nootDef = definition;
   schema.__nootParent = this;
 
@@ -60,40 +59,17 @@ MongooseSchema.extend = function(definition, ownStatics) {
 
 var SchemaBase = MongooseSchema.extend({
   statics : {
-    migrate : function (match, options, callback) {
-      var offset = 0;
+    migrate : function (match, callback) {
       var self = this;
-      var findLimit = options.limit || this.LOAD_LIMIT;
-      var shouldContinue = false;
+      var __t = self.modelName;
+      var __ts = self.schema.__nootDef.parents;
+      __ts.push(__t);
 
-      function ondata(results, done) {
-        async.each(results, function(result, cb) {
-          result.__ts = self.schema.__nootDef.parents;
-          result.__ts.push(self.modelName);
-          result.__t = self.modelName;
-          result.save(function(err) {
-            if (err) cb(err);
-            else cb();
-          });
-        }, function(err) {
-          if (err) done(err);
-          else done();
-        });
-      }
+      self.update(match || {}, { __ts: __ts,  __t: __t }, { multi: true }, function (err) {
+        if (err) return callback(err);
+        callback();
+      });
 
-      return async.doWhilst(function(done) {
-        return self.find(match || {}, null, { bypass : true })
-            .limit(findLimit)
-            .skip(offset)
-            .exec(function(err, results) {
-              if (err) return done(err);
-              shouldContinue = results.length === findLimit;
-              offset += findLimit;
-              return ondata(results, done);
-            });
-      }, function() {
-        return shouldContinue;
-      }, callback);
     }
   }
 });
@@ -247,7 +223,7 @@ mongoose.model = function(modelName, schema, collection, options) {
       schema.__nootDef.parents = _.cloneDeep(definition.parents);
       definition.parents.push(modelName);
 
-      var identificator = { __t: { type: String, default: modelName } };
+      var identificator = { __t: { type: String, default: modelName, index: true } };
       var discriminator = {
         __ts: { type: Array, default: function () {
           return definition.parents;

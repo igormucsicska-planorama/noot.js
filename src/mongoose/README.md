@@ -6,7 +6,6 @@ Implements schema inheritance
 
 ```javascript
 var NOOT = require('noot')('mongoose');
-
 var Schema = NOOT.Mongoose.Schema;
 
 var yourSchema = Schema.extend({
@@ -67,7 +66,7 @@ var PersonSchema = Schema.extend({
 ```javascript
 var EmployeeSchema = PersonSchema.extend({
   schema: {
-    job: String
+    job: { type: String, required: true }
   },
 
   methods: {
@@ -88,14 +87,34 @@ var EmployeeSchema = PersonSchema.extend({
 });
 ```
 
-
-
 ### Declare your models
 ```javascript
 var Person = mongoose.model('Person', PersonSchema);
 var Employee = mongoose.model('Employee', EmployeeSchema);
 ```
 
+### Migrate your old data
+
+You can update your old data with a static function migrate
+
+#### Usage
+```javascript
+Model.migrate(match, function(err) {
+  if(err) handleError(err);
+})
+```
+
+#### Example
+
+In our example, Person is a root model so we don't have to migrate it.
+
+```javascript
+Employee.migrate({ job: { $exists : true } }, function(err) {
+  if(err) handleError(err);
+})
+
+Employee.find(); //should return only person with a job, the documents are instance of Employee.
+```
 
 # NOOT.Mongoose.useTimestamps 
 
@@ -147,5 +166,4 @@ Obj.create({}, function(err, item){  // Set createdOn and updatedOn to date1 = D
     }); 
   }, 1000);
 });
-
 ```

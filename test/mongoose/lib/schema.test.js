@@ -9,10 +9,10 @@ var _ = require('lodash');
 
 var TEST_DB_NAME = 'noot-mongoose-schema-test';
 
+
 /**
  * PersonMongooseSchema
  */
-
 var PersonLegacySchema = new mongoose.Schema({
   name: { type: String, required: true },
   age: { type: Number, required: true },
@@ -21,9 +21,9 @@ var PersonLegacySchema = new mongoose.Schema({
 } , {
   strict: false,
   collection: 'person',
-  versionKey: false
+  versionKey: false,
+  autoIndex: false
 });
-
 
 /**
  * PersonSchema
@@ -49,10 +49,10 @@ var PersonSchema = Schema.extend({
   options: {
     strict: false,
     collection: 'person',
-    versionKey: false
+    versionKey: false,
+    autoIndex: false
   }
 });
-
 
 /**
  * EmployeeSchema
@@ -79,7 +79,6 @@ var EmployeeSchema = PersonSchema.extend({
   }
 });
 
-
 /**
  * DeveloperSchema
  */
@@ -103,6 +102,7 @@ var SingerSchema = ArtistSchema.extend({
   }
 });
 
+
 /**
  * Models
  */
@@ -113,6 +113,7 @@ var Developer = mongoose.model('Developer', DeveloperSchema);
 
 var Artist = mongoose.model('Artiste', ArtistSchema);
 var Singer = mongoose.model('Singer', SingerSchema);
+
 
 /**
  * @type {PersonLegacy}
@@ -201,6 +202,16 @@ describe('NOOT.Mongoose.Schema', function() {
         }
       });
     });
+  });
+
+  before(function(done) {
+    PersonLegacy.ensureIndexes();
+    Person.ensureIndexes();
+    Employee.ensureIndexes();
+    Developer.ensureIndexes();
+    Artist.ensureIndexes();
+    Singer.ensureIndexes();
+    done();
   });
 
   before(function(done) {
@@ -349,7 +360,7 @@ describe('NOOT.Mongoose.Schema', function() {
   });
 
   it('should migrate Employee', function(done) {
-    Employee.migrate({ '__type' : 'Employee' }, '', function() {
+    Employee.migrate({ '__type' : 'Employee' }, function() {
       Employee.findOne({ 'name' : 'Lisa Doe' }, function (err, item) {
         item.__t.should.be.eql('Employee');
         item.__ts.should.have.members(['Person', 'Employee']);
@@ -359,7 +370,7 @@ describe('NOOT.Mongoose.Schema', function() {
   });
 
   it('should migrate Developer', function(done) {
-    Developer.migrate({ '__type' : 'Developer' }, '', function() {
+    Developer.migrate({ '__type' : 'Developer' }, function() {
       Employee.findOne({ 'name' : 'Bryan Doe' }, function (err, item) {
         item.__t.should.be.eql('Developer');
         item.__ts.should.have.members(['Person', 'Employee', 'Developer']);
@@ -376,9 +387,9 @@ describe('NOOT.Mongoose.Schema', function() {
       [{ person: him, class: Person }, { person: her, class: Employee }, { person: me, class: Developer },
         { person: artist, class: Artist }, { person: singer, class: Singer }, { person : personLegacy, class: Person },
       { person: employeeLegacy, class: Employee }, { person: developerLegacy, class: Developer }]
-        .forEach(function(item) {
-          (getItemFromList(item.person, results) instanceof item.class).should.eql(true);
-        });
+          .forEach(function(item) {
+            (getItemFromList(item.person, results) instanceof item.class).should.eql(true);
+          });
 
       return done();
     });
