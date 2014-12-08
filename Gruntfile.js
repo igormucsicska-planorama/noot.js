@@ -5,6 +5,9 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-mocha-cov');
   grunt.loadNpmTasks('grunt-blanket');
 
+  var args = require('minimist')(process.argv, {
+    strings: ['file']
+  });
 
   var TO_IGNORE = [
     '**/*.js',
@@ -56,7 +59,7 @@ module.exports = function(grunt) {
             'test/common.js'
           ]
         },
-        src: ['test/**/*.test.js']
+        src: args.file ? args.file : ['test/**/*.test.js']
       },
       coveralls: {
         options: {
