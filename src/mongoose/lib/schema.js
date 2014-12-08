@@ -65,11 +65,10 @@ var SchemaBase = MongooseSchema.extend({
       var __ts = self.schema.__nootDef.parents;
       __ts.push(__t);
 
-      self.update(match || {}, { __ts: __ts,  __t: __t }, { multi: true }, function (err) {
+      return self.update(match || {}, { __ts: __ts,  __t: __t }, { multi: true }, function (err) {
         if (err) return callback(err);
-        callback();
+        return callback();
       });
-
     }
   }
 });
@@ -84,20 +83,20 @@ var SchemaBase = MongooseSchema.extend({
  * @returns {Array}
  */
 var parseArguments = function(conditions, fields, options, callback) {
-  if ('function' === typeof conditions) {
+  if (NOOT.isFunction(conditions)) {
     callback = conditions;
     conditions = {};
     fields = null;
     options = null;
-  } else if ('function' === typeof fields) {
+  } else if (NOOT.isFunction(fields)) {
     callback = fields;
     fields = null;
     options = null;
-  } else if ('function' === typeof options) {
+  } else if (NOOT.isFunction(options)) {
     callback = options;
     options = null;
     fields = fields;
-  } else if ('function' === typeof callback) {
+  } else if (NOOT.isFunction(callback)) {
     fields = fields;
   }
 
