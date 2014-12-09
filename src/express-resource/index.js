@@ -1,6 +1,7 @@
 var NOOT = require('../../index')('object', 'url', 'errors');
 var _ = require('lodash');
 var mongoose = require('mongoose');
+var Case = require('case');
 
 var Route = require('./lib/route');
 
@@ -19,6 +20,8 @@ var Resource = NOOT.Object.extend({
   nonFilterableFields: null,
   sortableFields: null,
   nonSortableFields: null,
+  patchableFields: null,
+  nonPatchableFields: null,
 
   allowedRoutes: ['get', 'post', 'delete', 'patch', 'put'],
 
@@ -51,16 +54,16 @@ var Resource = NOOT.Object.extend({
   },
 
   _buildFields: function() {
-    var modelFields = this._getModelFields();
+    ['selectable', 'filterable', 'sortable', 'patchable'].forEach(this._buildFieldType.bind(this));
+//    this.patchableFields.pull(['_id', 'id']);
+  },
 
-    this.selectableFields = this.selectableFields || modelFields.slice(0);
-    if (this.nonSelectableFields) this.selectableFields = _.difference(this.selectableFields, this.nonSelectableFields);
+  _buildFieldType: function(type) {
+    var yes = type + 'Fields';
+    var no = 'non' + Case.squish(type) + 'Fields';
 
-    this.filterableFields = this.filterableFields || modelFields.slice(0);
-    if (this.nonFilterableFields) this.filterableFields = _.difference(this.filterableFields, this.nonFilterableFields);
-
-    this.sortableFields = this.sortableFields || modelFields.slice(0);
-    if (this.nonSortableFields) this.sortableFields = _.difference(this.sortableFields, this.nonSortableFields);
+    this[yes] = this[yes] || this._getModelFields();
+    if (this[no]) this[yes] = _.difference(this[yes], this[no]);
   },
 
   _buildRoutes: function() {
@@ -116,11 +119,12 @@ var Resource = NOOT.Object.extend({
       if (operator) fields[fieldName]['$' + operator] = query[key];
     }
 
+    fields = _.omit(fields, Resource.RESERVED_WORDS);
     var final = _.pick(fields, this.filterableFields);
-
-    var notSupportedFields = _.difference(Object.keys(final), Object.keys(fields));
+    
+    var notSupportedFields = _.difference(Object.keys(fields), Object.keys(final));
     if (notSupportedFields.length) {
-      throw new Error('Filtering on fields "' + notSupportedFields.join(', ') + '" is not supported');
+      throw new Error('Filtering on field(s) "' + notSupportedFields.join(', ') + '" is not supported');
     }
 
     return final;
@@ -187,11 +191,14 @@ var Resource = NOOT.Object.extend({
     });
   },
 
-  _filterDocument: function(doc) {
-    return _.pick(doc.toObject ? doc.toObject() : doc, this.selectableFields);
+  _filterDocument: function(doc, type) {
+    var fields = type ? this[type + 'Fields'] : this.selectableFields;
+    return _.pick(doc.toObject ? doc.toObject() : doc, fields);
   }
 
 }, {
+
+  RESERVED_WORDS: ['select', 'unselect', 'sortBy'],
 
 
 
@@ -204,8 +211,8 @@ var Resource = NOOT.Object.extend({
 
     try {
       queryArguments = this._parseQueryString(req.query);
-    } catch (ex) {
-      return next(new NOOT.Errors.BadRequest(ex.message));
+    } catch (err) {
+      return next(new NOOT.Errors.BadRequest(err.message));
     }
 
     var query = id ?
@@ -238,7 +245,9 @@ var Resource = NOOT.Object.extend({
 
   _DEFAULT_PATCH_HANDLER: function(req, res, next) {
     var self = this;
-    return this.model.findAndModify({ _id: req.param('id') }, { $set: req.body }, { new: true }, function(err, item) {
+    var properties = this._filterDocument(req.body, 'patchable');
+    return this.model.findOneAndUpdate({ _id: req.param('id') }, { $set: properties }, { new: true }, function(err, item) {
+      console.log(err || item);
       if (err) return next(err);
       if (!item) return next();
       return self._sendResponse(req, res, { data: self._filterDocument(item) });
