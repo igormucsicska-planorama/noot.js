@@ -92,7 +92,8 @@ Create a custom `require` function to avoid dealing with relative paths.
 #### [NOOT.TasksRunner](src/tasks-runner/README.md) *Class*
 Croned tasks for your applicaton and workers.
 
-
+#### [NOOT.Mongoose.Schema](src/mongoose/README.md) *Class*
+Implement schema inheritance for Mongoose.
 
 ##License
 Copyright (c) 2014 CDVM Solutions, released under the MIT license.

@@ -1,6 +1,6 @@
 # NOOT.Mongoose.Schema
 
-Implements schema inheritance 
+Implement schema inheritance
 
 ## Usage
 
