@@ -82,9 +82,16 @@ describe('NOOT.ExpressResource', function() {
 
     before(function() {
       resource.register(app);
-      return app.use(function(req, res) {
-        return res.status(404).json();
+
+      app.use(function(err, req, res, next) {
+        return res.status(err.statusCode || 500).json({
+          error: true,
+          message: err.message,
+          code: err.code
+        });
       });
+
+      return app.use(function(req, res) { return res.status(404).json(); });
     });
 
     it('should include apiVersion', function(done) {
@@ -205,6 +212,51 @@ describe('NOOT.ExpressResource', function() {
           data[1].email.should.eql('johndoe@toto.com');
           data[2].email.should.eql('misternobody@toto.com');
           return done();
+        });
+    });
+
+    it('should sort documents from query sortBy - inverted (GET)', function(done) {
+      return supertest(app)
+        .get('/v1/user?sortBy=-email')
+        .expect(200)
+        .end(function(err, res) {
+          if (err) return done(err);
+          var data = res.body.data;
+          data.should.be.an('array').and.have.length(3);
+          data[0].email.should.eql('misternobody@toto.com');
+          data[1].email.should.eql('johndoe@toto.com');
+          data[2].email.should.eql('janedoe@toto.com');
+          return done();
+        });
+    });
+
+    it('should return no result - wrong match (GET)', function(done) {
+      return supertest(app)
+        .get('/v1/user?email=toto')
+        .expect(200)
+        .end(function(err, res) {
+          if (err) return done(err);
+          res.body.data.should.deep.eql([]);
+          return done();
+        });
+    });
+
+    it('should update user\' email (PATCH)', function(done) {
+      var id = usersInDb[1]._id;
+      var email = 'updated@toto.com';
+      return supertest(app)
+        .patch('/v1/user/' + id)
+        .send({ email: email })
+        .expect(200)
+        .end(function(err, res) {
+          if (err) return done(err);
+          res.body.data.email.should.eql(email);
+          return User.findById(id, function(err, user) {
+            if (err) return done(err);
+            user.email.should.eql(email);
+            usersInDb[1].email = email;
+            return done();
+          });
         });
     });
 
