@@ -11,6 +11,21 @@ var TEST_DB_NAME = 'noot-mongoose-schema-test';
 
 
 /**
+ * PersonMongooseSchema
+ */
+var PersonLegacySchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  age: { type: Number, required: true },
+  job: { type: String },
+  __type: { type: String }
+} , {
+  strict: false,
+  collection: 'person',
+  versionKey: false,
+  autoIndex: false
+});
+
+/**
  * PersonSchema
  */
 var PersonSchema = Schema.extend({
@@ -34,10 +49,10 @@ var PersonSchema = Schema.extend({
   options: {
     strict: false,
     collection: 'person',
-    versionKey: false
+    versionKey: false,
+    autoIndex: false
   }
 });
-
 
 /**
  * EmployeeSchema
@@ -64,7 +79,6 @@ var EmployeeSchema = PersonSchema.extend({
   }
 });
 
-
 /**
  * DeveloperSchema
  */
@@ -74,14 +88,52 @@ var DeveloperSchema = EmployeeSchema.extend({
   }
 });
 
+/**
+ * ArtistSchema
+ */
+var ArtistSchema = PersonSchema.extend({});
+
+/**
+ * SingerSchema
+ */
+var SingerSchema = ArtistSchema.extend({
+  schema: {
+    type: { type: String }
+  }
+});
+
 
 /**
  * Models
  */
+var PersonLegacy = mongoose.model('PersonLegacy', PersonLegacySchema);
 var Person = mongoose.model('Person', PersonSchema);
 var Employee = mongoose.model('Employee', EmployeeSchema);
 var Developer = mongoose.model('Developer', DeveloperSchema);
 
+var Artist = mongoose.model('Artiste', ArtistSchema);
+var Singer = mongoose.model('Singer', SingerSchema);
+
+
+/**
+ * @type {PersonLegacy}
+ */
+var personLegacy = new PersonLegacy ({
+  name: 'Carol Doe',
+  age: 112
+});
+
+var employeeLegacy = new PersonLegacy ({
+  name: 'Lisa Doe',
+  age: 35,
+  __type: 'Employee'
+});
+
+var developerLegacy = new PersonLegacy ({
+  name: 'Bryan Doe',
+  age: 34,
+  __type: 'Developer'
+});
 
 /**
  * @type {Person}
@@ -108,6 +160,17 @@ var me = new Developer({
   age: 28
 });
 
+var artist = new Artist({
+  name: 'Alice Doe',
+  age: 19
+});
+
+var singer = new Singer({
+  name: 'Frank Doe',
+  type: 'Rock',
+  age: 26
+});
+
 
 var getItemFromList = function(item, list) {
   var id = item._id.toString();
@@ -124,9 +187,9 @@ describe('NOOT.Mongoose.Schema', function() {
     two: null
   };
 
-  var Obj1Schema, Obj2Schema;
-  var Obj1, Obj2;
-  var obj1, obj2;
+  var Obj1Schema, Obj2Schema, ExtendObjSchema;
+  var Obj1, Obj2, ExtendObj;
+  var obj1, obj2, extendObj;
 
   before(function(done) {
     return mongoose.connect('mongodb://localhost:27017/' + TEST_DB_NAME, function() {
@@ -139,6 +202,16 @@ describe('NOOT.Mongoose.Schema', function() {
         }
       });
     });
+  });
+
+  before(function(done) {
+    PersonLegacy.ensureIndexes();
+    Person.ensureIndexes();
+    Employee.ensureIndexes();
+    Developer.ensureIndexes();
+    Artist.ensureIndexes();
+    Singer.ensureIndexes();
+    done();
   });
 
   before(function(done) {
@@ -184,10 +257,17 @@ describe('NOOT.Mongoose.Schema', function() {
     Obj2Schema = Obj1Schema.extend();
 
     /**
+     * Obj2Schema
+     *
+     */
+    ExtendObjSchema = Obj1Schema.extend();
+
+    /**
      * Models
      */
     Obj1 = dbs.one.model('Obj', Obj1Schema);
     Obj2 = dbs.two.model('Obj', Obj2Schema);
+    ExtendObj = dbs.one.model('extendObj', ExtendObjSchema);
 
     /**
      * @type {Obj1}
@@ -203,7 +283,14 @@ describe('NOOT.Mongoose.Schema', function() {
       title: 'Object2'
     });
 
-    async.each([obj1, obj2], function(item, cb) {
+    /**
+     * @type {Obj3}
+     */
+    extendObj = new ExtendObj({
+      title: 'Object3'
+    });
+
+    async.each([obj1, obj2, extendObj], function(item, cb) {
       item.save(function(err) {
         if (err) done(err);
         return cb();
@@ -211,8 +298,6 @@ describe('NOOT.Mongoose.Schema', function() {
     }, done);
 
   });
-
-
 
   it('should inherit instance method', function() {
     return me.sayHello().should.eql('Hello, my name is Jean-Baptiste, I work as a Developer');
@@ -227,34 +312,69 @@ describe('NOOT.Mongoose.Schema', function() {
   });
 
   it('should inherit schema properties', function() {
+    SingerSchema.__nootDef.schema.name.should.deep.eql({ type: String, required: true });
     return DeveloperSchema.__nootDef.schema.name.should.deep.eql({ type: String, required: true });
   });
 
   it('should insert documents with right values', function(done) {
-    return async.each([me, her, him], function(item, cb) {
-      return item.save(cb);
-    }, function(err) {
-      if (err) return done(err);
+    return async.each([me, her, him, artist, singer, personLegacy, employeeLegacy, developerLegacy],
+        function(item, cb) {
+          return item.save(cb);
+        }, function(err) {
+          if (err) return done(err);
 
-      return Person.find(function(err, results) {
-        if (err) return done(err);
+          return Person.find(function(err, results) {
+            if (err) return done(err);
 
-        var retrievedMe = getItemFromList(me, results);
-        var retrievedHer = getItemFromList(her, results);
-        var retrievedHim = getItemFromList(him, results);
+            var retrievedLegacyPerson = getItemFromList(personLegacy, results);
+            var retrievedMe = getItemFromList(me, results);
+            var retrievedHer = getItemFromList(her, results);
+            var retrievedHim = getItemFromList(him, results);
+            var retrievedArtist = getItemFromList(artist, results);
+            var retrievedSinger = getItemFromList(singer, results);
 
-        retrievedMe.name.should.be.eql('Jean-Baptiste');
-        retrievedMe.job.should.be.eql('Developer');
-        retrievedMe.age.should.be.eql(28);
+            retrievedLegacyPerson.name.should.be.eql('Carol Doe');
+            retrievedLegacyPerson.age.should.be.eql(112);
 
-        retrievedHim.name.should.be.eql('John Doe');
-        retrievedHim.age.should.be.eql(42);
+            retrievedMe.name.should.be.eql('Jean-Baptiste');
+            retrievedMe.job.should.be.eql('Developer');
+            retrievedMe.age.should.be.eql(28);
 
-        retrievedHer.name.should.be.eql('Jane Doe');
-        retrievedHer.job.should.be.eql('Category expert');
-        retrievedHer.age.should.be.eql(38);
+            retrievedHim.name.should.be.eql('John Doe');
+            retrievedHim.age.should.be.eql(42);
 
-        return done();
+            retrievedHer.name.should.be.eql('Jane Doe');
+            retrievedHer.job.should.be.eql('Category expert');
+            retrievedHer.age.should.be.eql(38);
+
+            retrievedArtist.name.should.be.eql('Alice Doe');
+            retrievedArtist.age.should.be.eql(19);
+
+            retrievedSinger.name.should.be.eql('Frank Doe');
+            retrievedSinger.type.should.be.eql('Rock');
+            retrievedSinger.age.should.be.eql(26);
+
+            return done();
+          });
+        });
+  });
+
+  it('should migrate Employee', function(done) {
+    Employee.migrate({ '__type' : 'Employee' }, function() {
+      Employee.findOne({ 'name' : 'Lisa Doe' }, function (err, item) {
+        item.__t.should.be.eql('Employee');
+        item.__ts.should.have.members(['Person', 'Employee']);
+        done();
+      });
+    });
+  });
+
+  it('should migrate Developer', function(done) {
+    Developer.migrate({ '__type' : 'Developer' }, function() {
+      Employee.findOne({ 'name' : 'Bryan Doe' }, function (err, item) {
+        item.__t.should.be.eql('Developer');
+        item.__ts.should.have.members(['Person', 'Employee', 'Developer']);
+        done();
       });
     });
   });
@@ -262,21 +382,15 @@ describe('NOOT.Mongoose.Schema', function() {
   it('should associate right model', function(done) {
     return Person.find(function(err, results) {
       if (err) return done(err);
-      results.length.should.eql(3);
+      results.length.should.eql(8);
 
-      [{ person: him, class: Person }, { person: her, class: Employee }, { person: me, class: Developer }]
-        .forEach(function(item) {
-          (getItemFromList(item.person, results) instanceof item.class).should.eql(true);
-        });
+      [{ person: him, class: Person }, { person: her, class: Employee }, { person: me, class: Developer },
+        { person: artist, class: Artist }, { person: singer, class: Singer }, { person : personLegacy, class: Person },
+      { person: employeeLegacy, class: Employee }, { person: developerLegacy, class: Developer }]
+          .forEach(function(item) {
+            (getItemFromList(item.person, results) instanceof item.class).should.eql(true);
+          });
 
-      return done();
-    });
-  });
-
-  it('should find all Person', function(done) {
-    return Person.find(function(err, items) {
-      if (err) return done(err);
-      items.length.should.eql(3);
       return done();
     });
   });
@@ -284,7 +398,7 @@ describe('NOOT.Mongoose.Schema', function() {
   it('should find all Person at least 38 years old', function(done) {
     return Person.find({ age: { $gte: 38 } }, function(err, items) {
       if (err) return done(err);
-      items.length.should.eql(2);
+      items.length.should.eql(3);
       return done();
     });
   });
@@ -293,12 +407,15 @@ describe('NOOT.Mongoose.Schema', function() {
     return Person.find({ age: { $gte: 40 } }, 'name', function(err, items) {
       if (err) return done(err);
 
-      items.length.should.eql(1);
+      items.length.should.eql(2);
 
-      var retrievedHim = items[0];
+      var retrievedHim = getItemFromList(him, items);
+      var retrievedLegacyPerson = getItemFromList(personLegacy, items);
 
-      retrievedHim.toObject().should.have.keys('name', '_id', '__type');
+      retrievedHim.toObject().should.have.keys('name', '_id');
       retrievedHim.name.should.eql('John Doe');
+      retrievedLegacyPerson.toObject().should.have.keys('name', '_id');
+      retrievedLegacyPerson.name.should.eql('Carol Doe');
 
       return done();
     });
@@ -308,17 +425,21 @@ describe('NOOT.Mongoose.Schema', function() {
     return Person.find({ age: { $gte: 36 } }, 'name', { sort : 'name' }).exec(function(err, items) {
       if (err) return done(err);
 
-      items.length.should.eql(2);
+      items.length.should.eql(3);
 
+      var retrievedLegacyPerson = getItemFromList(personLegacy, items);
       var retrievedHer = getItemFromList(her, items);
       var retrievedHim = getItemFromList(him, items);
 
-      retrievedHer.should.eql(items[0]);
-      retrievedHim.should.eql(items[1]);
+      retrievedLegacyPerson.should.eql(items[0]);
+      retrievedHer.should.eql(items[1]);
+      retrievedHim.should.eql(items[2]);
 
-      retrievedHer.toObject().should.have.keys('name', '_id', '__type');
-      retrievedHim.toObject().should.have.keys('name', '_id', '__type');
+      retrievedLegacyPerson.toObject().should.have.keys('name', '_id');
+      retrievedHer.toObject().should.have.keys('name', '_id');
+      retrievedHim.toObject().should.have.keys('name', '_id');
 
+      retrievedLegacyPerson.name.should.be.eql('Carol Doe');
       retrievedHer.name.should.be.eql('Jane Doe');
       retrievedHim.name.should.be.eql('John Doe');
 
@@ -330,28 +451,33 @@ describe('NOOT.Mongoose.Schema', function() {
     return Person.find({ age: { $gte: 36 } }, 'name', { sort : '-name' }).exec(function(err, items) {
       if (err) return done(err);
 
-      items.length.should.eql(2);
+      items.length.should.eql(3);
 
+      var retrievedLegacyPerson = getItemFromList(personLegacy, items);
       var retrievedHer = getItemFromList(her, items);
       var retrievedHim = getItemFromList(him, items);
 
+      retrievedLegacyPerson.should.eql(items[2]);
       retrievedHer.should.eql(items[1]);
       retrievedHim.should.eql(items[0]);
 
-      retrievedHer.toObject().should.have.keys('name', '_id', '__type');
-      retrievedHim.toObject().should.have.keys('name', '_id', '__type');
+      retrievedLegacyPerson.toObject().should.have.keys('name', '_id');
+      retrievedHer.toObject().should.have.keys('name', '_id');
+      retrievedHim.toObject().should.have.keys('name', '_id');
 
+      retrievedLegacyPerson.name.should.be.eql('Carol Doe');
       retrievedHer.name.should.be.eql('Jane Doe');
       retrievedHim.name.should.be.eql('John Doe');
 
       return done();
     });
+
   });
 
   it('should find only developers', function(done) {
     return Developer.find().exec(function(err, items) {
       if (err) return done(err);
-      items.length.should.eql(1);
+      items.length.should.eql(2);
       return done();
     });
   });
@@ -359,7 +485,7 @@ describe('NOOT.Mongoose.Schema', function() {
   it('should find only employees', function(done) {
     return Employee.find(function(err, items) {
       if (err) return done(err);
-      items.length.should.eql(2);
+      items.length.should.eql(4);
       return done();
     });
   });
@@ -367,16 +493,22 @@ describe('NOOT.Mongoose.Schema', function() {
   it('should find all persons', function(done) {
     return Person.find(function(err, items) {
       if (err) return done(err);
-      items.length.should.eql(3);
+      items.length.should.eql(8);
       return done();
     });
   });
 
   it('should find only persons (strict mode)', function(done) {
-    return Person.find({}, '', { strict: true }, function(err, results) {
+    return Person.find({}, '', { strict: true }, function(err, items) {
       if (err) return done(err);
-      results.length.should.eql(1);
-      results[0].name.should.eql('John Doe');
+      items.length.should.eql(2);
+
+      var retrievedHim = getItemFromList(him, items);
+      var retrievedLegacyPerson = getItemFromList(personLegacy, items);
+
+      retrievedHim.name.should.eql('John Doe');
+      retrievedLegacyPerson.name.should.eql('Carol Doe');
+
       return done();
     });
   });
@@ -390,8 +522,16 @@ describe('NOOT.Mongoose.Schema', function() {
     });
   });
 
-  it('should find one Obj in db1', function(done) {
+  it('should find two Obj in db1', function(done) {
     return Obj1.find(function(err, items) {
+      if (err) return done(err);
+      items.length.should.eql(2);
+      return done();
+    });
+  });
+
+  it('should find one extend of Obj in db1', function(done) {
+    return ExtendObj.find(function(err, items) {
       if (err) return done(err);
       items.length.should.eql(1);
       return done();
@@ -407,7 +547,7 @@ describe('NOOT.Mongoose.Schema', function() {
   });
 
   it('should have middleware function attached', function() {
-    DeveloperSchema.useTimestamps.should.be.a('function');
+    return DeveloperSchema.useTimestamps.should.be.a('function');
   });
 
   after(function(done) {

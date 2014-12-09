@@ -8,7 +8,6 @@ var path = require('path');
 var fs = require('fs');
 var Case = require('case');
 
-
 /**
  * Variables
  */
@@ -30,9 +29,13 @@ var oldModel = mongoose.model;
  * @param {Object} [ownStatics] Schema static properties
  * @returns {MongooseSchema}
  */
+
 MongooseSchema.extend = function(definition, ownStatics) {
+
   definition = definition || {};
-  var properties = definition.schema || {};
+  if (NOOT.isUndefined(definition.schema)) definition.schema = {};
+
+  var properties = definition.schema;
   var parentProperties = (this.__nootDef && this.__nootDef.schema) || {};
   for (var key in parentProperties) {
     if (NOOT.isUndefined(properties[key])) properties[key] = _.cloneDeep(parentProperties[key]);
@@ -54,6 +57,21 @@ MongooseSchema.extend = function(definition, ownStatics) {
   return schema;
 };
 
+var SchemaBase = MongooseSchema.extend({
+  statics : {
+    migrate : function (match, callback) {
+      var self = this;
+      var __t = self.modelName;
+      var __ts = self.schema.__nootDef.parents;
+      __ts.push(__t);
+
+      return self.update(match || {}, { __ts: __ts,  __t: __t }, { multi: true }, function (err) {
+        if (err) return callback(err);
+        return callback();
+      });
+    }
+  }
+});
 
 /**
  * Parse incoming arguments for find and findOne
@@ -65,28 +83,34 @@ MongooseSchema.extend = function(definition, ownStatics) {
  * @returns {Array}
  */
 var parseArguments = function(conditions, fields, options, callback) {
-  if ('function' === typeof conditions) {
+  if (NOOT.isFunction(conditions)) {
     callback = conditions;
     conditions = {};
     fields = null;
     options = null;
-  } else if ('function' === typeof fields) {
+  } else if (NOOT.isFunction(fields)) {
     callback = fields;
     fields = null;
     options = null;
-  } else if ('function' === typeof options) {
+  } else if (NOOT.isFunction(options)) {
     callback = options;
     options = null;
-    fields = fields + ' __type';
-  } else if ('function' !== typeof callback) {
-    fields = fields + ' __type';
+    fields = fields;
+  } else if (NOOT.isFunction(callback)) {
+    fields = fields;
   }
 
   if (!conditions) conditions = {};
   if (!options) options = {};
-  if (options.strict) conditions.__type = this.modelName;
-  else conditions.__types = this.modelName;
 
+  if (options.bypass === true) return [conditions, fields, options, callback];
+
+  if (!_.isEmpty(this.schema.__nootDef.parents)) {
+    if (options.strict) conditions.__t = this.modelName;
+    else conditions.__ts = this.modelName;
+  } else {
+    if (options.strict) conditions.__t = { $exists : false };
+  }
   return [conditions, fields, options, callback];
 };
 
@@ -108,30 +132,38 @@ Model.find = function() {
 
 
 /**
- * Set the prototype based on the discriminator __type
+ * Set the prototype based on the discriminator __t
  *
  * @param {Object} doc
  * @param {Object} query
  * @param {function} fn
  * @returns {*}
  */
+
 Model.prototype.init = function(doc, query, fn) {
-  var model = this.db.model(doc.__type);
-  var newFn = function() {
-    process.nextTick(function() {
-      fn.apply(this, arguments);
-    });
-  };
-  this.schema = model.schema;
-  var obj = oldInit.call(this, doc, query, newFn);
-  obj.__proto__ = model.prototype;
-  return obj;
+
+  if (doc.__t) {
+    var model = this.db.model(doc.__t);
+    var newFn = function() {
+      process.nextTick(function() {
+        fn.apply(this, arguments);
+      });
+    };
+    this.schema = model.schema;
+    var obj = oldInit.call(this, doc, query, newFn);
+    obj.__proto__ = model.prototype;
+    return obj;
+  }
+
+  return oldInit.apply(this, arguments);
+
 };
 
 
 /**
  * Attach middlewares functions
  */
+
 fs.readdirSync(path.resolve(__dirname, MIDDLEWARES_PATH)).forEach(function(middleware) {
   var middlewareName = Case.camel(path.basename(middleware, '.js'));
   middleware = require(path.join(__dirname, MIDDLEWARES_PATH, middleware));
@@ -142,44 +174,65 @@ fs.readdirSync(path.resolve(__dirname, MIDDLEWARES_PATH)).forEach(function(middl
   };
 });
 
+/**
+ * Check if parent schema is already registered in a model
+ *
+ * @param {Object} parent
+ * @param {Object} models
+ * @returns {Array}
+ */
+function checkRegisteredModel(parent, models) {
+  for (var registeredModelName in models) {
+    if (models[registeredModelName].schema === parent) {
+      return [registeredModelName];
+    }
+  }
+  return [];
+}
+
 
 /**
  * Redefine model creation to attach discriminators
  *
  * @param {String} modelName
  * @param {Object} schema
+ * @param {String} collection
+ * @param {Object} options
  * @returns {Object}
  */
-mongoose.model = function(modelName, schema) {
+mongoose.model = function(modelName, schema, collection, options) {
 
   if (schema) {
 
-    var definition = schema.__nootDef;
+    var definition = {};
+    definition.parents = [];
 
-    if (definition) {
+    if (schema.__nootDef) {
       var parent = schema.__nootParent;
       var parentDef = parent.__nootDef;
 
-      definition.parents = [modelName];
+      if (options && NOOT.isObject(options)) {
+        definition.parents = checkRegisteredModel(parent, options.connection.models);
 
-      for (var registeredModelName in this.models) {
-        if (this.models[registeredModelName].schema === parent) {
-          definition.parents.push(registeredModelName);
-          break;
-        }
+      } else {
+        definition.parents = checkRegisteredModel(parent, this.models);
       }
 
       definition.parents = ((parentDef && parentDef.parents) || []).concat(definition.parents);
-      definition.parents = _.uniq(definition.parents);
+      schema.__nootDef.parents = _.cloneDeep(definition.parents);
+      definition.parents.push(modelName);
 
-      var identificator = { __type: { type: String, default: modelName } };
-
+      var identificator = { __t: { type: String, default: modelName, index: true } };
       var discriminator = {
-        __types: { type: Array, default: function() { return definition.parents; } }
+        __ts: { type: Array, default: function () {
+          return definition.parents;
+        } }
       };
 
-      schema.add(discriminator);
-      schema.add(identificator);
+      if (!NOOT.isEmpty(schema.__nootDef.parents)) {
+        schema.add(discriminator);
+        schema.add(identificator);
+      }
     }
   }
 
@@ -190,4 +243,4 @@ mongoose.model = function(modelName, schema) {
 /**
  * @module
  */
-module.exports = MongooseSchema;
+module.exports = SchemaBase;
