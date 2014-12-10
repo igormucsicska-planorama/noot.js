@@ -94,9 +94,57 @@ var Resource = NOOT.Object.extend({
 
 
   _orderRoutes: function() {
+    // list parameters into an array within the _routes.
+    this._routes.forEach(function (route) {
+      route.params = [];
+      var path = route.path;
+      var result;
+      route.regex = new RegExp('^' + path
+        .replace(/\//g, '\\/')
+        .replace(/\:([A-Za-z_]+)(\?)?\/?/g, '$2([A-Za-z0-9@._-]+)$2') + '\\/?$');
+      do {
+        var regexp = /\:([A-Za-z_]+)\/?/;
+        result = regexp.exec(path);
+        if (result) {
+          route.params.push(result.slice(1).toString());
+          path = path.replace(regexp, '');
+        }
+      } while (result);
+    });
 
+    var first = [];
+    var middle = [];
+    var last = [];
 
+    // initial primitive sorting
+    this._routes.forEach(function (route) {
+      if (route.path === '/') {
+        last.push(route);
+      } else if (/\:[A-Za-z0-9_]+/.test(route.path)) {
+        middle.push(route);
+      } else {
+        first.push(route);
+      }
+    });
 
+    // finer sorting method
+    // TODO: unify this with the initial sorting and get rid of the first, middle and last arrays.
+    function sort (a, b) {
+      var aRegex = a.regex.toString();
+      var bRegex = b.regex.toString();
+      if (!!~aRegex.indexOf('([A-Za-z0-9_-]+)')) {
+        return true;
+      } else if (!!~bRegex.indexOf('([A-Za-z0-9_-]+)')) {
+        return false;
+      } else {
+        return a.params.length > b.params.length;
+      }
+    }
+
+    first.sort(sort);
+    middle.sort(sort);
+
+    this._routes = _.sortBy(first.concat(middle, last), 'method');
   },
 
   _orderPaths: function(paths) {
