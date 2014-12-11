@@ -231,11 +231,13 @@ describe('NOOT.ExpressResource', function() {
         { path: '/api/plajProducts/create',
           method: 'post' },
         { path: '/api/admin',
+          method: 'post' },
+        { path: '/api/administrator',
           method: 'post' }
       ];
 
       NOOT
-        .ExpressResource.orderRoutes(routesToSort)
+        .ExpressResource.orderRoutes(_.shuffle(routesToSort))
         .map(function (route) {
           return _.pick(route, ['path', 'method']);
         })
@@ -248,17 +250,19 @@ describe('NOOT.ExpressResource', function() {
             method: 'post' },
           { path: '/visit/:id/user_feedback',
             method: 'post' },
-          { path: '/api/tasks/userActivity',
-            method: 'post' },
           { path: '/api/plajProducts/create',
             method: 'post' },
-          { path: '/api/visit',
+          { path: '/api/tasks/userActivity',
+            method: 'post' },
+          { path: '/api/administrator',
             method: 'post' },
           { path: '/api/planorama',
             method: 'post' },
+          { path: '/api/admin',
+            method: 'post' },
           { path: '/api/tasks',
             method: 'post' },
-          { path: '/api/admin',
+          { path: '/api/visit',
             method: 'post' },
           { path: '/verify-question-form',
             method: 'post' }
