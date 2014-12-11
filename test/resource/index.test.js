@@ -208,6 +208,66 @@ describe('NOOT.ExpressResource', function() {
         });
     });
 
+    it('should sort routes correctly', function (done) {
+      var routesToSort = [
+        { path: '/visit/:id/user_feedback',
+          method: 'post' },
+        { path: '/visit/user_fed-back/:id',
+          method: 'post' },
+        { path: '/api/visit',
+          method: 'post' },
+        { path: '/api/planorama/:id/picture',
+          method: 'post' },
+        { path: '/api/planorama',
+          method: 'post' },
+        { path: '/api/tasks',
+          method: 'post' },
+        { path: '/api/tasks/userActivity',
+          method: 'post' },
+        { path: '/api/autoreco/:visit_id/photo/:photo_id',
+          method: 'post' },
+        { path: '/verify-question-form',
+          method: 'post' },
+        { path: '/api/plajProducts/create',
+          method: 'post' },
+        { path: '/api/admin',
+          method: 'post' }
+      ];
+
+      NOOT
+        .ExpressResource.orderRoutes(routesToSort)
+        .map(function (route) {
+          return _.pick(route, ['path', 'method']);
+        })
+        .should.deep.eql([
+          { path: '/api/autoreco/:visit_id/photo/:photo_id',
+            method: 'post' },
+          { path: '/api/planorama/:id/picture',
+            method: 'post' },
+          { path: '/visit/user_fed-back/:id',
+            method: 'post' },
+          { path: '/visit/:id/user_feedback',
+            method: 'post' },
+          { path: '/api/tasks/userActivity',
+            method: 'post' },
+          { path: '/api/plajProducts/create',
+            method: 'post' },
+          { path: '/api/visit',
+            method: 'post' },
+          { path: '/api/planorama',
+            method: 'post' },
+          { path: '/api/tasks',
+            method: 'post' },
+          { path: '/api/admin',
+            method: 'post' },
+          { path: '/verify-question-form',
+            method: 'post' }
+        ]);
+
+      done();
+
+    })
+
   });
 
 
