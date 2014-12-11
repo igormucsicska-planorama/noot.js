@@ -207,9 +207,6 @@ var Resource = NOOT.Object.extend({
       route.params = [];
       var path = route.path;
       var result;
-      route.regex = new RegExp('^' + path
-        .replace(/\//g, '\\/')
-        .replace(/\:([A-Za-z_]+)(\?)?\/?/g, '$2([A-Za-z0-9@._-]+)$2') + '\\/?$');
       do {
         var regexp = /\:([A-Za-z_]+)\/?/;
         result = regexp.exec(path);
@@ -238,25 +235,29 @@ var Resource = NOOT.Object.extend({
     // finer sorting method
     // TODO: unify this with the initial sorting and get rid of the first, middle and last arrays.
     function sort (a, b) {
-      var aRes = 0;
-      var bRes = 0;
-      if (a.path.split('/').length < b.path.split('/').length) {
-        aRes++;
-      } else if (a.path.split('/').length > b.path.split('/').length) {
-        bRes++;
-      }
-
       if (a.params.length < b.params.length) {
-        aRes++;
-      } else if (a.params.length > b.params.length) {
-        bRes++;
+        return true;
       }
 
-      if (aRes === bRes) {
-        return a.path.split(':')[0].split('/').length < b.path.split(':')[0].split('/').length;
+      if (b.path.indexOf(a.path) === 0) {
+        return true;
       }
 
-      return aRes > bRes;
+      var aSplitBySlash = a.path.split('/').length;
+      var bSplitBySlash = b.path.split('/').length;
+      var aSplitByColon = a.path.split(':')[0].split('/').length;
+      var bSplitByColon = b.path.split(':')[0].split('/').length;
+      if (aSplitBySlash < bSplitBySlash) {
+        return true;
+      } else if (aSplitBySlash > bSplitBySlash) {
+        return false;
+      } else if (aSplitByColon !== bSplitByColon) {
+        return aSplitByColon < bSplitByColon;
+      } else if (a.path.length !== b.path.length) {
+        return a.path.length < b.path.length;
+      } else {
+        return a.path > b.path;
+      }
     }
 
     first.sort(sort);
