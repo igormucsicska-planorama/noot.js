@@ -264,7 +264,7 @@ describe('NOOT.ExpressResource', function() {
             method: 'post' }
         ]);
 
-      done();
+      return done();
 
     })
 
