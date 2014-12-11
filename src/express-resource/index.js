@@ -88,64 +88,11 @@ var Resource = NOOT.Object.extend({
       return route;
     });
 
-    this._orderRoutes();
+    this._routes = Resource.orderRoutes(this._routes);
   },
 
 
 
-  _orderRoutes: function() {
-    // list parameters into an array within the _routes.
-    this._routes.forEach(function (route) {
-      route.params = [];
-      var path = route.path;
-      var result;
-      route.regex = new RegExp('^' + path
-        .replace(/\//g, '\\/')
-        .replace(/\:([A-Za-z_]+)(\?)?\/?/g, '$2([A-Za-z0-9@._-]+)$2') + '\\/?$');
-      do {
-        var regexp = /\:([A-Za-z_]+)\/?/;
-        result = regexp.exec(path);
-        if (result) {
-          route.params.push(result.slice(1).toString());
-          path = path.replace(regexp, '');
-        }
-      } while (result);
-    });
-
-    var first = [];
-    var middle = [];
-    var last = [];
-
-    // initial primitive sorting
-    this._routes.forEach(function (route) {
-      if (route.path === '/') {
-        last.push(route);
-      } else if (/\:[A-Za-z0-9_]+/.test(route.path)) {
-        middle.push(route);
-      } else {
-        first.push(route);
-      }
-    });
-
-    // finer sorting method
-    // TODO: unify this with the initial sorting and get rid of the first, middle and last arrays.
-    function sort (a, b) {
-      var aRegex = a.regex.toString();
-      var bRegex = b.regex.toString();
-      if (!!~aRegex.indexOf('([A-Za-z0-9_-]+)')) {
-        return true;
-      } else if (!!~bRegex.indexOf('([A-Za-z0-9_-]+)')) {
-        return false;
-      } else {
-        return a.params.length > b.params.length;
-      }
-    }
-
-    first.sort(sort);
-    middle.sort(sort);
-
-    this._routes = _.sortBy(first.concat(middle, last), 'method');
-  },
 
   _orderPaths: function(paths) {
     var map = paths.map(function(path) { return path.split('/'); });
@@ -241,8 +188,83 @@ var Resource = NOOT.Object.extend({
 
 }, {
 
+  /**
+   * Orders the given array of routes.
+   * Example for a route object:
+   * {
+   *   method: 'delete',
+   *   path: '/v1/user/',
+   *   handlers: [function]
+   * }
+   * The sorting doesn't deal with handlers, so for testing the method and path parameters are enough.
+   *
+   * @param {[Object]} routes
+   * @returns {[Object]}
+   */
+  orderRoutes: function(routes) {
+    // list parameters into an array within the _routes.
+    routes.forEach(function (route) {
+      route.params = [];
+      var path = route.path;
+      var result;
+      route.regex = new RegExp('^' + path
+        .replace(/\//g, '\\/')
+        .replace(/\:([A-Za-z_]+)(\?)?\/?/g, '$2([A-Za-z0-9@._-]+)$2') + '\\/?$');
+      do {
+        var regexp = /\:([A-Za-z_]+)\/?/;
+        result = regexp.exec(path);
+        if (result) {
+          route.params.push(result.slice(1).toString());
+          path = path.replace(regexp, '');
+        }
+      } while (result);
+    });
 
+    var first = [];
+    var middle = [];
+    var last = [];
 
+    // initial primitive sorting
+    routes.forEach(function (route) {
+      if (route.path === '/') {
+        first.push(route);
+      } else if (/\:[A-Za-z0-9@._-]+/.test(route.path)) {
+        middle.push(route);
+      } else {
+        last.push(route);
+      }
+    });
+
+    // finer sorting method
+    // TODO: unify this with the initial sorting and get rid of the first, middle and last arrays.
+    function sort (a, b) {
+      var aRes = 0;
+      var bRes = 0;
+      if (a.path.split('/').length < b.path.split('/').length) {
+        aRes++;
+      } else if (a.path.split('/').length > b.path.split('/').length) {
+        bRes++;
+      }
+
+      if (a.params.length < b.params.length) {
+        aRes++;
+      } else if (a.params.length > b.params.length) {
+        bRes++;
+      }
+
+      if (aRes === bRes) {
+        return a.path.split(':')[0].split('/').length < b.path.split(':')[0].split('/').length;
+      }
+
+      return aRes > bRes;
+    }
+
+    first.sort(sort);
+    middle.sort(sort);
+    last.sort(sort);
+
+    return _.sortBy(first.concat(middle, last), 'method');
+  },
 
   _DEFAULT_GET_HANDLER: function(req, res, next) {
     var self = this;
