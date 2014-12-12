@@ -202,7 +202,7 @@ var Resource = NOOT.Object.extend({
    * @returns {[Object]}
    */
   orderRoutes: function(routes) {
-    // list parameters into an array within the _routes.
+    // list parameters into an array within the routes.
     routes.forEach(function (route) {
       route.params = [];
       var path = route.path;
@@ -217,54 +217,26 @@ var Resource = NOOT.Object.extend({
       } while (result);
     });
 
-    var first = [];
-    var middle = [];
-    var last = [];
+    return routes.sort(function (a, b) {
+      if (a.path === b.path && a.method === b.method) throw new Error('Two identical paths have been declared!');
+      var verbList = Resource.possibleVerbs;
 
-    // initial primitive sorting
-    routes.forEach(function (route) {
-      if (route.path === '/') {
-        first.push(route);
-      } else if (/\:[A-Za-z0-9@._-]+/.test(route.path)) {
-        middle.push(route);
-      } else {
-        last.push(route);
-      }
-    });
-
-    // finer sorting method
-    // TODO: unify this with the initial sorting and get rid of the first, middle and last arrays.
-    function sort (a, b) {
-      if (a.params.length < b.params.length) {
-        return true;
-      }
-
-      if (b.path.indexOf(a.path) === 0) {
-        return true;
-      }
+      if (a.method !== b.method) return verbList.indexOf(a.method) > verbList.indexOf(b.method) ? 1 : -1;
+      if ((a.path === '/') !== (b.path === '/')) return a.path === '/' ? 1 : -1;
+      if (!!~a.path.indexOf(':') !== !!~b.path.indexOf(':')) return !!~a.path.indexOf(':') ? -1 : 1;
+      if (a.params.length !== b.params.length) return a.params.length < b.params.length ? 1 : -1;
+      if (b.path.indexOf(a.path) === 0 || a.path.indexOf(b.path) === 0) return b.path.indexOf(a.path) === 0 ? 1 : -1;
 
       var aSplitBySlash = a.path.split('/').length;
       var bSplitBySlash = b.path.split('/').length;
       var aSplitByColon = a.path.split(':')[0].split('/').length;
       var bSplitByColon = b.path.split(':')[0].split('/').length;
-      if (aSplitBySlash < bSplitBySlash) {
-        return true;
-      } else if (aSplitBySlash > bSplitBySlash) {
-        return false;
-      } else if (aSplitByColon !== bSplitByColon) {
-        return aSplitByColon < bSplitByColon;
-      } else if (a.path.length !== b.path.length) {
-        return a.path.length < b.path.length;
-      } else {
-        return a.path > b.path;
-      }
-    }
 
-    first.sort(sort);
-    middle.sort(sort);
-    last.sort(sort);
-
-    return _.sortBy(first.concat(middle, last), 'method');
+      if (aSplitBySlash !== bSplitBySlash) return aSplitBySlash < bSplitBySlash ? 1 : -1;
+      if (aSplitByColon !== bSplitByColon) return aSplitByColon < bSplitByColon ? 1 : -1;
+      if (a.path.length !== b.path.length) return a.path.length < b.path.length ? 1 : -1;
+      else return a.path > b.path ? 1 : -1;
+    });
   },
 
   _DEFAULT_GET_HANDLER: function(req, res, next) {
