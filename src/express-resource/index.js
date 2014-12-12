@@ -189,7 +189,15 @@ var Resource = NOOT.Object.extend({
 }, {
 
   /**
+   * List of possible HTTP verbs for the model. In order of priority.
+   */
+  possibleVerbs: ['get', 'post', 'delete', 'patch', 'put'],
+
+  /**
    * Orders the given array of routes.
+   * NOTE: the method is not yet able to recognise regular expressions in the paths, only the basic parameters
+   * that start with colons (:). Path declarations with regex' are likely to get ordered falsely.
+   *
    * Example for a route object:
    * {
    *   method: 'delete',
