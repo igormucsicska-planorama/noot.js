@@ -233,7 +233,11 @@ describe('NOOT.ExpressResource', function() {
         { path: '/api/admin',
           method: 'post' },
         { path: '/api/administrator',
-          method: 'post' }
+          method: 'post' },
+        { path: '/api/administrator',
+          method: 'get' },
+        { path: '/',
+          method: 'get' }
       ];
 
       NOOT
@@ -242,6 +246,10 @@ describe('NOOT.ExpressResource', function() {
           return _.pick(route, ['path', 'method']);
         })
         .should.deep.eql([
+          { path: '/api/administrator',
+            method: 'get' },
+          { path: '/',
+            method: 'get' },
           { path: '/api/autoreco/:visit_id/photo/:photo_id',
             method: 'post' },
           { path: '/api/planorama/:id/picture',
@@ -269,8 +277,15 @@ describe('NOOT.ExpressResource', function() {
         ]);
 
       return done();
+    });
 
-    })
+    it('should throw an error if the same path have been declared twice', function (done) {
+      (function () {NOOT.ExpressResource.orderRoutes([
+        { path: '/visit/:id/user_feedback', method: 'post' },
+        { path: '/visit/:id/user_feedback', method: 'post' }
+      ])}).should.throw(Error);
+      return done();
+    });
 
   });
 
