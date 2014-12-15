@@ -22,4 +22,16 @@ describe('NOOT (utils)', function() {
     });
   });
 
+  describe('.flattenArrays()', function() {
+    it('should return an array (single argument)', function() {
+      NOOT.toFlatArray('toto').should.deep.eql(['toto']);
+    });
+    it('should return an array (1 argument is an array)', function() {
+      NOOT.toFlatArray('toto', ['titi', 'tata']).should.deep.eql(['toto', 'titi', 'tata']);
+    });
+    it('should return an array (deep nested array)', function() {
+      NOOT.toFlatArray('toto', ['titi', ['tata', 'tutu']]).should.deep.eql(['toto', 'titi', 'tata', 'tutu']);
+    });
+  });
+
 });
