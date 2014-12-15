@@ -44,7 +44,27 @@ var Utils = {
     return obj;
   },
 
-  noop: function() { return this; }
+  /**
+   *
+   * @returns {Utils}
+   */
+  noop: function() { return this; },
+
+  /**
+   * Convert nested arrays to a single flatten one
+   *
+   * @returns {Array}
+   */
+  toFlatArray: function() {
+    var self = this;
+    var ret = [];
+    var args = Utils.makeArray(arguments);
+    args.forEach(function(arg) {
+      if (Utils.isArray(arg)) ret = ret.concat(Utils.toFlatArray.apply(Utils, arg));
+      else ret.push(arg);
+    });
+    return ret;
+  }
 
 };
 
@@ -52,7 +72,7 @@ var Utils = {
 /**
  * Attach other libraries
  */
-['types'].forEach(function(file) {
+['types', 'case'].forEach(function(file) {
   _.extend(Utils, require('./lib/' + file));
 });
 
