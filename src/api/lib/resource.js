@@ -27,7 +27,9 @@ var Resource = NOOT.Object.extend({
   defaultLimit: 0,
 
   methods: null,
-  routes: null,
+
+  _routes: null,
+  _isComputed: false,
 
   selectable: null,
   _selectable: null,
@@ -50,7 +52,7 @@ var Resource = NOOT.Object.extend({
     if (!this.model) throw new Error('NOOT resource requires a Mongoose `model`');
 
     // Initialize routes
-    this.routes = this.routes || [];
+    this._routes = [];
 
     // Path defaults to model name
     this.path = this.path || NOOT.dasherize(Inflector.pluralize(this.model.modelName));
@@ -72,11 +74,11 @@ var Resource = NOOT.Object.extend({
 
   /**
    * Build, sort and register routes on the app
-   *
-   * @private
    */
-  _register: function() {
-    this._buildRoutes();
+  getRoutes: function() {
+    if (this._isComputed) return this._routes;
+    this._isComputed = true;
+    return this._buildRoutes();
   },
 
   /**
@@ -264,13 +266,14 @@ var Resource = NOOT.Object.extend({
    */
   _buildRoutes: function() {
     var self = this;
-    this.routes = this.methods.map(function(method) {
+    this._routes = this.methods.map(function(method) {
       var DefaultRoute = DefaultRoutes[method];
       return DefaultRoute.create({
         resource: self,
         handlers: [self[DefaultRoute.defaultHandler].bind(self)]
       });
     });
+    return this._routes;
   },
 
   /**
