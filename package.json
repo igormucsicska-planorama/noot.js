@@ -16,8 +16,7 @@
     "change-case": "~2.1.4",
     "colors": "^0.6.2",
     "cron": "^1.0.4",
-    "lodash": "~2.4.1",
-    "mongoose": "^3.8.17"
+    "lodash": "~2.4.1"
   },
   "devDependencies": {
     "chai": "^1.9.1",
@@ -28,7 +27,8 @@
     "grunt-mocha-cov": "^0.3.0",
     "jshint-stylish": "^0.1.5",
     "mocha": "~1.21.0",
-    "grunt-blanket": "0.0.8"
+    "grunt-blanket": "0.0.8",
+    "mongoose": "^3.8.17"
   },
   "scripts": {
     "test": "grunt travis"
