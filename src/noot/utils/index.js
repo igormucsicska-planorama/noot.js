@@ -72,7 +72,7 @@ var Utils = {
 /**
  * Attach other libraries
  */
-['types', 'case'].forEach(function(file) {
+['types', 'case', 'validation'].forEach(function(file) {
   _.extend(Utils, require('./lib/' + file));
 });
 
