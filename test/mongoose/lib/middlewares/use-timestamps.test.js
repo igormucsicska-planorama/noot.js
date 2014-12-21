@@ -7,7 +7,7 @@ var Schema = NOOT.Mongoose.Schema;
 
 var TEST_DB_NAME = 'noot-mongoose-middlewares-test';
 var TEST_COLLECTION_NAME = 'use_timestamps';
-var db = mongoose.createConnection('mongodb://localhost:27017/' + TEST_DB_NAME);
+var db;
 
 
 var UseTimestamps;

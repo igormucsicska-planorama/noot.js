@@ -3,7 +3,6 @@
  */
 var NOOT = nootrequire('mongoose');
 var Schema = NOOT.Mongoose.Schema;
-var mongoose = require('mongoose');
 var async = require('async');
 var _ = require('lodash');
 var Utils = require('../../test-utils');
@@ -172,10 +171,12 @@ var getItemFromList = function(item, list) {
 
 describe('NOOT.Mongoose.Schema', function() {
 
-
-  var Obj1Schema, Obj2Schema, ExtendObjSchema;
-  var Obj1, Obj2, ExtendObj;
-  var obj1, obj2, extendObj;
+  var Obj1Schema;
+  var Obj2Schema;
+  var Obj1;
+  var Obj2;
+  var obj1;
+  var obj2;
 
   before(function(done) {
     dbs.main = Utils.DB.create({ name: TEST_DB_NAME, drop: true }, function(err) {

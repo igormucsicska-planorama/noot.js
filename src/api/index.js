@@ -45,7 +45,7 @@ var API = NOOT.Object.extend({
     }, []);
 
     API.orderRoutes(routes).forEach(function(route) {
-      if (!(route instanceof Route)) throw new Error('Note a `NOOT.API.Route`');
+      if (!(route instanceof Route)) throw new Error('Not a `NOOT.API.Route`');
       var args = route.handlers.slice(0);
       args.unshift(route.path);
       return self.server[route.method].apply(self.server, args);
