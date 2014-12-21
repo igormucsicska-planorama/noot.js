@@ -1,4 +1,7 @@
-var NOOT = nootrequire('api');
+/**
+ * Dependencies
+ */
+var NOOT = nootrequire('api', 'mongoose');
 var express = require('express');
 var mongoose = require('mongoose');
 var http  = require('http');
@@ -9,6 +12,7 @@ var bodyParser = require('body-parser');
 var loremIpsum = require('lorem-ipsum');
 var qs = require('querystring');
 var Utils = require('../test-utils');
+var Schema = NOOT.Mongoose.Schema;
 
 
 /**
@@ -51,7 +55,7 @@ var fetchedData = { User: [], Blog: [], Post: [] };
 describe('NOOT.API', function() {
 
   before(function(done) {
-    return http.createServer(app).listen(8770, done);
+    return http.createServer(app).listen(8870, done);
   });
 
   before(function(done) {
@@ -61,49 +65,64 @@ describe('NOOT.API', function() {
       /**
        * Create models
        */
-      User = db.model('User', new mongoose.Schema({
-        name: {
-          first: String,
-          last: String
+      User = db.model('User', Schema.extend({
+        schema: {
+          name: {
+            first: String,
+            last: String
+          },
+          email: String,
+          password: String,
+          blogs: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Blog', default: function() { return []; } }]
         },
-        email: String,
-        password: String,
-        blogs: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Blog', default: function() { return []; } }]
-      }, {
-        collection: 'users'
+        options: {
+          collection: 'users',
+          versionKey: false
+        }
       }));
 
 
-      Blog = db.model('Blog', new mongoose.Schema({
-        name: { type: String, required: true }
-      }, {
-        collection: 'blogs'
+      Blog = db.model('Blog', Schema.extend({
+        schema: {
+          name: { type: String, required: true }
+        },
+        options: {
+          collection: 'blogs',
+          versionKey: false
+        }
       }));
 
 
-      Post = db.model('Post', new mongoose.Schema({
-        message: { type: String, required: true },
-        user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-        blog: { type: mongoose.Schema.Types.ObjectId, ref: 'Blog', required: true }
-      }, {
-        collection: 'posts'
+      Post = db.model('Post', Schema.extend({
+        schema: {
+          message: { type: String, required: true },
+          user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+          blog: { type: mongoose.Schema.Types.ObjectId, ref: 'Blog', required: true }
+        },
+        options: {
+          collection: 'posts',
+          versionKey: false
+        }
       }));
 
       /**
        * Create resources
        */
       BlogResource = NOOT.API.Resource.create({
-        model: Blog
+        model: Blog,
+        nonSelectable: ['__type', '__types']
       });
 
       UserResource = NOOT.API.Resource.create({
         model: User,
-        nonSelectable: ['password'],
+        methods: ['get', 'put', 'patch', 'post'],
+        nonSelectable: ['password', '__type', '__types'],
         nonSortable: ['blogs']
       });
 
       PostResource = NOOT.API.Resource.create({
         model: Post,
+        nonSelectable: ['__type', '__types'],
         defaultLimit: 10,
         maxLimit: 50
       });
@@ -303,7 +322,7 @@ describe('NOOT.API', function() {
           return cb();
         });
     }, function() {
-      return nextQuery;
+      return !!nextQuery;
     }, function(err) {
       if (err) return done(err);
       posts.should.have.lengthOf(200);

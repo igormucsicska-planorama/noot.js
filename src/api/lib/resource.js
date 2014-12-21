@@ -113,13 +113,14 @@ var Resource = NOOT.Object.extend({
     var query = this.parseQueryString(req.query);
 
     if (id) {
-      return this.model.findById(id, query.select, function(err, item) {
+      return this.model.findById(id, query.select, { lean: true }, function(err, item) {
         if (err) return next(err);
         if (!item) return next();
-        return res.json({ data: item });
+        return res.status(200).json({ data: item });
       });
     } else {
       var self = this;
+      // TODO cache count by filter
       return this.model.count(query.filter, function(err, count) {
         if (err) return next(err);
 
@@ -188,7 +189,7 @@ var Resource = NOOT.Object.extend({
       limit: Math.min(parseInt(query.limit, 10) || this.defaultLimit, this.maxLimit),
       filter: this.filterFields(query, Resource.FILTER),
       sort: this.filterFields(query.sort, Resource.SORT) || '-_id',
-      select: this.filterFields(query.select, Resource.SELECT)
+      select: this.filterFields(query.select, Resource.SELECT) || this._selectable.join(' ')
     };
   },
 
