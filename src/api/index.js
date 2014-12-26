@@ -27,9 +27,9 @@ var API = NOOT.Object.extend({
    * Constructor
    */
   init: function() {
-    if (!this.server) throw new Error('NOOT.Api requires a `server`');
-    this.resources = this.resources || {};
-    this._routes = this._routes || [];
+    NOOT.required(this, 'server');
+    this.resources = {};
+    this._routes = [];
   },
 
   /**
@@ -95,8 +95,69 @@ var API = NOOT.Object.extend({
    * @param {Array} routes
    */
   orderRoutes: function(routes) {
-    return routes;
-    // TODO order routes
+    var PART_TYPES = { OPTIONNAL: 0, PARAM: 1, FIXED: 2 };
+    var ret = [];
+    var indexesMap = [];
+
+    var groupedMap = {};
+    routes.forEach(function(route, i) {
+      var method = (route.method || '').toString().toLowerCase();
+      groupedMap[method] = groupedMap[method] || [];
+      groupedMap[method].push({ path: route.path, index: i });
+    });
+
+
+    for (var method in groupedMap) {
+      console.log('------------', method, '----------------------');
+
+      var methodRoutes = groupedMap[method];
+      methodRoutes = methodRoutes.map(function(route) {
+        route.parts = _.compact(route.path.split('/')).map(function(part) {
+          return part.match(/^:/) ? (part.match(/\?$/) ? PART_TYPES.OPTIONNAL : PART_TYPES.PARAM) : PART_TYPES.FIXED;
+        });
+
+        return route;
+      });
+
+      var methodRoutesByPartsLength = _.groupBy(methodRoutes, function(route) { return route.parts.length; });
+      methodRoutes = [];
+
+      for (var partsLength in methodRoutesByPartsLength) {
+        methodRoutesByPartsLength[partsLength] = methodRoutesByPartsLength[partsLength].sort(function(a, b) {
+          var aParts = a.parts;
+          var bParts = b.parts;
+
+          if (_.isEqual(aParts, bParts)) return 0;
+
+          for (var i = 0; i < partsLength; i++) {
+            if (aParts[i] > bParts[i]) return -1;
+          }
+
+          return 1;
+        });
+        methodRoutes[partsLength] = methodRoutesByPartsLength[partsLength];
+      }
+
+      methodRoutes = _.compact(methodRoutes).reverse();
+
+      groupedMap[method] = [];
+
+      methodRoutes.forEach(function(routes) {
+        routes.forEach(function(route) {
+          groupedMap[method].push(route.index);
+        });
+      });
+    }
+
+    Object.keys(groupedMap).sort().forEach(function(methodName) {
+      indexesMap = indexesMap.concat(groupedMap[methodName]);
+    });
+
+    return indexesMap.map(function(routeIndex) {
+      return routes[routeIndex];
+    });
+
+
   }
 
 });

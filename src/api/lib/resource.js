@@ -1,7 +1,7 @@
 /**
  * Dependencies
  */
-var NOOT = require('../../../')('object', 'url');
+var NOOT = require('../../../')('object', 'url', 'time');
 var Inflector = require('inflected');
 var _ = require('lodash');
 var qs = require('querystring');
@@ -9,6 +9,7 @@ var qs = require('querystring');
 var QueryMode = require('./query-mode');
 var Route = require('./route');
 var DefaultRoutes = require('./default-routes');
+var CountCache = require('./count-cache');
 
 /***********************************************************************************************************************
  * NOOT.Api.Resource
@@ -25,6 +26,7 @@ var Resource = NOOT.Object.extend({
   path: '',
   maxLimit: 0,
   defaultLimit: 0,
+  countCacheExpiration: 0,
 
   methods: null,
 
@@ -70,6 +72,16 @@ var Resource = NOOT.Object.extend({
 
     // Build allowed fields
     this._buildFields();
+
+    this._countCache = CountCache.create({
+      model: this.model,
+      expiration: this.countCacheExpiration || Resource.DEFAULTS.countCacheExpiration
+    });
+  },
+
+
+  getCount: function(filter, callback) {
+    return this._countCache.getCount(filter, callback);
   },
 
   /**
@@ -92,8 +104,7 @@ var Resource = NOOT.Object.extend({
    */
   create: function(req, res, next) {
     var self = this;
-    var properties = this.filterFields(req.body, Resource.WRITE);
-    return this.model.create(properties, function(err, item) {
+    return this.model.create(this.filterFields(req.body, Resource.WRITE), function(err, item) {
       if (err) return next(err);
       return res.status(201).json({ data: self.filterFields(item.toObject(), Resource.READ) });
     });
@@ -120,8 +131,7 @@ var Resource = NOOT.Object.extend({
       });
     } else {
       var self = this;
-      // TODO cache count by filter
-      return this.model.count(query.filter, function(err, count) {
+      return this.getCount(query.filter, function(err, count) {
         if (err) return next(err);
 
         var meta = self.getMeta(req, query, count);
@@ -138,6 +148,10 @@ var Resource = NOOT.Object.extend({
           });
       });
     }
+  },
+
+  count: function(filter, callback) {
+
   },
 
   /**
@@ -323,7 +337,8 @@ var Resource = NOOT.Object.extend({
   _DEFAULTS: {
     methods: ['get', 'put', 'patch', 'delete', 'post'],
     maxLimit: 1000,
-    defaultLimit: 20
+    defaultLimit: 20,
+    countCacheExpiration: NOOT.Time.SECOND
   },
 
   /**

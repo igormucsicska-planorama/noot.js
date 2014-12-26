@@ -16,9 +16,7 @@
   "validateIndentation": 2,
   "validateQuoteMarks": "'",
 
-  "disallowMultipleLineStrings": true,
   "disallowMixedSpacesAndTabs": true,
-  "disallowTrailingWhitespace": true,
   "requireSpaceAfterKeywords": [
     "if",
     "else",
