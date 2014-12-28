@@ -25,6 +25,7 @@ var RoutesSorter = NOOT.Namespace.create({
    * @returns {Array}
    */
   compute: function(routes) {
+    var self = this;
     var sorted = [];
 
     var routesByMethod = _.groupBy(routes.map(function(route, i) {
@@ -33,11 +34,8 @@ var RoutesSorter = NOOT.Namespace.create({
 
     var tmp = routes.splice(0, routes.length);
 
-    for (var methodName in routesByMethod) {
-      this._computeMethodRoutes(routesByMethod[methodName]);
-    }
-
     Object.keys(routesByMethod).sort().forEach(function(methodName) {
+      self._computeMethodRoutes(routesByMethod[methodName]);
       sorted = sorted.concat(routesByMethod[methodName]);
     });
 
