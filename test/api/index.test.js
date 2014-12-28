@@ -1,84 +1,67 @@
 var NOOT = nootrequire('api');
 var express = require('express');
+var _ = require('lodash');
 
 
 describe('NOOT.API', function() {
+  describe('.init()', function() {
+    it('should not create an instance (missing `server`)', function() {
+      (function() { NOOT.API.create(); }).should.throw(/server/);
+    });
 
-
-  it('should not create an instance (missing `server`)', function() {
-    (function() { NOOT.API.create(); }).should.throw(/server/);
+    it('should create an instance and initialize properties', function() {
+      var api = NOOT.API.create({ server: express() });
+      api.resources.should.deep.eql({});
+      api._routes.should.deep.eql([]);
+    });
   });
 
-  it('should create an instance and initialize properties', function() {
-    var api = NOOT.API.create({ server: express() });
-    api.resources.should.deep.eql({});
-    api._routes.should.deep.eql([]);
-  });
-
-  it('should order routes', function() {
-    var route5 = { path: '/users/:id/me/friends', method: 'GET' };
-    var route4 = { path: '/users/:id/friends/:id', method: 'GET' };
-    var route3 = { path: '/users/:id/me', method: 'GET' };
-    var route1 = { path: '/users/:id?', method: 'GET' };
-    var route2 = { path: '/users', method: 'GET' };
-
-    var route6 = { path: '/users', method: 'POST' };
-    var route7 = { path: '/users/', method: 'POST' };
-
-    var route8 = { path: '/users/:id', method: 'PUT' };
-
-    var route9 = { path: '/users/:id', method: 'DELETE' };
-
-    /*
-    RESULT
-    [ 0, 1, 0, 0 ]
-    [ 0, 1, 0, 1 ]
-    [ 0, 1, 0 ]
-    [ 0, 2 ]
-    [ 0 ]
-
-
-     */
-
-
-    /*
-    DATA
-     [ 0, 1, 0, 1 ]
-     [ 0, 2 ]
-     [ 0, 1, 0, 0 ]
-     [ 0 ]
-     [ 0, 1, 0 ]
-
-     */
-
-
+  describe('.sortRoutes()', function() {
     var result = [
-      route9,
-
-      route5,
-      route4,
-      route3,
-      route1,
-      route2,
-
-      route6,
-      route7,
-
-      route8
+      // DELETE
+      { path: '/users/:id', method: 'DELETE' },
+      // GET
+      { path: '/all/is/fixed', method: 'GET' },
+      { path: '/customers/me/:id/:other-id/she', method: 'GET' },
+      { path: '/users/:id/me/friends', method: 'GET' },
+      { path: '/users/:id/friends/:id', method: 'GET' },
+      { path: '/customers/:id/purchases', method: 'GET' },
+      { path: '/users/:id/me', method: 'GET' },
+      { path: '/customers/:id/:other-id', method: 'GET' },
+      { path: '/customers/:id', method: 'GET' },
+      { path: '/customers/:id?', method: 'GET' },
+      { path: '/users/:id?', method: 'GET' },
+      { path: '/users', method: 'GET' },
+      { path: '/:type/fixed', method: 'GET' },
+      { path: '/:type/:other-type', method: 'GET' },
+      { path: '/:unknown', method: 'GET' },
+      // POST
+      { path: '/users', method: 'POST' },
+      // PUT
+      { path: '/users/:id', method: 'PUT' }
     ];
 
+    it('should always return the same result', function() {
+      var prev;
+      _.times(100, function() {
+        var sorted = NOOT.API.sortRoutes(_.shuffle(result));
+        if (prev) sorted.should.deep.eql(prev);
+        prev = sorted;
+      });
+    });
 
-    NOOT.API.orderRoutes([
-      route6,
-      route8,
-      route9,
-      route4,
-      route1,
-      route5,
-      route7,
-      route2,
-      route3
-    ]).should.deep.eql(result);
+    it('should order shuffled routes (100 different shuffles)', function() {
+      _.times(100, function() {
+        NOOT.API.sortRoutes(_.shuffle(result)).should.deep.eql(result);
+      });
+    });
+
+    it('should have kept reference', function() {
+      var toOrder = _.shuffle(result);
+      (NOOT.API.sortRoutes(toOrder) === toOrder).should.eql(true);
+    });
+
+
 
   });
 
