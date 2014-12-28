@@ -14,7 +14,7 @@ var _ = require('lodash');
 var RoutesSorter = NOOT.Namespace.create({
 
   /**
-   * Path weights enumeration
+   * Path part weights enumeration
    */
   _PATH_WEIGHTS: { FIXED: 3, PARAM: 2, OPTIONAL: 1, BLANK: 0 },
 
@@ -22,19 +22,20 @@ var RoutesSorter = NOOT.Namespace.create({
    *
    *
    * @param {Array} routes
-   * @returns {*}
+   * @returns {Array}
    */
   compute: function(routes) {
+    var sorted = [];
+
     var routesByMethod = _.groupBy(routes.map(function(route, i) {
       return { method: (route.method || '').toLowerCase(), path: route.path, originalIndex: i };
     }), 'method');
 
+    var tmp = routes.splice(0, routes.length);
+
     for (var methodName in routesByMethod) {
       this._computeMethodRoutes(routesByMethod[methodName]);
     }
-
-    var sorted = [];
-    var tmp = routes.splice(0, routes.length);
 
     Object.keys(routesByMethod).sort().forEach(function(methodName) {
       sorted = sorted.concat(routesByMethod[methodName]);
