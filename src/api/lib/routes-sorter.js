@@ -69,7 +69,9 @@ var RoutesSorter = NOOT.Namespace.create({
     });
 
     routes.sort(function(a, b) {
-      return a.path < b.path ? -1 : a.path === b.path ? 0 : 1;
+      var aPath = a.path;
+      var bPath = b.path;
+      return aPath < bPath ? -1 : aPath === bPath ? 0 : 1;
     });
 
     routes.sort(function(a, b) {
