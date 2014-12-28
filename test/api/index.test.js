@@ -4,6 +4,7 @@ var _ = require('lodash');
 
 
 describe('NOOT.API', function() {
+
   describe('.init()', function() {
     it('should not create an instance (missing `server`)', function() {
       (function() { NOOT.API.create(); }).should.throw(/server/);
@@ -60,8 +61,6 @@ describe('NOOT.API', function() {
       var toOrder = _.shuffle(result);
       (NOOT.API.sortRoutes(toOrder) === toOrder).should.eql(true);
     });
-
-
 
   });
 
