@@ -5,6 +5,7 @@ var NOOT = require('../../')('object');
 var _ = require('lodash');
 var Resource = require('./lib/resource');
 var Route = require('./lib/route');
+var RoutesSorter = require('./lib/routes-sorter');
 
 /***********************************************************************************************************************
  * NOOT.API
@@ -90,29 +91,29 @@ var API = NOOT.Object.extend({
 }, {
 
   /**
-   * Order a list of NOOT.API.Route
+   * Order a list of routes
+   *
+   * @info Routes must respect the following format : { path: String, method: String }
    *
    * @param {Array} routes
    */
-  orderRoutes: function(routes) {
+  _oldOrderRoutes: function(routes) {
     var PART_TYPES = { OPTIONNAL: 0, PARAM: 1, FIXED: 2 };
-    var ret = [];
     var indexesMap = [];
 
     var groupedMap = {};
+
     routes.forEach(function(route, i) {
       var method = (route.method || '').toString().toLowerCase();
       groupedMap[method] = groupedMap[method] || [];
       groupedMap[method].push({ path: route.path, index: i });
     });
 
-
     for (var method in groupedMap) {
-      console.log('------------', method, '----------------------');
-
       var methodRoutes = groupedMap[method];
       methodRoutes = methodRoutes.map(function(route) {
         route.parts = _.compact(route.path.split('/')).map(function(part) {
+          if (NOOT.isRegExp(part)) throw new Error('Sorting of RegExps based routes is not supported');
           return part.match(/^:/) ? (part.match(/\?$/) ? PART_TYPES.OPTIONNAL : PART_TYPES.PARAM) : PART_TYPES.FIXED;
         });
 
@@ -123,19 +124,26 @@ var API = NOOT.Object.extend({
       methodRoutes = [];
 
       for (var partsLength in methodRoutesByPartsLength) {
-        methodRoutesByPartsLength[partsLength] = methodRoutesByPartsLength[partsLength].sort(function(a, b) {
-          var aParts = a.parts;
-          var bParts = b.parts;
+        methodRoutesByPartsLength[partsLength] = methodRoutesByPartsLength[partsLength]
+          .sort(function(a, b) {
+            if (a.path === b.path) return 0;
+            else if (a.path < b.path) return 1;
+            else return -1;
+          })
+          .sort(function(a, b) {
+            var aParts = a.parts;
+            var bParts = b.parts;
 
-          if (_.isEqual(aParts, bParts)) return 0;
+            if (_.isEqual(aParts, bParts)) return 0;
 
-          for (var i = 0; i < partsLength; i++) {
-            if (aParts[i] > bParts[i]) return -1;
-          }
+            for (var i = 0; i < partsLength; i++) {
+              if (aParts[i] > bParts[i]) return -1;
+            }
 
-          return 1;
-        });
+            return 1;
+          });
         methodRoutes[partsLength] = methodRoutesByPartsLength[partsLength];
+
       }
 
       methodRoutes = _.compact(methodRoutes).reverse();
@@ -153,12 +161,22 @@ var API = NOOT.Object.extend({
       indexesMap = indexesMap.concat(groupedMap[methodName]);
     });
 
-    return indexesMap.map(function(routeIndex) {
-      return routes[routeIndex];
+    var allValues = routes.splice(0, routes.length);
+
+    indexesMap.forEach(function(targetIndex, i) {
+      routes[i] = allValues[targetIndex];
     });
 
+    return routes;
+  },
 
+
+
+  sortRoutes: function(routes) {
+    return RoutesSorter.compute(routes);
   }
+
+
 
 });
 
@@ -167,6 +185,7 @@ var API = NOOT.Object.extend({
  */
 API.Resource = Resource;
 API.Route = Route;
+API.RoutesSorter = RoutesSorter;
 
 /**
  * @module
