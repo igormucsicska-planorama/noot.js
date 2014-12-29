@@ -94,7 +94,7 @@ Obj.extend = function (prototype, statics) {
   InternalUtils.buildSuper(stat, this, statics);
   _.extend(child, this, stat);
 
-  child.protos = new Surrogate();
+  child.prototype = new Surrogate();
   for (var key in proto) {
     child.prototype[key] = proto[key];
   }
@@ -124,6 +124,4 @@ Obj.create = function(def) {
 /**
  * @exports
  */
-module.exports = Obj.extend({
-  init: function() { return this; }
-});
+module.exports = Obj.extend({ init: function() { return this; } });
