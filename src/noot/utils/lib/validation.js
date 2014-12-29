@@ -1,6 +1,6 @@
-var Utils = require('../');
-
 var ValidationUtils = {
+
+
   required: function() {
     var args = Array.prototype.slice.call(arguments, 0);
     var obj = args.shift();
@@ -10,5 +10,7 @@ var ValidationUtils = {
   }
 };
 
-
+/**
+ * @exports
+ */
 module.exports = ValidationUtils;
