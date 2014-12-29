@@ -76,6 +76,7 @@ var Utils = {
    * @for NOOT
    * @static
    * @property noop
+   * @chainable
    * @type Function
    */
   noop: function() { return this; },

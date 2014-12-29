@@ -1,13 +1,11 @@
+
 var CREATED_ON = 'createdOn';
 var UPDATED_ON = 'updatedOn';
 
 /***********************************************************************************************************************
- * useTimestamps
- ***********************************************************************************************************************
- *
- *
- *
- *
+ * @for NOOT.Mongoose
+ * @method useTimestamps
+ * @static
  **********************************************************************************************************************/
 var useTimestamps = function(schema, options) {
   options = options || {};
@@ -42,6 +40,6 @@ var useTimestamps = function(schema, options) {
 
 
 /**
- * @module
+ * @exports
  */
 module.exports = useTimestamps;

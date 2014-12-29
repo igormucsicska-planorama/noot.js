@@ -7,12 +7,15 @@ var Resource = require('./lib/resource');
 var Route = require('./lib/route');
 var RoutesSorter = require('./lib/routes-sorter');
 
-/**
+
+/***********************************************************************************************************************
+ *
  *
  *
  * @class API
+ * @constructor
  * @namespace NOOT
- */
+ **********************************************************************************************************************/
 var API = NOOT.Object.extend({
   version: '',
   server: null,
@@ -101,6 +104,6 @@ API.Resource = Resource;
 API.Route = Route;
 
 /**
- * @module
+ * @exports
  */
 module.exports = API;

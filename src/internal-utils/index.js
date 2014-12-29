@@ -44,6 +44,6 @@ var __Utils = {
 
 
 /**
- * @module
+ * @exports
  */
 module.exports = __Utils;

@@ -46,9 +46,5 @@
   "disallowSpacesInsideArrayBrackets": "all",
   "disallowSpacesInsideParentheses": true,
   "requireCapitalizedConstructors": true,
-  "safeContextKeyword": ["self"],
-  "validateJSDoc": {
-    "checkParamNames": true,
-    "requireParamTypes": true
-  }
+  "safeContextKeyword": ["self"]
 }

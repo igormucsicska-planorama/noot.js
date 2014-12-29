@@ -14,6 +14,6 @@ var NOOT = require('../../../')('object');
 var QueryMode = NOOT.Object.extend();
 
 /**
- * @module
+ * @exports
  */
 module.exports = QueryMode;

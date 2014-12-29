@@ -22,6 +22,13 @@ var oldInit = Model.prototype.init;
 var oldModel = mongoose.model;
 
 
+/***********************************************************************************************************************
+ * @class Schema
+ * @constructor
+ * @namespace NOOT.Mongoose
+ **********************************************************************************************************************/
+
+
 /**
  * Extend schema, define discriminator, create model
  *
@@ -241,6 +248,6 @@ mongoose.model = function(modelName, schema, collection, options) {
 
 
 /**
- * @module
+ * @exports
  */
 module.exports = SchemaBase;

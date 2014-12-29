@@ -114,6 +114,6 @@ var RoutesSorter = NOOT.Namespace.create({
 });
 
 /**
- * @module
+ * @exports
  */
 module.exports = RoutesSorter;
