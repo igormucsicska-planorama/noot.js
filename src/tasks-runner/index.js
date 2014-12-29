@@ -5,14 +5,10 @@ var NOOT = require('../../')('object');
 var Task = require('./lib/task');
 var cron = require('cron');
 
-
 /***********************************************************************************************************************
- * NOOT.TasksRunner
- ***********************************************************************************************************************
- *
- *
- *
- *
+ * @class TasksRunner
+ * @namespace NOOT
+ * @constructor
  **********************************************************************************************************************/
 var TasksRunner = NOOT.Object.extend({
   _tasks: [],
@@ -59,12 +55,16 @@ var TasksRunner = NOOT.Object.extend({
 });
 
 /**
- * Attach Task class
+ * See {{#crossLink "NOOT.TasksRunner.Task"}}{{/crossLink}}.
+ *
+ * @property Task
+ * @static
+ * @type {*}
  */
 TasksRunner.Task = Task;
 
 
 /**
-* @module
+* @exports
 */
 module.exports = TasksRunner;

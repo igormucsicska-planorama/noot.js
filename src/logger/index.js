@@ -6,16 +6,15 @@ var _ = require('lodash');
 var util = require('util');
 var NOOT = require('../../')('object');
 
-
 /***********************************************************************************************************************
- * NOOT.Logger
- ***********************************************************************************************************************
- *
- * @description Simple logger to display/write/send nice logs
- *
+ * Simple logger to display/write/send nice logs :
  * - Hierarchic logging levels, choose what you want to see in your logs
  * - Configurable transport method : simply override 'writeLog' method, default is console logging
  *
+ * @class Logger
+ * @namespace NOOT
+ * @extends NOOT.Object
+ * @constructor
  **********************************************************************************************************************/
 var Logger = NOOT.Object.extend({
   level: null,
@@ -249,6 +248,6 @@ var Logger = NOOT.Object.extend({
 });
 
 /**
- * @module
+ * @exports
  */
 module.exports = Logger;

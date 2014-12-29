@@ -97,6 +97,6 @@ var DependenciesManager = {
 };
 
 /**
- * @module
+ * @exports
  */
 module.exports = DependenciesManager;

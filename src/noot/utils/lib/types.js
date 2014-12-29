@@ -202,6 +202,6 @@ var Utils = {
 };
 
 /**
- * @module
+ * @exports
  */
 module.exports = Utils;

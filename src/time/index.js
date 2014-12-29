@@ -5,28 +5,62 @@ var NOOT = require('../../')('namespace');
 var _ = require('lodash');
 
 /***********************************************************************************************************************
- * NOOT.Utils.Time
- ***********************************************************************************************************************
- *
- *
- *
- *
+ * @class Time
+ * @static
+ * @namespace NOOT
  **********************************************************************************************************************/
 var Time = NOOT.Namespace.create({});
 
-
 /**
- * Time constants
+ * @property SECOND
+ * @final
+ * @static
+ * @type {number}
  */
 Time.SECOND = 1000;
-Time.MINUTE = Time.SECOND * 60;
-Time.HOUR = Time.MINUTE * 60;
-Time.DAY = Time.HOUR * 24;
-Time.WEEK = Time.DAY * 7;
-
-
 
 /**
- * @module
+ * @property MINUTE
+ * @final
+ * @static
+ * @type {number}
  */
-module.exports = _.extend(Time, { Measure: require('./lib/measure') });
+Time.MINUTE = Time.SECOND * 60;
+
+/**
+ * @property HOUR
+ * @final
+ * @static
+ * @type {number}
+ */
+Time.HOUR = Time.MINUTE * 60;
+
+/**
+ * @property DAY
+ * @final
+ * @static
+ * @type {number}
+ */
+Time.DAY = Time.HOUR * 24;
+
+/**
+ * @property WEEK
+ * @final
+ * @static
+ * @type {number}
+ */
+Time.WEEK = Time.DAY * 7;
+
+/**
+ * See See {{#crossLink "NOOT.Time.Measure"}}{{/crossLink}}.
+ *
+ * @property Measure
+ * @type {*}
+ * @static
+ */
+Time.Measure = require('./lib/measure');
+
+/**
+ * @exports
+ */
+module.exports = Time;

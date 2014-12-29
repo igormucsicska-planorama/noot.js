@@ -4,7 +4,7 @@
 var _ = require('lodash');
 var InternalUtils = require('../internal-utils');
 
-/**
+/***********************************************************************************************************************
  * The purpose of this module is to provide a clear object model for OOJS programming. This is a base Class
  * implementation using the factory pattern. An implementation of 'super' inspired by John Resig is also available to
  * make this object model more scalable.
@@ -59,13 +59,11 @@ var InternalUtils = require('../internal-utils');
  *
  * employee.sayHello();
  * // Hello, my name is John Doe, I work as a developer
- ```
+ * ```
  *
  * @class Object
  * @constructor
- * @namespace NOOT
- */
-
+ **********************************************************************************************************************/
 var Obj = function () { };
 
 /**
@@ -75,7 +73,6 @@ var Obj = function () { };
  * @static
  * @param {Object} [prototype] Instance members
  * @param {Object} [statics] Static members
- * @returns {NOOT.Object} A new class
  */
 Obj.extend = function (prototype, statics) {
   if (!arguments.length) prototype = {};
@@ -111,7 +108,6 @@ Obj.extend = function (prototype, statics) {
  * @method create
  * @static
  * @param {Object} [def]
- * @returns {NOOT.Object} A new instance
  */
 Obj.create = function(def) {
   var instance = new this.prototype.constructor();
@@ -125,8 +121,9 @@ Obj.create = function(def) {
   return instance;
 };
 
-
 /**
- * @ignore
+ * @exports
  */
-module.exports = Obj.extend({ init: function() { return this; } });
+module.exports = Obj.extend({
+  init: function() { return this; }
+});

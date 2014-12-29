@@ -48,6 +48,6 @@ var Route = NOOT.Object.extend({
 });
 
 /**
- * @module
+ * @exports
  */
 module.exports = Route;

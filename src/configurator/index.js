@@ -6,11 +6,12 @@ var _ = require('lodash');
 var NOOT = require('../../')('object');
 
 /***********************************************************************************************************************
- * Configurator Class
- ***********************************************************************************************************************
  *
- * @info Lightweight module to deal with environments configurations
  *
+ *
+ * @class Configurator
+ * @constructor
+ * @namespace NOOT
  **********************************************************************************************************************/
 var Configurator = NOOT.Object.extend({
   directory: null,

@@ -21,6 +21,6 @@ var Routes = NOOT.Namespace.create({
 });
 
 /**
- * @module
+ * @exports
  */
 module.exports = Routes;

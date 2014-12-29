@@ -4,17 +4,27 @@
 var path = require('path');
 var NOOT = require('../../')('namespace');
 
-
 /***********************************************************************************************************************
- * NOOT.Utils.Url
- ***********************************************************************************************************************
- *
- *
- *
- *
+ * @class Url
+ * @namespace NOOT
+ * @static
  **********************************************************************************************************************/
 var Url = NOOT.Namespace.create({
+
+  /**
+   * @property PROTOCOL_REG
+   * @final
+   * @static
+   * @type {RegExp}
+   */
   PROTOCOL_REG: /^(file:\/|(http(s)?|s?ftp|smb):)(\/){2}/i,
+
+  /**
+   * @property HTTP_PROTOCOL_REG
+   * @final
+   * @static
+   * @type {RegExp}
+   */
   HTTP_PROTOCOL_REG: /^http(s)?:\/{2}/i,
 
   /**
@@ -54,6 +64,6 @@ var Url = NOOT.Namespace.create({
 });
 
 /**
- * @module
+ * @exports
  */
 module.exports = Url;

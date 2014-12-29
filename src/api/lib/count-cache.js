@@ -58,6 +58,6 @@ var CountCache = NOOT.Object.extend({
 
 
 /**
- * @module
+ * @exports
  */
 module.exports = CountCache;

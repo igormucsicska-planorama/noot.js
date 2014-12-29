@@ -371,6 +371,6 @@ var Resource = NOOT.Object.extend({
 
 
 /**
- * @module
+ * @exports
  */
 module.exports = Resource;
