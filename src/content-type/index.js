@@ -10,21 +10,23 @@ var DEFAULT_CONTENT_TYPE = 'application/octet-stream';
 var DEFAULT_EXTENSION = '';
 
 
-/***********************************************************************************************************************
- * ContentType
- ***********************************************************************************************************************
+/**
+ * Deal with MIME types and files extensions
  *
- *
- *
- *
- **********************************************************************************************************************/
+ * @namespace NOOT
+ * @class ContentType
+ * @extends NOOT.Namespace
+ * @static
+ */
 var ContentType = NOOT.Namespace.create({
 
   /**
    * Get content type from extension
    *
+   * @method fromExtension
+   * @static
    * @param {String} extension
-   * @returns {String}
+   * @return {String}
    */
   fromExtension: function(extension) {
     extension = extension.replace(/\./g, '');
@@ -34,8 +36,10 @@ var ContentType = NOOT.Namespace.create({
   /**
    * Get content type from path
    *
+   * @method fromPath
+   * @static
    * @param {String} str
-   * @returns {String}
+   * @return {String}
    */
   fromPath: function(str) {
     return this.fromExtension(path.extname(str).toString());
@@ -44,6 +48,8 @@ var ContentType = NOOT.Namespace.create({
   /**
    * Get extension from content type
    *
+   * @method toExtension
+   * @static
    * @param {String} contentType
    * @returns {String}
    */
@@ -54,6 +60,6 @@ var ContentType = NOOT.Namespace.create({
 
 
 /**
- * @module
+ * @exports
  */
 module.exports = ContentType;

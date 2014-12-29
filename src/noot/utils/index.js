@@ -6,10 +6,19 @@ var _ = require('lodash');
 var Utils = {
 
   /**
+   * Create an array from an `arguments` instance.
    *
+   * ```javascript
+   * var myFunction = function() {
+   *   var args = NOOT.makeArray(arguments); // `args` is now a JS array instance
+   * };
+   * ```
    *
+   * @for NOOT
+   * @static
+   * @method makeArray
    * @param {arguments|Array} arg
-   * @returns {Array}
+   * @return {Array}
    */
   makeArray: function(arg) {
     return Array.isArray(arg) ? arg : Array.prototype.slice.call(arg, 0);
@@ -17,12 +26,20 @@ var Utils = {
 
 
   /**
-   * Rename an object's property
+   * Rename an object's property by copying the value of the old property to the new one and deleting the old.
    *
+   * ```javascript
+   * var myObj = { one: 'bar', two: 'foo' };
+   * NOOT.renameProperty(myObj, 'one', 'first); // { first: 'bar', two: 'foo' }
+   * ```
+   *
+   * @for NOOT
+   * @static
+   * @method renameProperty
    * @param {Object} obj
    * @param {String} from
    * @param {String} to
-   * @returns {Object}
+   * @return {Object}
    */
   renameProperty: function(obj, from, to) {
     obj[to] = obj[from];
@@ -31,11 +48,20 @@ var Utils = {
   },
 
   /**
-   * Rename multiple properties
+   * Rename multiple properties. Same as `renameProperty` but this time you can provide a map of
+   * properties to be replaced.
    *
+   * ```javascript
+   * var myObj = { one: 'bar', two: 'foo' };
+   * NOOT.renameProperties(myObj, { one: 'first', two: 'second' }); // { first: 'bar', second: 'foo' }
+   * ```
+   *
+   * @for NOOT
+   * @static
+   * @method renameProperties
    * @param {Object} obj
    * @param {Array} map
-   * @returns {Object}
+   * @return {Object}
    */
   renameProperties: function(obj, map) {
     for (var key in map) {
@@ -45,18 +71,29 @@ var Utils = {
   },
 
   /**
+   * Empty, chainable function that does... nothing.
    *
-   * @returns {Utils}
+   * @for NOOT
+   * @static
+   * @property noop
+   * @type Function
    */
   noop: function() { return this; },
 
   /**
    * Convert nested arrays to a single flatten one
    *
-   * @returns {Array}
+   * ```javascript
+   * NOOT.toFlatArray([1, 2, 3]); // [1, 2, 3]
+   * NOOT.toFlatArray([[1], [2, 3]]); // [1, 2, 3]
+   * ```
+   *
+   * @for NOOT
+   * @static
+   * @method toFlatArray
+   * @return {Array}
    */
   toFlatArray: function() {
-    var self = this;
     var ret = [];
     var args = Utils.makeArray(arguments);
     args.forEach(function(arg) {
@@ -77,7 +114,4 @@ var Utils = {
 });
 
 
-/**
- * @module
- */
 module.exports = Utils;

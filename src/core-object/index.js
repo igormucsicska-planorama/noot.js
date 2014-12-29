@@ -1,62 +1,105 @@
-/***********************************************************************************************************************
+/**
  * Dependencies
- **********************************************************************************************************************/
+ */
 var _ = require('lodash');
 var InternalUtils = require('../internal-utils');
 
-/***********************************************************************************************************************
- * NOOT.Object
- ***********************************************************************************************************************
- *
+/**
  * The purpose of this module is to provide a clear object model for OOJS programming. This is a base Class
  * implementation using the factory pattern. An implementation of 'super' inspired by John Resig is also available to
  * make this object model more scalable.
  *
+ * ### Create a class
  *
- * All classes should inherit from this base object.
+ * ``` javascript
+ * var Person = NOOT.Object.extend({
+ *   firstName: '',
+ *   lastName: '',
  *
- * - Use 'NOOT.Object.extend({ ... prototype ... });' to create a new class
- * - Use 'NOOT.Object.create({ ... instance members ... });' to create a new instance
- * - Static members can be added as a second argument in 'extend'
- * - If you provide an 'init' method, it will be used as a 'constructor'
- * - Call 'this._super( args.. )' in any method to call the parent's one
+ *   init: function() {
+ *     if(!this.lastName || !this.firstName) throw new Error('John Doe is a myth');
+ *   },
  *
- * - Note that the constructor 'init' method is called after instance members have been set
+ *   sayHello: function() {
+ *     console.log('Hello, my name is', this.getFullName());
+ *   },
  *
- **********************************************************************************************************************/
+ *   getFullName: function() {
+ *     return this.firstName + ' ' + this.lastName;
+ *   }
+ * });
+ *
+ *
+ * var person = Person.create({
+ *   firstName: 'John',
+ *   lastName: 'Doe'
+ * });
+ *
+ * person.sayHello();
+ * // Hello, my name is John Doe
+ * ```
+ *
+ * ### Extend a class
+ *
+ * ``` javascript
+ * var Employee = Person.extend({
+ *   job: '',
+ *
+ *   sayHello: function() {
+ *     console.log(this._super(), ', I work as a ', this.job);
+ *   }
+ * });
+ *
+ *
+ * var employee = Employee.create({
+ *   firstName: 'John',
+ *   lastName: 'Doe',
+ *   job: 'developer'
+ * });
+ *
+ * employee.sayHello();
+ * // Hello, my name is John Doe, I work as a developer
+ ```
+ *
+ * @class Object
+ * @constructor
+ * @namespace NOOT
+ */
 
 var Obj = function () { };
 
 /**
- * extend
+ * Extend
  *
- * @param {Object} [proto]
- * @param {Object} [stat]
- * @returns {child}
+ * @method extend
+ * @static
+ * @param {Object} [prototype] Instance members
+ * @param {Object} [statics] Static members
+ * @returns {NOOT.Object} A new class
  */
-Obj.extend = function (proto, stat) {
-  if (!arguments.length) proto = {};
-  stat = stat || {};
+Obj.extend = function (prototype, statics) {
+  if (!arguments.length) prototype = {};
+  statics = statics || {};
 
   // Constructor
   var child = function () { return this; };
-  var prototype = {};
+  var proto = {};
 
   // 'super' implementation
-  InternalUtils.buildSuper(prototype, this.prototype, proto);
+  InternalUtils.buildSuper(proto, this.prototype, prototype);
 
   // Prototypal inheritance
   var Surrogate = function () { this.constructor = child; };
   Surrogate.prototype = this.prototype;
 
   // Static properties
-  var statics = {};
-  InternalUtils.buildSuper(statics, this, stat);
-  _.extend(child, this, statics);
+  var stat = {};
+  InternalUtils.buildSuper(stat, this, statics);
+  _.extend(child, this, stat);
 
-  child.prototype = new Surrogate();
-  for (var key in prototype) {
-    child.prototype[key] = prototype[key];
+  child.protos = new Surrogate();
+  for (var key in proto) {
+    child.prototype[key] = proto[key];
   }
 
   // Return the newly created class
@@ -65,10 +108,10 @@ Obj.extend = function (proto, stat) {
 
 
 /**
- * create
- *
+ * @method create
+ * @static
  * @param {Object} [def]
- * @returns {Object.constructor}
+ * @returns {NOOT.Object} A new instance
  */
 Obj.create = function(def) {
   var instance = new this.prototype.constructor();
