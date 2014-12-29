@@ -1,7 +1,6 @@
 /**
  * Dependencies
  */
-var path = require('path');
 var NOOT = require('../../')('namespace');
 
 /***********************************************************************************************************************
@@ -40,7 +39,7 @@ var Url = NOOT.Namespace.create({
     protocol = protocol ? protocol[0] : '';
     ret = ret.replace(protocol, '');
     if (protocol) ret = ret.replace(/^\/+/, '');
-    return protocol + path.join(ret);
+    return protocol + ret.replace(/\/{2,}/g, '/');
   },
 
   /**
