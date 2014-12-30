@@ -6,9 +6,6 @@ var _ = require('lodash');
 var NOOT = require('../../')('object');
 
 /***********************************************************************************************************************
- *
- *
- *
  * @class Configurator
  * @constructor
  * @namespace NOOT
@@ -18,7 +15,7 @@ var Configurator = NOOT.Object.extend({
   env: null,
 
   /**
-   * @constructor
+   * @method init
    */
   init: function() {
     if (!this.env) throw new Error('No environment defined for NOOT.Configurator');
@@ -28,9 +25,10 @@ var Configurator = NOOT.Object.extend({
   /**
    * Get a configuration or configuration field
    *
+   * @method get
    * @param {String} fileName
    * @param {...String} [fields]
-   * @returns {*}
+   * @return {*}
    */
   get: function() {
     var args = NOOT.makeArray(arguments);
@@ -44,7 +42,9 @@ var Configurator = NOOT.Object.extend({
   /**
    * Retrieve the configuration
    *
+   * @method _load
    * @param {String} fileName
+   * @return {*}
    */
   _load: function(fileName) {
     var config;
@@ -59,9 +59,10 @@ var Configurator = NOOT.Object.extend({
   /**
    * Deeply merge 2 objects
    *
+   * @method _merge
    * @param {Object} left
    * @param {Object} right
-   * @returns {Object}
+   * @return {Object}
    * @private
    */
   _merge: function(left, right) {
@@ -96,6 +97,11 @@ var Configurator = NOOT.Object.extend({
   }
 
 }, {
+
+  /**
+   * @property DEFAULTS
+   * @static
+   */
   DEFAULTS: { DIRECTORY: path.join(process.cwd(), 'config') }
 });
 

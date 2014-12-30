@@ -2,22 +2,19 @@
  * Dependencies
  */
 var NOOT = require('../../../')('namespace');
-var Route = require('./route');
 
 /***********************************************************************************************************************
- * DefaultRoutes
- ***********************************************************************************************************************
- *
- * @info configurations for default routes by verb
- *
- *
+ * @class DefaultRoutes
+ * @namespace NOOT.API
+ * @extends NOOT.Namespace
+ * @static
  **********************************************************************************************************************/
 var Routes = NOOT.Namespace.create({
-  get: Route.extend({ path: '/:id?', method: 'get' }, { defaultHandler: 'read' }),
-  delete: Route.extend({ path: '/:id', method: 'delete' }, { defaultHandler: 'delete' }),
-  post: Route.extend({ path: '/', method: 'post' }, { defaultHandler: 'create' }),
-  put: Route.extend({ path: '/:id', method: 'put' }, { defaultHandler: 'update' }),
-  patch: Route.extend({ path: '/:id', method: 'patch' }, { defaultHandler: 'update' })
+  get: require('./default-routes/get'),
+  delete: require('./default-routes/delete'),
+  post: require('./default-routes/post'),
+  put: require('./default-routes/put'),
+  patch: require('./default-routes/patch')
 });
 
 /**

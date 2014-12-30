@@ -79,28 +79,31 @@ Obj.extend = function (prototype, statics) {
   statics = statics || {};
 
   // Constructor
-  var child = function () { return this; };
+  var Class = function () { return this; };
   var proto = {};
 
   // 'super' implementation
   InternalUtils.buildSuper(proto, this.prototype, prototype);
 
   // Prototypal inheritance
-  var Surrogate = function () { this.constructor = child; };
+  var Surrogate = function () { this.constructor = Class; };
   Surrogate.prototype = this.prototype;
 
   // Static properties
   var stat = {};
   InternalUtils.buildSuper(stat, this, statics);
-  _.extend(child, this, stat);
+  _.extend(Class, this, stat);
 
-  child.prototype = new Surrogate();
+  Class.prototype = new Surrogate();
   for (var key in proto) {
-    child.prototype[key] = proto[key];
+    Class.prototype[key] = proto[key];
   }
 
+  // Keep a reference
+  Class.superClass = this;
+
   // Return the newly created class
-  return child;
+  return Class;
 };
 
 
@@ -110,15 +113,44 @@ Obj.extend = function (prototype, statics) {
  * @param {Object} [def]
  */
 Obj.create = function(def) {
+  if (typeof def !== 'object' && def !== undefined) throw new Error('NOOT.Object.create only accepts objects');
+
   var instance = new this.prototype.constructor();
 
-  // Set instance members
-  for (var key in def) {
-    instance[key] = def[key];
+  if (def) {
+    var keyNames = Object.keys(def);
+    var concatenatedProperties = def.concatenatedProperties || instance.concatenatedProperties;
+
+    if (concatenatedProperties) {
+      InternalUtils.buildConcatenatedProperties(instance, def, concatenatedProperties);
+      keyNames = _.pull.apply(_, [keyNames].concat(concatenatedProperties));
+    }
+
+    keyNames.forEach(function(key) {
+      instance[key] = def[key];
+    });
   }
-  // Call 'init' method, it acts as a constructor
+
   instance.init.call(instance);
+
   return instance;
+};
+
+/**
+ * Detect if parameter class is a subclass
+ *
+ * @method detect
+ * @static
+ * @param Class Class to be tested
+ * @return {boolean}
+ */
+Obj.detect = function(Class) {
+  if ('function' !== typeof Class) return false;
+  while (Class) {
+    if (Class === this) return true;
+    Class = Class.superClass;
+  }
+  return false;
 };
 
 /**

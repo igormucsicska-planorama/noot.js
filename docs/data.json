@@ -1,0 +1,4364 @@
+{
+    "project": {
+        "name": "NOOT.js",
+        "description": "NOOT.js: Object oriented toolset for Node.js",
+        "url": "http://nootjs.com",
+        "version": "0.5.5"
+    },
+    "files": {
+        "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/count-cache.js": {
+            "name": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/count-cache.js",
+            "modules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
+        "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/default-routes.js": {
+            "name": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/default-routes.js",
+            "modules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
+        "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/query-mode.js": {
+            "name": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/query-mode.js",
+            "modules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
+        "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/resource.js": {
+            "name": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/resource.js",
+            "modules": {},
+            "classes": {
+                "NOOT.API.Resource": 1
+            },
+            "fors": {},
+            "namespaces": {
+                "NOOT.API": 1
+            }
+        },
+        "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/route.js": {
+            "name": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/route.js",
+            "modules": {},
+            "classes": {
+                "NOOT.API.Route": 1
+            },
+            "fors": {},
+            "namespaces": {
+                "NOOT.API": 1
+            }
+        },
+        "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/routes-sorter.js": {
+            "name": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/routes-sorter.js",
+            "modules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
+        "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/index.js": {
+            "name": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/index.js",
+            "modules": {},
+            "classes": {
+                "NOOT.API": 1
+            },
+            "fors": {},
+            "namespaces": {
+                "NOOT": 1
+            }
+        },
+        "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/configurator/index.js": {
+            "name": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/configurator/index.js",
+            "modules": {},
+            "classes": {
+                "NOOT.Configurator": 1
+            },
+            "fors": {},
+            "namespaces": {
+                "NOOT": 1
+            }
+        },
+        "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/content-type/index.js": {
+            "name": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/content-type/index.js",
+            "modules": {},
+            "classes": {
+                "NOOT.ContentType": 1
+            },
+            "fors": {},
+            "namespaces": {
+                "NOOT": 1
+            }
+        },
+        "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/core-object/index.js": {
+            "name": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/core-object/index.js",
+            "modules": {},
+            "classes": {
+                "NOOT.Object": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/custom-require/index.js": {
+            "name": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/custom-require/index.js",
+            "modules": {},
+            "classes": {
+                "NOOT.CustomRequire": 1
+            },
+            "fors": {},
+            "namespaces": {
+                "NOOT": 1
+            }
+        },
+        "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/error/index.js": {
+            "name": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/error/index.js",
+            "modules": {},
+            "classes": {
+                "NOOT.Error": 1
+            },
+            "fors": {},
+            "namespaces": {
+                "NOOT": 1
+            }
+        },
+        "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/errors/index.js": {
+            "name": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/errors/index.js",
+            "modules": {},
+            "classes": {
+                "NOOT.Errors": 1
+            },
+            "fors": {},
+            "namespaces": {
+                "NOOT": 1
+            }
+        },
+        "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/http/index.js": {
+            "name": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/http/index.js",
+            "modules": {},
+            "classes": {
+                "NOOT.HTTP": 1
+            },
+            "fors": {},
+            "namespaces": {
+                "NOOT": 1
+            }
+        },
+        "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/internal-utils/index.js": {
+            "name": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/internal-utils/index.js",
+            "modules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
+        "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/logger/index.js": {
+            "name": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/logger/index.js",
+            "modules": {},
+            "classes": {
+                "NOOT.Logger": 1
+            },
+            "fors": {},
+            "namespaces": {
+                "NOOT": 1
+            }
+        },
+        "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/mongoose/lib/middlewares/use-timestamps.js": {
+            "name": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/mongoose/lib/middlewares/use-timestamps.js",
+            "modules": {},
+            "classes": {},
+            "fors": {
+                "NOOT.Mongoose": 1
+            },
+            "namespaces": {}
+        },
+        "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/mongoose/lib/schema.js": {
+            "name": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/mongoose/lib/schema.js",
+            "modules": {},
+            "classes": {
+                "NOOT.Mongoose.Schema": 1
+            },
+            "fors": {},
+            "namespaces": {
+                "NOOT.Mongoose": 1
+            }
+        },
+        "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/mongoose/index.js": {
+            "name": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/mongoose/index.js",
+            "modules": {},
+            "classes": {
+                "NOOT.Mongoose": 1
+            },
+            "fors": {},
+            "namespaces": {
+                "NOOT": 1
+            }
+        },
+        "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/namespace/index.js": {
+            "name": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/namespace/index.js",
+            "modules": {},
+            "classes": {
+                "NOOT.Namespace": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/noot/utils/lib/case.js": {
+            "name": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/noot/utils/lib/case.js",
+            "modules": {},
+            "classes": {},
+            "fors": {
+                "NOOT": 1
+            },
+            "namespaces": {}
+        },
+        "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/noot/utils/lib/types.js": {
+            "name": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/noot/utils/lib/types.js",
+            "modules": {},
+            "classes": {},
+            "fors": {
+                "NOOT.NOOT": 1
+            },
+            "namespaces": {}
+        },
+        "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/noot/utils/lib/validation.js": {
+            "name": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/noot/utils/lib/validation.js",
+            "modules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
+        "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/noot/utils/index.js": {
+            "name": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/noot/utils/index.js",
+            "modules": {},
+            "classes": {},
+            "fors": {
+                "NOOT.NOOT": 1
+            },
+            "namespaces": {}
+        },
+        "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/noot/manager.js": {
+            "name": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/noot/manager.js",
+            "modules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
+        "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/tasks-runner/lib/task.js": {
+            "name": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/tasks-runner/lib/task.js",
+            "modules": {},
+            "classes": {
+                "NOOT.TasksRunner.Task": 1
+            },
+            "fors": {},
+            "namespaces": {
+                "NOOT.TasksRunner": 1
+            }
+        },
+        "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/tasks-runner/index.js": {
+            "name": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/tasks-runner/index.js",
+            "modules": {},
+            "classes": {
+                "NOOT.TasksRunner": 1
+            },
+            "fors": {},
+            "namespaces": {
+                "NOOT": 1
+            }
+        },
+        "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/time/lib/measure.js": {
+            "name": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/time/lib/measure.js",
+            "modules": {},
+            "classes": {
+                "NOOT.Time.Measure": 1
+            },
+            "fors": {},
+            "namespaces": {
+                "NOOT.Time": 1
+            }
+        },
+        "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/time/index.js": {
+            "name": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/time/index.js",
+            "modules": {},
+            "classes": {
+                "NOOT.Time": 1
+            },
+            "fors": {},
+            "namespaces": {
+                "NOOT": 1
+            }
+        },
+        "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/url/index.js": {
+            "name": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/url/index.js",
+            "modules": {},
+            "classes": {
+                "NOOT.Url": 1
+            },
+            "fors": {},
+            "namespaces": {
+                "NOOT": 1
+            }
+        },
+        "/Users/sylvainestevez/Documents/Projects/Web/noot.js/Gruntfile.js": {
+            "name": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/Gruntfile.js",
+            "modules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
+        "/Users/sylvainestevez/Documents/Projects/Web/noot.js/index.js": {
+            "name": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/index.js",
+            "modules": {},
+            "classes": {
+                "NOOT.NOOT": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        }
+    },
+    "modules": {},
+    "classes": {
+        "NOOT.API.Resource": {
+            "name": "NOOT.API.Resource",
+            "shortname": "NOOT.API.Resource",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "namespace": "NOOT.API",
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/resource.js",
+            "line": 14,
+            "is_constructor": 1
+        },
+        "NOOT.API.Route": {
+            "name": "NOOT.API.Route",
+            "shortname": "NOOT.API.Route",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "namespace": "NOOT.API",
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/route.js",
+            "line": 6,
+            "is_constructor": 1
+        },
+        "NOOT.API": {
+            "name": "NOOT.API",
+            "shortname": "NOOT.API",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "namespace": "NOOT",
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/index.js",
+            "line": 11,
+            "is_constructor": 1
+        },
+        "NOOT.Configurator": {
+            "name": "NOOT.Configurator",
+            "shortname": "NOOT.Configurator",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "namespace": "NOOT",
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/configurator/index.js",
+            "line": 8,
+            "is_constructor": 1
+        },
+        "NOOT.ContentType": {
+            "name": "NOOT.ContentType",
+            "shortname": "NOOT.ContentType",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "namespace": "NOOT",
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/content-type/index.js",
+            "line": 13,
+            "description": "Deal with MIME types and files extensions",
+            "extends": "NOOT.Namespace",
+            "static": 1
+        },
+        "NOOT.Object": {
+            "name": "NOOT.Object",
+            "shortname": "Object",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "namespace": "NOOT",
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/core-object/index.js",
+            "line": 7,
+            "description": "The purpose of this module is to provide a clear object model for OOJS programming. This is a base Class\nimplementation using the factory pattern. An implementation of 'super' inspired by John Resig is also available to\nmake this object model more scalable.\n\n### Create a class\n\n``` javascript\nvar Person = NOOT.Object.extend({\n  firstName: '',\n  lastName: '',\n\n  init: function() {\n    if(!this.lastName || !this.firstName) throw new Error('John Doe is a myth');\n  },\n\n  sayHello: function() {\n    console.log('Hello, my name is', this.getFullName());\n  },\n\n  getFullName: function() {\n    return this.firstName + ' ' + this.lastName;\n  }\n});\n\n\nvar person = Person.create({\n  firstName: 'John',\n  lastName: 'Doe'\n});\n\nperson.sayHello();\n// Hello, my name is John Doe\n```\n\n### Extend a class\n\n``` javascript\nvar Employee = Person.extend({\n  job: '',\n\n  sayHello: function() {\n    console.log(this._super(), ', I work as a ', this.job);\n  }\n});\n\n\nvar employee = Employee.create({\n  firstName: 'John',\n  lastName: 'Doe',\n  job: 'developer'\n});\n\nemployee.sayHello();\n// Hello, my name is John Doe, I work as a developer\n```",
+            "is_constructor": 1
+        },
+        "NOOT.CustomRequire": {
+            "name": "NOOT.CustomRequire",
+            "shortname": "NOOT.CustomRequire",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "namespace": "NOOT",
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/custom-require/index.js",
+            "line": 7,
+            "is_constructor": 1
+        },
+        "NOOT.Error": {
+            "name": "NOOT.Error",
+            "shortname": "NOOT.Error",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "namespace": "NOOT",
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/error/index.js",
+            "line": 7,
+            "is_constructor": 1
+        },
+        "NOOT.Errors": {
+            "name": "NOOT.Errors",
+            "shortname": "NOOT.Errors",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "namespace": "NOOT",
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/errors/index.js",
+            "line": 6,
+            "static": 1
+        },
+        "NOOT.HTTP": {
+            "name": "NOOT.HTTP",
+            "shortname": "NOOT.HTTP",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "namespace": "NOOT",
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/http/index.js",
+            "line": 7,
+            "description": "Complete list of HTTP codes.",
+            "static": 1
+        },
+        "NOOT.Logger": {
+            "name": "NOOT.Logger",
+            "shortname": "NOOT.Logger",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "namespace": "NOOT",
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/logger/index.js",
+            "line": 9,
+            "description": "Simple logger to display/write/send nice logs :\n- Hierarchic logging levels, choose what you want to see in your logs\n- Configurable transport method : simply override 'writeLog' method, default is console logging",
+            "extends": "NOOT.Object",
+            "is_constructor": 1
+        },
+        "NOOT.Mongoose": {
+            "name": "NOOT.Mongoose",
+            "shortname": "NOOT.Mongoose",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "namespace": "NOOT",
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/mongoose/index.js",
+            "line": 1,
+            "description": "Provides additional functionality to the well know\n<a href=\"http://mongoosejs.com/\" target=\"_blank\">Mongoose</a> ODM.",
+            "static": 1
+        },
+        "NOOT.Mongoose.Schema": {
+            "name": "NOOT.Mongoose.Schema",
+            "shortname": "NOOT.Mongoose.Schema",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "namespace": "NOOT.Mongoose",
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/mongoose/lib/schema.js",
+            "line": 26,
+            "is_constructor": 1
+        },
+        "NOOT.Namespace": {
+            "name": "NOOT.Namespace",
+            "shortname": "Namespace",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "namespace": "NOOT",
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/namespace/index.js",
+            "line": 1,
+            "is_constructor": 1
+        },
+        "NOOT.NOOT": {
+            "name": "NOOT.NOOT",
+            "shortname": "NOOT",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "namespace": "NOOT",
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/index.js",
+            "line": 8,
+            "static": 1
+        },
+        "NOOT.TasksRunner.Task": {
+            "name": "NOOT.TasksRunner.Task",
+            "shortname": "NOOT.TasksRunner.Task",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "namespace": "NOOT.TasksRunner",
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/tasks-runner/lib/task.js",
+            "line": 9,
+            "is_constructor": 1
+        },
+        "NOOT.TasksRunner": {
+            "name": "NOOT.TasksRunner",
+            "shortname": "NOOT.TasksRunner",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "namespace": "NOOT",
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/tasks-runner/index.js",
+            "line": 8,
+            "is_constructor": 1
+        },
+        "NOOT.Time.Measure": {
+            "name": "NOOT.Time.Measure",
+            "shortname": "NOOT.Time.Measure",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "namespace": "NOOT.Time",
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/time/lib/measure.js",
+            "line": 6,
+            "is_constructor": 1
+        },
+        "NOOT.Time": {
+            "name": "NOOT.Time",
+            "shortname": "NOOT.Time",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "namespace": "NOOT",
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/time/index.js",
+            "line": 7,
+            "static": 1
+        },
+        "NOOT.Url": {
+            "name": "NOOT.Url",
+            "shortname": "NOOT.Url",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "namespace": "NOOT",
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/url/index.js",
+            "line": 6,
+            "static": 1
+        }
+    },
+    "classitems": [
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/count-cache.js",
+            "line": 1,
+            "description": "Dependencies",
+            "class": "NOOT.API.Resource"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/count-cache.js",
+            "line": 8,
+            "description": "CountCache\n**********************************************************************************************************************",
+            "format": ": { filter: Object, validUntil: Time, value: Number }",
+            "class": "NOOT.API.Resource"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/count-cache.js",
+            "line": 28,
+            "description": "Get count for a given filter, returning either a cached value or fetching a new one",
+            "params": [
+                {
+                    "name": "filter",
+                    "description": ""
+                },
+                {
+                    "name": "callback",
+                    "description": ""
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "*"
+            },
+            "class": "NOOT.API.Resource"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/count-cache.js",
+            "line": 60,
+            "exports": "",
+            "class": "NOOT.API.Resource"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/default-routes.js",
+            "line": 1,
+            "description": "Dependencies",
+            "class": "NOOT.API.Resource"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/default-routes.js",
+            "line": 7,
+            "description": "DefaultRoutes\n**********************************************************************************************************************",
+            "info": "configurations for default routes by verb",
+            "class": "NOOT.API.Resource"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/default-routes.js",
+            "line": 23,
+            "exports": "",
+            "class": "NOOT.API.Resource"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/query-mode.js",
+            "line": 1,
+            "description": "Dependencies",
+            "class": "NOOT.API.Resource"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/query-mode.js",
+            "line": 6,
+            "description": "QueryMode\n**********************************************************************************************************************",
+            "class": "NOOT.API.Resource"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/query-mode.js",
+            "line": 16,
+            "exports": "",
+            "class": "NOOT.API.Resource"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/resource.js",
+            "line": 1,
+            "description": "Dependencies",
+            "class": "NOOT.API.Resource"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/resource.js",
+            "line": 45,
+            "description": "Constructor",
+            "class": "NOOT.API.Resource",
+            "namespace": "NOOT.API"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/resource.js",
+            "line": 82,
+            "description": "Build, sort and register routes on the app",
+            "class": "NOOT.API.Resource",
+            "namespace": "NOOT.API"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/resource.js",
+            "line": 91,
+            "description": "C . . .\n\nCreate a new item",
+            "params": [
+                {
+                    "name": "req",
+                    "description": "",
+                    "type": "Request"
+                },
+                {
+                    "name": "res",
+                    "description": "",
+                    "type": "Response"
+                },
+                {
+                    "name": "next",
+                    "description": "",
+                    "type": "Function"
+                }
+            ],
+            "class": "NOOT.API.Resource",
+            "namespace": "NOOT.API"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/resource.js",
+            "line": 108,
+            "description": "Read multiple items",
+            "itemtype": "method",
+            "name": "getMultiple",
+            "async": 1,
+            "params": [
+                {
+                    "name": "req",
+                    "description": "",
+                    "type": "Request"
+                },
+                {
+                    "name": "callback",
+                    "description": "",
+                    "type": "Function"
+                }
+            ],
+            "class": "NOOT.API.Resource",
+            "namespace": "NOOT.API"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/resource.js",
+            "line": 147,
+            "itemtype": "method",
+            "name": "respond",
+            "params": [
+                {
+                    "name": "res",
+                    "description": "",
+                    "type": "Response"
+                },
+                {
+                    "name": "data",
+                    "description": "",
+                    "type": "Object",
+                    "optional": true,
+                    "optdefault": "{}"
+                },
+                {
+                    "name": "status",
+                    "description": "",
+                    "type": "Number",
+                    "optional": true,
+                    "optdefault": "200"
+                }
+            ],
+            "class": "NOOT.API.Resource",
+            "namespace": "NOOT.API"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/resource.js",
+            "line": 189,
+            "description": ". R . .\n\nRead single/multiple item(s)",
+            "params": [
+                {
+                    "name": "req",
+                    "description": "",
+                    "type": "Request"
+                },
+                {
+                    "name": "res",
+                    "description": "",
+                    "type": "Response"
+                },
+                {
+                    "name": "next",
+                    "description": "",
+                    "type": "Function"
+                }
+            ],
+            "class": "NOOT.API.Resource",
+            "namespace": "NOOT.API"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/resource.js",
+            "line": 229,
+            "description": ". . U .\n\nUpdate a single item",
+            "params": [
+                {
+                    "name": "req",
+                    "description": "",
+                    "type": "Request"
+                },
+                {
+                    "name": "res",
+                    "description": "",
+                    "type": "Response"
+                },
+                {
+                    "name": "next",
+                    "description": "",
+                    "type": "Function"
+                }
+            ],
+            "class": "NOOT.API.Resource",
+            "namespace": "NOOT.API"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/resource.js",
+            "line": 248,
+            "description": ". . . D\n\nDelete a single item",
+            "params": [
+                {
+                    "name": "req",
+                    "description": "",
+                    "type": "Request"
+                },
+                {
+                    "name": "res",
+                    "description": "",
+                    "type": "Response"
+                },
+                {
+                    "name": "next",
+                    "description": "",
+                    "type": "Function"
+                }
+            ],
+            "class": "NOOT.API.Resource",
+            "namespace": "NOOT.API"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/resource.js",
+            "line": 266,
+            "description": "Parse offset, limit, filters, sorting and select from request query string",
+            "params": [
+                {
+                    "name": "query",
+                    "description": "",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Object"
+            },
+            "class": "NOOT.API.Resource",
+            "namespace": "NOOT.API"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/resource.js",
+            "line": 282,
+            "description": "Build metadata for multiple reads (ie, GET without identifier)",
+            "params": [
+                {
+                    "name": "req",
+                    "description": "",
+                    "type": "Request"
+                },
+                {
+                    "name": "query",
+                    "description": "",
+                    "type": "Object"
+                },
+                {
+                    "name": "count",
+                    "description": "",
+                    "type": "Number"
+                }
+            ],
+            "class": "NOOT.API.Resource",
+            "namespace": "NOOT.API"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/resource.js",
+            "line": 301,
+            "description": "Build new uri from the original, modifying limit and offset parameters",
+            "params": [
+                {
+                    "name": "req",
+                    "description": "",
+                    "type": "Request"
+                },
+                {
+                    "name": "offset",
+                    "description": "",
+                    "type": "Number"
+                },
+                {
+                    "name": "limit",
+                    "description": "",
+                    "type": "Number"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "String"
+            },
+            "class": "NOOT.API.Resource",
+            "namespace": "NOOT.API"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/resource.js",
+            "line": 316,
+            "description": "Filter fields depending on query mode (read, write, select, sort...)",
+            "params": [
+                {
+                    "name": "fields",
+                    "description": "",
+                    "type": "Array|Object"
+                },
+                {
+                    "name": "queryMode",
+                    "description": "",
+                    "type": "QueryMode"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Array|Object"
+            },
+            "class": "NOOT.API.Resource",
+            "namespace": "NOOT.API"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/resource.js",
+            "line": 334,
+            "description": "Parse fields from a comma separated list",
+            "params": [
+                {
+                    "name": "fieldsStr",
+                    "description": "",
+                    "type": "String"
+                },
+                {
+                    "name": "allowedFields",
+                    "description": "",
+                    "type": "Array"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "String"
+            },
+            "class": "NOOT.API.Resource",
+            "namespace": "NOOT.API"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/resource.js",
+            "line": 349,
+            "description": "Build routes",
+            "access": "private",
+            "tagname": "",
+            "class": "NOOT.API.Resource",
+            "namespace": "NOOT.API"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/resource.js",
+            "line": 366,
+            "description": "Build allowed fields for all types",
+            "access": "private",
+            "tagname": "",
+            "class": "NOOT.API.Resource",
+            "namespace": "NOOT.API"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/resource.js",
+            "line": 380,
+            "description": "Build allowed fields for a single type",
+            "params": [
+                {
+                    "name": "type",
+                    "description": "",
+                    "type": "String"
+                }
+            ],
+            "access": "private",
+            "tagname": "",
+            "class": "NOOT.API.Resource",
+            "namespace": "NOOT.API"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/resource.js",
+            "line": 394,
+            "description": "Get an exhaustive list of paths for model (nested paths use dot notation)",
+            "return": {
+                "description": "",
+                "type": "Array"
+            },
+            "access": "private",
+            "tagname": "",
+            "class": "NOOT.API.Resource",
+            "namespace": "NOOT.API"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/resource.js",
+            "line": 406,
+            "description": "Default values",
+            "class": "NOOT.API.Resource",
+            "namespace": "NOOT.API"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/resource.js",
+            "line": 416,
+            "description": "Query modes",
+            "class": "NOOT.API.Resource",
+            "namespace": "NOOT.API"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/resource.js",
+            "line": 425,
+            "description": "Module's supported methods",
+            "class": "NOOT.API.Resource",
+            "namespace": "NOOT.API"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/resource.js",
+            "line": 435,
+            "description": "Ensure array only contains supported methods",
+            "params": [
+                {
+                    "name": "methods",
+                    "description": "",
+                    "type": "Array"
+                }
+            ],
+            "class": "NOOT.API.Resource",
+            "namespace": "NOOT.API"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/resource.js",
+            "line": 450,
+            "exports": "",
+            "class": "NOOT.API.Resource",
+            "namespace": "NOOT.API"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/route.js",
+            "line": 1,
+            "description": "Dependencies",
+            "class": "NOOT.API.Route",
+            "namespace": "NOOT.API"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/route.js",
+            "line": 20,
+            "description": "Constructor",
+            "class": "NOOT.API.Route",
+            "namespace": "NOOT.API"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/route.js",
+            "line": 32,
+            "description": "Validate body against JSON schema",
+            "params": [
+                {
+                    "name": "req",
+                    "description": "",
+                    "type": "Request"
+                },
+                {
+                    "name": "res",
+                    "description": "",
+                    "type": "Response"
+                },
+                {
+                    "name": "next",
+                    "description": "",
+                    "type": "Function"
+                }
+            ],
+            "class": "NOOT.API.Route",
+            "namespace": "NOOT.API"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/route.js",
+            "line": 45,
+            "exports": "",
+            "class": "NOOT.API.Route",
+            "namespace": "NOOT.API"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/routes-sorter.js",
+            "line": 1,
+            "description": "Dependencies",
+            "class": "NOOT.API",
+            "namespace": "NOOT.API"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/routes-sorter.js",
+            "line": 7,
+            "description": "RoutesSorter\n**********************************************************************************************************************",
+            "class": "NOOT.API",
+            "namespace": "NOOT.API"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/routes-sorter.js",
+            "line": 16,
+            "description": "Path part weights enumeration",
+            "class": "NOOT.API",
+            "namespace": "NOOT.API"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/routes-sorter.js",
+            "line": 21,
+            "params": [
+                {
+                    "name": "routes",
+                    "description": "",
+                    "type": "Array"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Array"
+            },
+            "class": "NOOT.API",
+            "namespace": "NOOT.API"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/routes-sorter.js",
+            "line": 49,
+            "params": [
+                {
+                    "name": "routes",
+                    "description": "",
+                    "type": "Array"
+                }
+            ],
+            "access": "private",
+            "tagname": "",
+            "class": "NOOT.API",
+            "namespace": "NOOT.API"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/routes-sorter.js",
+            "line": 86,
+            "params": [
+                {
+                    "name": "str",
+                    "description": "",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Number"
+            },
+            "access": "private",
+            "tagname": "",
+            "class": "NOOT.API",
+            "namespace": "NOOT.API"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/routes-sorter.js",
+            "line": 99,
+            "params": [
+                {
+                    "name": "arr",
+                    "description": "",
+                    "type": "Array"
+                },
+                {
+                    "name": "length",
+                    "description": "",
+                    "type": "Number"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Array"
+            },
+            "access": "private",
+            "tagname": "",
+            "class": "NOOT.API",
+            "namespace": "NOOT.API"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/routes-sorter.js",
+            "line": 116,
+            "exports": "",
+            "class": "NOOT.API",
+            "namespace": "NOOT.API"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/index.js",
+            "line": 1,
+            "description": "Dependencies",
+            "class": "NOOT.API",
+            "namespace": "NOOT.API"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/index.js",
+            "line": 25,
+            "description": "Constructor",
+            "class": "NOOT.API",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/index.js",
+            "line": 34,
+            "description": "Launch the API. Resources and routes cannot be added after this method has been called.",
+            "itemtype": "method",
+            "name": "launch",
+            "class": "NOOT.API",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/index.js",
+            "line": 58,
+            "description": "Register a single resource",
+            "params": [
+                {
+                    "name": "Resource",
+                    "description": "A NOOT.API.Resource **class** that will be instantiated by the API",
+                    "type": "*"
+                }
+            ],
+            "class": "NOOT.API",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/index.js",
+            "line": 71,
+            "description": "Register multiple resources",
+            "params": [
+                {
+                    "name": "resources",
+                    "description": "",
+                    "type": "Resource..."
+                }
+            ],
+            "class": "NOOT.API",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/index.js",
+            "line": 82,
+            "description": "Ensure resources are not added after API is launched. Throw an error if need be",
+            "access": "private",
+            "tagname": "",
+            "class": "NOOT.API",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/index.js",
+            "line": 100,
+            "description": "See {{#crossLink \"NOOT.API.Resource\"}}{{/crossLink}}.",
+            "itemtype": "property",
+            "name": "Resource",
+            "static": 1,
+            "type": "{*}",
+            "class": "NOOT.API",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/index.js",
+            "line": 109,
+            "description": "See {{#crossLink \"NOOT.API.Route\"}}{{/crossLink}}.",
+            "itemtype": "property",
+            "name": "Route",
+            "static": 1,
+            "type": "{*}",
+            "class": "NOOT.API",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/index.js",
+            "line": 118,
+            "exports": "",
+            "class": "NOOT.API",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/configurator/index.js",
+            "line": 1,
+            "description": "Dependencies",
+            "class": "NOOT.Configurator",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/configurator/index.js",
+            "line": 17,
+            "itemtype": "method",
+            "name": "init",
+            "class": "NOOT.Configurator",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/configurator/index.js",
+            "line": 25,
+            "description": "Get a configuration or configuration field",
+            "itemtype": "method",
+            "name": "get",
+            "params": [
+                {
+                    "name": "fileName",
+                    "description": "",
+                    "type": "String"
+                },
+                {
+                    "name": "fields",
+                    "description": "",
+                    "type": "...String",
+                    "optional": true
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "*"
+            },
+            "class": "NOOT.Configurator",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/configurator/index.js",
+            "line": 42,
+            "description": "Retrieve the configuration",
+            "itemtype": "method",
+            "name": "_load",
+            "params": [
+                {
+                    "name": "fileName",
+                    "description": "",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "*"
+            },
+            "class": "NOOT.Configurator",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/configurator/index.js",
+            "line": 59,
+            "description": "Deeply merge 2 objects",
+            "itemtype": "method",
+            "name": "_merge",
+            "params": [
+                {
+                    "name": "left",
+                    "description": "",
+                    "type": "Object"
+                },
+                {
+                    "name": "right",
+                    "description": "",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Object"
+            },
+            "access": "private",
+            "tagname": "",
+            "class": "NOOT.Configurator",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/configurator/index.js",
+            "line": 101,
+            "itemtype": "property",
+            "name": "DEFAULTS",
+            "static": 1,
+            "class": "NOOT.Configurator",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/configurator/index.js",
+            "line": 108,
+            "exports": "",
+            "class": "NOOT.Configurator",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/content-type/index.js",
+            "line": 1,
+            "description": "Dependencies",
+            "class": "NOOT.ContentType",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/content-type/index.js",
+            "line": 23,
+            "description": "Get content type from extension",
+            "itemtype": "method",
+            "name": "fromExtension",
+            "static": 1,
+            "params": [
+                {
+                    "name": "extension",
+                    "description": "",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "String"
+            },
+            "class": "NOOT.ContentType",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/content-type/index.js",
+            "line": 36,
+            "description": "Get content type from path",
+            "itemtype": "method",
+            "name": "fromPath",
+            "static": 1,
+            "params": [
+                {
+                    "name": "str",
+                    "description": "",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "String"
+            },
+            "class": "NOOT.ContentType",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/content-type/index.js",
+            "line": 48,
+            "description": "Get extension from content type",
+            "itemtype": "method",
+            "name": "toExtension",
+            "static": 1,
+            "params": [
+                {
+                    "name": "contentType",
+                    "description": "",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "String"
+            },
+            "class": "NOOT.ContentType",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/content-type/index.js",
+            "line": 62,
+            "exports": "",
+            "class": "NOOT.ContentType",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/core-object/index.js",
+            "line": 1,
+            "description": "Dependencies",
+            "class": "NOOT.Object",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/core-object/index.js",
+            "line": 69,
+            "description": "Extend",
+            "itemtype": "method",
+            "name": "extend",
+            "static": 1,
+            "params": [
+                {
+                    "name": "prototype",
+                    "description": "Instance members",
+                    "type": "Object",
+                    "optional": true
+                },
+                {
+                    "name": "statics",
+                    "description": "Static members",
+                    "type": "Object",
+                    "optional": true
+                }
+            ],
+            "class": "NOOT.Object",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/core-object/index.js",
+            "line": 110,
+            "itemtype": "method",
+            "name": "create",
+            "static": 1,
+            "params": [
+                {
+                    "name": "def",
+                    "description": "",
+                    "type": "Object",
+                    "optional": true
+                }
+            ],
+            "class": "NOOT.Object",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/core-object/index.js",
+            "line": 127,
+            "description": "Detect if parameter class is a subclass",
+            "itemtype": "method",
+            "name": "detect",
+            "static": 1,
+            "params": [
+                {
+                    "name": "Class",
+                    "description": "Class to be tested"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Boolean"
+            },
+            "class": "NOOT.Object",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/core-object/index.js",
+            "line": 144,
+            "exports": "",
+            "class": "NOOT.Object",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/custom-require/index.js",
+            "line": 1,
+            "description": "Dependencies",
+            "class": "NOOT.CustomRequire",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/custom-require/index.js",
+            "line": 20,
+            "is_constructor": 1,
+            "class": "NOOT.CustomRequire",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/custom-require/index.js",
+            "line": 30,
+            "description": "Create a new instance",
+            "return": {
+                "description": "",
+                "type": "NOOT.CustomRequire"
+            },
+            "class": "NOOT.CustomRequire",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/custom-require/index.js",
+            "line": 49,
+            "exports": "",
+            "class": "NOOT.CustomRequire",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/error/index.js",
+            "line": 1,
+            "description": "Dependencies",
+            "class": "NOOT.Error",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/error/index.js",
+            "line": 17,
+            "description": "Constructor",
+            "params": [
+                {
+                    "name": "options",
+                    "description": "",
+                    "type": "Object|...String"
+                }
+            ],
+            "is_constructor": 1,
+            "class": "NOOT.Error",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/error/index.js",
+            "line": 33,
+            "description": "Inherit from Error",
+            "class": "NOOT.Error",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/error/index.js",
+            "line": 40,
+            "description": "Default values",
+            "class": "NOOT.Error",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/error/index.js",
+            "line": 47,
+            "description": "toJSON",
+            "return": {
+                "description": "Valid JSON representation",
+                "type": "Object"
+            },
+            "class": "NOOT.Error",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/error/index.js",
+            "line": 58,
+            "params": [
+                {
+                    "name": "proto",
+                    "description": "",
+                    "type": "Object",
+                    "optional": true
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Object"
+            },
+            "class": "NOOT.Error",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/error/index.js",
+            "line": 87,
+            "exports": "",
+            "class": "NOOT.Error",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/errors/index.js",
+            "line": 1,
+            "description": "Dependencies",
+            "class": "NOOT.Errors",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/errors/index.js",
+            "line": 13,
+            "description": "50? errors",
+            "class": "NOOT.Errors",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/errors/index.js",
+            "line": 20,
+            "description": "40? errors",
+            "class": "NOOT.Errors",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/errors/index.js",
+            "line": 32,
+            "exports": "",
+            "class": "NOOT.Errors",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/http/index.js",
+            "line": 1,
+            "description": "Dependencies",
+            "class": "NOOT.HTTP",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/http/index.js",
+            "line": 15,
+            "itemtype": "property",
+            "name": "Continue",
+            "static": 1,
+            "final": 1,
+            "type": "{number}",
+            "class": "NOOT.HTTP",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/http/index.js",
+            "line": 22,
+            "itemtype": "property",
+            "name": "SwitchingProtocols",
+            "static": 1,
+            "final": 1,
+            "type": "{number}",
+            "class": "NOOT.HTTP",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/http/index.js",
+            "line": 30,
+            "itemtype": "property",
+            "name": "OK",
+            "static": 1,
+            "final": 1,
+            "type": "{number}",
+            "class": "NOOT.HTTP",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/http/index.js",
+            "line": 37,
+            "itemtype": "property",
+            "name": "Created",
+            "static": 1,
+            "final": 1,
+            "type": "{number}",
+            "class": "NOOT.HTTP",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/http/index.js",
+            "line": 44,
+            "itemtype": "property",
+            "name": "Accepted",
+            "static": 1,
+            "final": 1,
+            "type": "{number}",
+            "class": "NOOT.HTTP",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/http/index.js",
+            "line": 51,
+            "itemtype": "property",
+            "name": "NonAuthoritativeInformation",
+            "static": 1,
+            "final": 1,
+            "type": "{number}",
+            "class": "NOOT.HTTP",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/http/index.js",
+            "line": 58,
+            "itemtype": "property",
+            "name": "NoContent",
+            "static": 1,
+            "final": 1,
+            "type": "{number}",
+            "class": "NOOT.HTTP",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/http/index.js",
+            "line": 65,
+            "itemtype": "property",
+            "name": "ResetContent",
+            "static": 1,
+            "final": 1,
+            "type": "{number}",
+            "class": "NOOT.HTTP",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/http/index.js",
+            "line": 72,
+            "itemtype": "property",
+            "name": "PartialContent",
+            "static": 1,
+            "final": 1,
+            "type": "{number}",
+            "class": "NOOT.HTTP",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/http/index.js",
+            "line": 80,
+            "itemtype": "property",
+            "name": "MultipleChoices",
+            "static": 1,
+            "final": 1,
+            "type": "{number}",
+            "class": "NOOT.HTTP",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/http/index.js",
+            "line": 87,
+            "itemtype": "property",
+            "name": "MovedPermanently",
+            "static": 1,
+            "final": 1,
+            "type": "{number}",
+            "class": "NOOT.HTTP",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/http/index.js",
+            "line": 94,
+            "itemtype": "property",
+            "name": "MovedTemporarily",
+            "static": 1,
+            "final": 1,
+            "type": "{number}",
+            "class": "NOOT.HTTP",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/http/index.js",
+            "line": 101,
+            "itemtype": "property",
+            "name": "SeeOther",
+            "static": 1,
+            "final": 1,
+            "type": "{number}",
+            "class": "NOOT.HTTP",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/http/index.js",
+            "line": 108,
+            "itemtype": "property",
+            "name": "NotModified",
+            "static": 1,
+            "final": 1,
+            "type": "{number}",
+            "class": "NOOT.HTTP",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/http/index.js",
+            "line": 115,
+            "itemtype": "property",
+            "name": "UseProxy",
+            "static": 1,
+            "final": 1,
+            "type": "{number}",
+            "class": "NOOT.HTTP",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/http/index.js",
+            "line": 123,
+            "itemtype": "property",
+            "name": "BadRequest",
+            "static": 1,
+            "final": 1,
+            "type": "{number}",
+            "class": "NOOT.HTTP",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/http/index.js",
+            "line": 130,
+            "itemtype": "property",
+            "name": "Unauthorized",
+            "static": 1,
+            "final": 1,
+            "type": "{number}",
+            "class": "NOOT.HTTP",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/http/index.js",
+            "line": 137,
+            "itemtype": "property",
+            "name": "PaymentRequired",
+            "static": 1,
+            "final": 1,
+            "type": "{number}",
+            "class": "NOOT.HTTP",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/http/index.js",
+            "line": 144,
+            "itemtype": "property",
+            "name": "Forbidden",
+            "static": 1,
+            "final": 1,
+            "type": "{number}",
+            "class": "NOOT.HTTP",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/http/index.js",
+            "line": 151,
+            "itemtype": "property",
+            "name": "NotFound",
+            "static": 1,
+            "final": 1,
+            "type": "{number}",
+            "class": "NOOT.HTTP",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/http/index.js",
+            "line": 158,
+            "itemtype": "property",
+            "name": "MethodNotAllowed",
+            "static": 1,
+            "final": 1,
+            "type": "{number}",
+            "class": "NOOT.HTTP",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/http/index.js",
+            "line": 165,
+            "itemtype": "property",
+            "name": "NotAcceptable",
+            "static": 1,
+            "final": 1,
+            "type": "{number}",
+            "class": "NOOT.HTTP",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/http/index.js",
+            "line": 172,
+            "itemtype": "property",
+            "name": "ProxyAuthenticationRequired",
+            "static": 1,
+            "final": 1,
+            "type": "{number}",
+            "class": "NOOT.HTTP",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/http/index.js",
+            "line": 179,
+            "itemtype": "property",
+            "name": "RequestTimeOut",
+            "static": 1,
+            "final": 1,
+            "type": "{number}",
+            "class": "NOOT.HTTP",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/http/index.js",
+            "line": 186,
+            "itemtype": "property",
+            "name": "Conflict",
+            "static": 1,
+            "final": 1,
+            "type": "{number}",
+            "class": "NOOT.HTTP",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/http/index.js",
+            "line": 193,
+            "itemtype": "property",
+            "name": "Gone",
+            "static": 1,
+            "final": 1,
+            "type": "{number}",
+            "class": "NOOT.HTTP",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/http/index.js",
+            "line": 200,
+            "itemtype": "property",
+            "name": "LengthRequired",
+            "static": 1,
+            "final": 1,
+            "type": "{number}",
+            "class": "NOOT.HTTP",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/http/index.js",
+            "line": 207,
+            "itemtype": "property",
+            "name": "PreconditionFailed",
+            "static": 1,
+            "final": 1,
+            "type": "{number}",
+            "class": "NOOT.HTTP",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/http/index.js",
+            "line": 214,
+            "itemtype": "property",
+            "name": "RequestEntityTooLarge",
+            "static": 1,
+            "final": 1,
+            "type": "{number}",
+            "class": "NOOT.HTTP",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/http/index.js",
+            "line": 221,
+            "itemtype": "property",
+            "name": "RequestURITooLong",
+            "static": 1,
+            "final": 1,
+            "type": "{number}",
+            "class": "NOOT.HTTP",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/http/index.js",
+            "line": 228,
+            "itemtype": "property",
+            "name": "UnsupportedMediaType",
+            "static": 1,
+            "final": 1,
+            "type": "{number}",
+            "class": "NOOT.HTTP",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/http/index.js",
+            "line": 235,
+            "itemtype": "property",
+            "name": "RequestRangeUnsatisfiable",
+            "static": 1,
+            "final": 1,
+            "type": "{number}",
+            "class": "NOOT.HTTP",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/http/index.js",
+            "line": 242,
+            "itemtype": "property",
+            "name": "ExpectationFailed",
+            "static": 1,
+            "final": 1,
+            "type": "{number}",
+            "class": "NOOT.HTTP",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/http/index.js",
+            "line": 250,
+            "itemtype": "property",
+            "name": "InternalServerError",
+            "static": 1,
+            "final": 1,
+            "type": "{number}",
+            "class": "NOOT.HTTP",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/http/index.js",
+            "line": 257,
+            "itemtype": "property",
+            "name": "NotImplemented",
+            "static": 1,
+            "final": 1,
+            "type": "{number}",
+            "class": "NOOT.HTTP",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/http/index.js",
+            "line": 264,
+            "itemtype": "property",
+            "name": "BadGateway",
+            "static": 1,
+            "final": 1,
+            "type": "{number}",
+            "class": "NOOT.HTTP",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/http/index.js",
+            "line": 271,
+            "itemtype": "property",
+            "name": "ServiceUnavailable",
+            "static": 1,
+            "final": 1,
+            "type": "{number}",
+            "class": "NOOT.HTTP",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/http/index.js",
+            "line": 278,
+            "itemtype": "property",
+            "name": "GatewayTimeOut",
+            "static": 1,
+            "final": 1,
+            "type": "{number}",
+            "class": "NOOT.HTTP",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/http/index.js",
+            "line": 285,
+            "itemtype": "property",
+            "name": "HTTPVersionNotSupported",
+            "static": 1,
+            "final": 1,
+            "type": "{number}",
+            "class": "NOOT.HTTP",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/http/index.js",
+            "line": 294,
+            "exports": "",
+            "class": "NOOT.HTTP",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/internal-utils/index.js",
+            "line": 1,
+            "description": "Dependencies",
+            "class": "NOOT.Logger",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/internal-utils/index.js",
+            "line": 6,
+            "description": "**********************************************************************************************************************",
+            "class": "NOOT.Logger",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/internal-utils/index.js",
+            "line": 16,
+            "description": "Build \"_super\" implementation",
+            "params": [
+                {
+                    "name": "dest",
+                    "description": "Object to contain the resulting properties",
+                    "type": "Object"
+                },
+                {
+                    "name": "parent",
+                    "description": "Parent properties",
+                    "type": "Object"
+                },
+                {
+                    "name": "child",
+                    "description": "Child properties",
+                    "type": "Object"
+                }
+            ],
+            "class": "NOOT.Logger",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/internal-utils/index.js",
+            "line": 46,
+            "exports": "",
+            "class": "NOOT.Logger",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/logger/index.js",
+            "line": 1,
+            "description": "Dependencies",
+            "class": "NOOT.Logger",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/logger/index.js",
+            "line": 27,
+            "description": "Constructor",
+            "class": "NOOT.Logger",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/logger/index.js",
+            "line": 35,
+            "description": "Trace logging level",
+            "class": "NOOT.Logger",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/logger/index.js",
+            "line": 44,
+            "description": "Debug log level",
+            "class": "NOOT.Logger",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/logger/index.js",
+            "line": 53,
+            "description": "Info log level",
+            "class": "NOOT.Logger",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/logger/index.js",
+            "line": 62,
+            "description": "Warn log level",
+            "class": "NOOT.Logger",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/logger/index.js",
+            "line": 72,
+            "description": "Error level log",
+            "class": "NOOT.Logger",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/logger/index.js",
+            "line": 81,
+            "description": "Application level log",
+            "class": "NOOT.Logger",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/logger/index.js",
+            "line": 90,
+            "description": "High visibility log",
+            "class": "NOOT.Logger",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/logger/index.js",
+            "line": 99,
+            "description": "Format message before logging",
+            "params": [
+                {
+                    "name": "message",
+                    "description": "",
+                    "type": "String"
+                },
+                {
+                    "name": "level",
+                    "description": "",
+                    "type": "String",
+                    "optional": true
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "String"
+            },
+            "class": "NOOT.Logger",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/logger/index.js",
+            "line": 110,
+            "description": "Transport method(s)",
+            "params": [
+                {
+                    "name": "message",
+                    "description": "",
+                    "type": "String"
+                },
+                {
+                    "name": "level",
+                    "description": "",
+                    "type": "String"
+                },
+                {
+                    "name": "callback",
+                    "description": "",
+                    "type": "Function"
+                }
+            ],
+            "class": "NOOT.Logger",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/logger/index.js",
+            "line": 122,
+            "description": "Define logging styles",
+            "params": [
+                {
+                    "name": "value",
+                    "description": "",
+                    "type": "Object"
+                }
+            ],
+            "class": "NOOT.Logger",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/logger/index.js",
+            "line": 131,
+            "description": "Define logging level",
+            "params": [
+                {
+                    "name": "level",
+                    "description": "",
+                    "type": "String|Number"
+                }
+            ],
+            "class": "NOOT.Logger",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/logger/index.js",
+            "line": 155,
+            "params": [
+                {
+                    "name": "args",
+                    "description": "",
+                    "type": "Array|arguments"
+                },
+                {
+                    "name": "level",
+                    "description": "",
+                    "type": "String|Number"
+                }
+            ],
+            "access": "private",
+            "tagname": "",
+            "class": "NOOT.Logger",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/logger/index.js",
+            "line": 180,
+            "description": "String used to concatenate messages",
+            "class": "NOOT.Logger",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/logger/index.js",
+            "line": 185,
+            "description": "Levels enumeration",
+            "class": "NOOT.Logger",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/logger/index.js",
+            "line": 190,
+            "description": "Default values",
+            "class": "NOOT.Logger",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/logger/index.js",
+            "line": 204,
+            "description": "Concatenate arguments into a single valid string",
+            "params": [
+                {
+                    "name": "args",
+                    "description": "",
+                    "type": "Array|arguments"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "String"
+            },
+            "access": "private",
+            "tagname": "",
+            "class": "NOOT.Logger",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/logger/index.js",
+            "line": 231,
+            "description": "Build an object containing all styles properties",
+            "params": [
+                {
+                    "name": "styles",
+                    "description": "",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Object"
+            },
+            "access": "private",
+            "tagname": "",
+            "class": "NOOT.Logger",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/logger/index.js",
+            "line": 250,
+            "exports": "",
+            "class": "NOOT.Logger",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/mongoose/lib/middlewares/use-timestamps.js",
+            "line": 5,
+            "itemtype": "method",
+            "name": "useTimestamps",
+            "static": 1,
+            "class": "NOOT.Mongoose",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/mongoose/lib/middlewares/use-timestamps.js",
+            "line": 42,
+            "exports": "",
+            "class": "NOOT.Mongoose",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/mongoose/lib/schema.js",
+            "line": 1,
+            "description": "Dependencies",
+            "class": "NOOT.Mongoose.Schema",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/mongoose/lib/schema.js",
+            "line": 12,
+            "description": "Variables",
+            "class": "NOOT.Mongoose.Schema",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/mongoose/lib/schema.js",
+            "line": 33,
+            "description": "Extend schema, define discriminator, create model",
+            "params": [
+                {
+                    "name": "definition",
+                    "description": "Schema properties",
+                    "type": "Object"
+                },
+                {
+                    "name": "ownStatics",
+                    "description": "Schema static properties",
+                    "type": "Object",
+                    "optional": true
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "MongooseSchema"
+            },
+            "class": "NOOT.Mongoose.Schema",
+            "namespace": "NOOT.Mongoose"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/mongoose/lib/schema.js",
+            "line": 65,
+            "description": "Parse incoming arguments for find and findOne",
+            "params": [
+                {
+                    "name": "conditions",
+                    "description": "",
+                    "type": "Object"
+                },
+                {
+                    "name": "fields",
+                    "description": "",
+                    "type": "String"
+                },
+                {
+                    "name": "options",
+                    "description": "",
+                    "type": "Object"
+                },
+                {
+                    "name": "callback",
+                    "description": "",
+                    "type": "Function"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Array"
+            },
+            "class": "NOOT.Mongoose.Schema",
+            "namespace": "NOOT.Mongoose"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/mongoose/lib/schema.js",
+            "line": 101,
+            "description": "Override findOne method to handle inheritance and find the right document based on the modelName",
+            "class": "NOOT.Mongoose.Schema",
+            "namespace": "NOOT.Mongoose"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/mongoose/lib/schema.js",
+            "line": 109,
+            "description": "Override find method to handle inheritance and find the right documents based on the modelName",
+            "class": "NOOT.Mongoose.Schema",
+            "namespace": "NOOT.Mongoose"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/mongoose/lib/schema.js",
+            "line": 117,
+            "description": "Set the prototype based on the discriminator __type",
+            "params": [
+                {
+                    "name": "doc",
+                    "description": "",
+                    "type": "Object"
+                },
+                {
+                    "name": "query",
+                    "description": "",
+                    "type": "Object"
+                },
+                {
+                    "name": "fn",
+                    "description": "",
+                    "type": "Function"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "*"
+            },
+            "class": "NOOT.Mongoose.Schema",
+            "namespace": "NOOT.Mongoose"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/mongoose/lib/schema.js",
+            "line": 139,
+            "description": "Attach middlewares functions",
+            "class": "NOOT.Mongoose.Schema",
+            "namespace": "NOOT.Mongoose"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/mongoose/lib/schema.js",
+            "line": 153,
+            "description": "Redefine model creation to attach discriminators",
+            "params": [
+                {
+                    "name": "modelName",
+                    "description": "",
+                    "type": "String"
+                },
+                {
+                    "name": "schema",
+                    "description": "",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Object"
+            },
+            "class": "NOOT.Mongoose.Schema",
+            "namespace": "NOOT.Mongoose"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/mongoose/lib/schema.js",
+            "line": 197,
+            "exports": "",
+            "class": "NOOT.Mongoose.Schema",
+            "namespace": "NOOT.Mongoose"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/noot/utils/lib/case.js",
+            "line": 3,
+            "description": "Transform a string to a dash-case compliant one.\n\n```javascript\nNOOT.dasherize('MyClass'); // my-class\nNOOT.dasherize('a;weirdString'); // a-weird-string\nNOOT.dasherize('_private_property'); // private-property\n```",
+            "itemtype": "method",
+            "name": "dasherize",
+            "static": 1,
+            "params": [
+                {
+                    "name": "str",
+                    "description": "",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "String"
+            },
+            "class": "NOOT.NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/noot/utils/lib/types.js",
+            "line": 1,
+            "description": "Types mapping",
+            "class": "NOOT.NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/noot/utils/lib/types.js",
+            "line": 14,
+            "description": "Detailed `typeof`, will return a string which can be :\n\n- boolean\n- number\n- string\n- function\n- array\n- date\n- regexp\n- object\n- error\n- null\n- undefined",
+            "itemtype": "method",
+            "name": "typeOf",
+            "static": 1,
+            "params": [
+                {
+                    "name": "value",
+                    "description": "",
+                    "type": "*"
+                }
+            ],
+            "return": {
+                "description": "Detected type of `value`",
+                "type": "String"
+            },
+            "class": "NOOT.NOOT",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/noot/utils/lib/types.js",
+            "line": 40,
+            "itemtype": "method",
+            "name": "isUndefined",
+            "static": 1,
+            "params": [
+                {
+                    "name": "value",
+                    "description": "",
+                    "type": "*"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Boolean"
+            },
+            "class": "NOOT.NOOT",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/noot/utils/lib/types.js",
+            "line": 50,
+            "itemtype": "method",
+            "name": "isDate",
+            "static": 1,
+            "params": [
+                {
+                    "name": "value",
+                    "description": "",
+                    "type": "*"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Boolean"
+            },
+            "class": "NOOT.NOOT",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/noot/utils/lib/types.js",
+            "line": 60,
+            "itemtype": "method",
+            "name": "isError",
+            "static": 1,
+            "params": [
+                {
+                    "name": "value",
+                    "description": "",
+                    "type": "*"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Boolean"
+            },
+            "class": "NOOT.NOOT",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/noot/utils/lib/types.js",
+            "line": 70,
+            "itemtype": "method",
+            "name": "isBoolean",
+            "static": 1,
+            "params": [
+                {
+                    "name": "value",
+                    "description": "",
+                    "type": "*"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Boolean"
+            },
+            "class": "NOOT.NOOT",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/noot/utils/lib/types.js",
+            "line": 80,
+            "itemtype": "method",
+            "name": "isNumber",
+            "static": 1,
+            "params": [
+                {
+                    "name": "value",
+                    "description": "",
+                    "type": "*"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Boolean"
+            },
+            "class": "NOOT.NOOT",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/noot/utils/lib/types.js",
+            "line": 90,
+            "itemtype": "method",
+            "name": "isString",
+            "static": 1,
+            "params": [
+                {
+                    "name": "value",
+                    "description": "",
+                    "type": "*"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Boolean"
+            },
+            "class": "NOOT.NOOT",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/noot/utils/lib/types.js",
+            "line": 100,
+            "itemtype": "method",
+            "name": "isFunction",
+            "static": 1,
+            "params": [
+                {
+                    "name": "value",
+                    "description": "",
+                    "type": "*"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Boolean"
+            },
+            "class": "NOOT.NOOT",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/noot/utils/lib/types.js",
+            "line": 110,
+            "itemtype": "method",
+            "name": "isArray",
+            "static": 1,
+            "params": [
+                {
+                    "name": "value",
+                    "description": "",
+                    "type": "*"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Boolean"
+            },
+            "class": "NOOT.NOOT",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/noot/utils/lib/types.js",
+            "line": 120,
+            "itemtype": "method",
+            "name": "isRegExp",
+            "static": 1,
+            "params": [
+                {
+                    "name": "value",
+                    "description": "",
+                    "type": "*"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Boolean"
+            },
+            "class": "NOOT.NOOT",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/noot/utils/lib/types.js",
+            "line": 130,
+            "itemtype": "method",
+            "name": "isObject",
+            "static": 1,
+            "params": [
+                {
+                    "name": "value",
+                    "description": "",
+                    "type": "*"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Boolean"
+            },
+            "class": "NOOT.NOOT",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/noot/utils/lib/types.js",
+            "line": 140,
+            "itemtype": "method",
+            "name": "isNull",
+            "static": 1,
+            "params": [
+                {
+                    "name": "value",
+                    "description": "",
+                    "type": "*"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Boolean"
+            },
+            "class": "NOOT.NOOT",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/noot/utils/lib/types.js",
+            "line": 150,
+            "description": "Detect if `value` is `null` or `undefined`.",
+            "itemtype": "method",
+            "name": "isNone",
+            "static": 1,
+            "params": [
+                {
+                    "name": "value",
+                    "description": "",
+                    "type": "*"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Boolean"
+            },
+            "class": "NOOT.NOOT",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/noot/utils/lib/types.js",
+            "line": 161,
+            "description": "Detect if `value` is a pure JS object.\n\n```javascript\nNOOT.isPlainObject(NOOT); // false\nNOOT.isPLainObject({}); // true\n```",
+            "itemtype": "method",
+            "name": "isPlainObject",
+            "static": 1,
+            "params": [
+                {
+                    "name": "value",
+                    "description": "",
+                    "type": "*"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Boolean"
+            },
+            "class": "NOOT.NOOT",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/noot/utils/lib/types.js",
+            "line": 177,
+            "description": "Returns `true` if `value` is :\n- an empty string\n- an empty array\n- an object with no properties",
+            "itemtype": "method",
+            "name": "isEmpty",
+            "static": 1,
+            "params": [
+                {
+                    "name": "value",
+                    "description": "",
+                    "type": "*"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Boolean"
+            },
+            "class": "NOOT.NOOT",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/noot/utils/lib/types.js",
+            "line": 204,
+            "exports": "",
+            "class": "NOOT.NOOT",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/noot/utils/lib/validation.js",
+            "line": 13,
+            "exports": "",
+            "class": "NOOT.NOOT",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/noot/utils/index.js",
+            "line": 1,
+            "description": "Dependencies",
+            "class": "NOOT.NOOT",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/noot/utils/index.js",
+            "line": 8,
+            "description": "Create an array from an `arguments` instance.\n\n```javascript\nvar myFunction = function() {\n  var args = NOOT.makeArray(arguments); // `args` is now a JS array instance\n};\n```",
+            "static": 1,
+            "itemtype": "method",
+            "name": "makeArray",
+            "params": [
+                {
+                    "name": "arg",
+                    "description": "",
+                    "type": "Arguments|Array"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Array"
+            },
+            "class": "NOOT.NOOT",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/noot/utils/index.js",
+            "line": 28,
+            "description": "Rename an object's property by copying the value of the old property to the new one and deleting the old.\n\n```javascript\nvar myObj = { one: 'bar', two: 'foo' };\nNOOT.renameProperty(myObj, 'one', 'first); // { first: 'bar', two: 'foo' }\n```",
+            "static": 1,
+            "itemtype": "method",
+            "name": "renameProperty",
+            "params": [
+                {
+                    "name": "obj",
+                    "description": "",
+                    "type": "Object"
+                },
+                {
+                    "name": "from",
+                    "description": "",
+                    "type": "String"
+                },
+                {
+                    "name": "to",
+                    "description": "",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Object"
+            },
+            "class": "NOOT.NOOT",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/noot/utils/index.js",
+            "line": 50,
+            "description": "Rename multiple properties. Same as `renameProperty` but this time you can provide a map of\nproperties to be replaced.\n\n```javascript\nvar myObj = { one: 'bar', two: 'foo' };\nNOOT.renameProperties(myObj, { one: 'first', two: 'second' }); // { first: 'bar', second: 'foo' }\n```",
+            "static": 1,
+            "itemtype": "method",
+            "name": "renameProperties",
+            "params": [
+                {
+                    "name": "obj",
+                    "description": "",
+                    "type": "Object"
+                },
+                {
+                    "name": "map",
+                    "description": "",
+                    "type": "Array"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Object"
+            },
+            "class": "NOOT.NOOT",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/noot/utils/index.js",
+            "line": 73,
+            "description": "Empty, chainable function that does... nothing.",
+            "static": 1,
+            "itemtype": "property",
+            "name": "noop",
+            "chainable": 1,
+            "type": "Function",
+            "class": "NOOT.NOOT",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/noot/utils/index.js",
+            "line": 84,
+            "description": "Convert nested arrays to a single flatten one\n\n```javascript\nNOOT.toFlatArray([1, 2, 3]); // [1, 2, 3]\nNOOT.toFlatArray([[1], [2, 3]]); // [1, 2, 3]\n```",
+            "static": 1,
+            "itemtype": "method",
+            "name": "toFlatArray",
+            "return": {
+                "description": "",
+                "type": "Array"
+            },
+            "class": "NOOT.NOOT",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/noot/utils/index.js",
+            "line": 110,
+            "description": "Attach other libraries",
+            "class": "NOOT.NOOT",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/noot/manager.js",
+            "line": 1,
+            "description": "Dependencies",
+            "class": "NOOT.TasksRunner.Task",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/noot/manager.js",
+            "line": 14,
+            "return": {
+                "description": "",
+                "type": "Object"
+            },
+            "class": "NOOT.TasksRunner.Task",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/noot/manager.js",
+            "line": 30,
+            "params": [
+                {
+                    "name": "moduleName",
+                    "description": "",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Object"
+            },
+            "access": "private",
+            "tagname": "",
+            "class": "NOOT.TasksRunner.Task",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/noot/manager.js",
+            "line": 41,
+            "params": [
+                {
+                    "name": "name",
+                    "description": "",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Object"
+            },
+            "access": "private",
+            "tagname": "",
+            "class": "NOOT.TasksRunner.Task",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/noot/manager.js",
+            "line": 55,
+            "params": [
+                {
+                    "name": "name",
+                    "description": "",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "String"
+            },
+            "access": "private",
+            "tagname": "",
+            "class": "NOOT.TasksRunner.Task",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/noot/manager.js",
+            "line": 66,
+            "params": [
+                {
+                    "name": "name",
+                    "description": "",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "String"
+            },
+            "access": "private",
+            "tagname": "",
+            "class": "NOOT.TasksRunner.Task",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/noot/manager.js",
+            "line": 81,
+            "return": {
+                "description": "",
+                "type": "Array"
+            },
+            "access": "private",
+            "tagname": "",
+            "class": "NOOT.TasksRunner.Task",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/noot/manager.js",
+            "line": 100,
+            "exports": "",
+            "class": "NOOT.TasksRunner.Task",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/tasks-runner/lib/task.js",
+            "line": 1,
+            "description": "Dependencies",
+            "class": "NOOT.TasksRunner.Task",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/tasks-runner/lib/task.js",
+            "line": 21,
+            "is_constructor": 1,
+            "class": "NOOT.TasksRunner.Task",
+            "namespace": "NOOT.TasksRunner"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/tasks-runner/lib/task.js",
+            "line": 30,
+            "description": "Run task",
+            "class": "NOOT.TasksRunner.Task",
+            "namespace": "NOOT.TasksRunner"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/tasks-runner/lib/task.js",
+            "line": 56,
+            "exports": "",
+            "class": "NOOT.TasksRunner.Task",
+            "namespace": "NOOT.TasksRunner"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/tasks-runner/index.js",
+            "line": 1,
+            "description": "Dependencies",
+            "class": "NOOT.TasksRunner",
+            "namespace": "NOOT.TasksRunner"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/tasks-runner/index.js",
+            "line": 16,
+            "description": "Register a new task",
+            "params": [
+                {
+                    "name": "task",
+                    "description": "",
+                    "type": "TasksRunner.Task"
+                }
+            ],
+            "class": "NOOT.TasksRunner",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/tasks-runner/index.js",
+            "line": 41,
+            "params": [
+                {
+                    "name": "task",
+                    "description": "",
+                    "type": "TasksRunner.Task"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "exports.CronJob"
+            },
+            "access": "private",
+            "tagname": "",
+            "class": "NOOT.TasksRunner",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/tasks-runner/index.js",
+            "line": 57,
+            "description": "See {{#crossLink \"NOOT.TasksRunner.Task\"}}{{/crossLink}}.",
+            "itemtype": "property",
+            "name": "Task",
+            "static": 1,
+            "type": "{*}",
+            "class": "NOOT.TasksRunner",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/tasks-runner/index.js",
+            "line": 67,
+            "exports": "",
+            "class": "NOOT.TasksRunner",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/time/lib/measure.js",
+            "line": 1,
+            "description": "Dependencies",
+            "class": "NOOT.Time.Measure",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/time/lib/measure.js",
+            "line": 16,
+            "description": "Start measure",
+            "return": {
+                "description": "",
+                "type": "Array"
+            },
+            "class": "NOOT.Time.Measure",
+            "namespace": "NOOT.Time"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/time/lib/measure.js",
+            "line": 27,
+            "description": "Start measure",
+            "return": {
+                "description": "",
+                "type": "Array"
+            },
+            "class": "NOOT.Time.Measure",
+            "namespace": "NOOT.Time"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/time/lib/measure.js",
+            "line": 39,
+            "description": "Get mesured time in nanoseconds",
+            "return": {
+                "description": "",
+                "type": "Number"
+            },
+            "class": "NOOT.Time.Measure",
+            "namespace": "NOOT.Time"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/time/lib/measure.js",
+            "line": 48,
+            "description": "Get mesured time in microseconds",
+            "params": [
+                {
+                    "name": "shouldRound",
+                    "description": "",
+                    "type": "Boolean"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Number"
+            },
+            "class": "NOOT.Time.Measure",
+            "namespace": "NOOT.Time"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/time/lib/measure.js",
+            "line": 58,
+            "description": "Get mesured time in milliseconds",
+            "params": [
+                {
+                    "name": "shouldRound",
+                    "description": "",
+                    "type": "Boolean"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Number"
+            },
+            "class": "NOOT.Time.Measure",
+            "namespace": "NOOT.Time"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/time/lib/measure.js",
+            "line": 68,
+            "description": "Get mesured time in seconds",
+            "params": [
+                {
+                    "name": "shouldRound",
+                    "description": "",
+                    "type": "Boolean"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Number"
+            },
+            "class": "NOOT.Time.Measure",
+            "namespace": "NOOT.Time"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/time/lib/measure.js",
+            "line": 78,
+            "description": "Convert to precision using given factor - Also rounds the returned value if asked for",
+            "params": [
+                {
+                    "name": "factor",
+                    "description": "",
+                    "type": "Number"
+                },
+                {
+                    "name": "shouldRound",
+                    "description": "",
+                    "type": "Boolean"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Number"
+            },
+            "access": "private",
+            "tagname": "",
+            "class": "NOOT.Time.Measure",
+            "namespace": "NOOT.Time"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/time/lib/measure.js",
+            "line": 93,
+            "exports": "",
+            "class": "NOOT.Time.Measure",
+            "namespace": "NOOT.Time"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/time/index.js",
+            "line": 1,
+            "description": "Dependencies",
+            "class": "NOOT.Time",
+            "namespace": "NOOT.Time"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/time/index.js",
+            "line": 14,
+            "itemtype": "property",
+            "name": "SECOND",
+            "final": 1,
+            "static": 1,
+            "type": "{number}",
+            "class": "NOOT.Time",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/time/index.js",
+            "line": 22,
+            "itemtype": "property",
+            "name": "MINUTE",
+            "final": 1,
+            "static": 1,
+            "type": "{number}",
+            "class": "NOOT.Time",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/time/index.js",
+            "line": 30,
+            "itemtype": "property",
+            "name": "HOUR",
+            "final": 1,
+            "static": 1,
+            "type": "{number}",
+            "class": "NOOT.Time",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/time/index.js",
+            "line": 38,
+            "itemtype": "property",
+            "name": "DAY",
+            "final": 1,
+            "static": 1,
+            "type": "{number}",
+            "class": "NOOT.Time",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/time/index.js",
+            "line": 46,
+            "itemtype": "property",
+            "name": "WEEK",
+            "final": 1,
+            "static": 1,
+            "type": "{number}",
+            "class": "NOOT.Time",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/time/index.js",
+            "line": 54,
+            "description": "See See {{#crossLink \"NOOT.Time.Measure\"}}{{/crossLink}}.",
+            "itemtype": "property",
+            "name": "Measure",
+            "type": "{*}",
+            "static": 1,
+            "class": "NOOT.Time",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/time/index.js",
+            "line": 63,
+            "exports": "",
+            "class": "NOOT.Time",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/url/index.js",
+            "line": 1,
+            "description": "Dependencies",
+            "class": "NOOT.Url",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/url/index.js",
+            "line": 13,
+            "itemtype": "property",
+            "name": "PROTOCOL_REG",
+            "final": 1,
+            "static": 1,
+            "type": "{RegExp}",
+            "class": "NOOT.Url",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/url/index.js",
+            "line": 21,
+            "itemtype": "property",
+            "name": "HTTP_PROTOCOL_REG",
+            "final": 1,
+            "static": 1,
+            "type": "{RegExp}",
+            "class": "NOOT.Url",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/url/index.js",
+            "line": 29,
+            "description": "join\n\nparts {...String}",
+            "return": {
+                "description": "",
+                "type": "String"
+            },
+            "class": "NOOT.Url",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/url/index.js",
+            "line": 45,
+            "description": "ensureHTTPProtocol",
+            "params": [
+                {
+                    "name": "url",
+                    "description": "",
+                    "type": "String"
+                },
+                {
+                    "name": "useHTTPS",
+                    "description": "",
+                    "type": "Boolean",
+                    "optional": true
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "String"
+            },
+            "class": "NOOT.Url",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/src/url/index.js",
+            "line": 65,
+            "exports": "",
+            "class": "NOOT.Url",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/Gruntfile.js",
+            "line": 22,
+            "description": "Git pre-commit hook",
+            "class": "NOOT.NOOT",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/Gruntfile.js",
+            "line": 31,
+            "description": "JSHint",
+            "class": "NOOT.NOOT",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/Gruntfile.js",
+            "line": 42,
+            "description": "JS Code Sniffer",
+            "class": "NOOT.NOOT",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/Gruntfile.js",
+            "line": 52,
+            "description": "Mocha",
+            "class": "NOOT.NOOT",
+            "namespace": "NOOT"
+        },
+        {
+            "file": "/Users/sylvainestevez/Documents/Projects/Web/noot.js/index.js",
+            "line": 1,
+            "description": "Dependencies",
+            "class": "NOOT.NOOT",
+            "namespace": "NOOT"
+        }
+    ],
+    "warnings": [
+        {
+            "message": "unknown tag: format",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/count-cache.js:8"
+        },
+        {
+            "message": "replacing incorrect tag: returns with return",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/count-cache.js:28"
+        },
+        {
+            "message": "unknown tag: exports",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/count-cache.js:60"
+        },
+        {
+            "message": "unknown tag: info",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/default-routes.js:7"
+        },
+        {
+            "message": "unknown tag: exports",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/default-routes.js:23"
+        },
+        {
+            "message": "unknown tag: exports",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/query-mode.js:16"
+        },
+        {
+            "message": "replacing incorrect tag: returns with return",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/resource.js:266"
+        },
+        {
+            "message": "replacing incorrect tag: returns with return",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/resource.js:301"
+        },
+        {
+            "message": "replacing incorrect tag: returns with return",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/resource.js:316"
+        },
+        {
+            "message": "replacing incorrect tag: returns with return",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/resource.js:334"
+        },
+        {
+            "message": "replacing incorrect tag: returns with return",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/resource.js:394"
+        },
+        {
+            "message": "unknown tag: exports",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/resource.js:450"
+        },
+        {
+            "message": "unknown tag: exports",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/route.js:45"
+        },
+        {
+            "message": "replacing incorrect tag: returns with return",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/routes-sorter.js:21"
+        },
+        {
+            "message": "replacing incorrect tag: returns with return",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/routes-sorter.js:86"
+        },
+        {
+            "message": "replacing incorrect tag: returns with return",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/routes-sorter.js:99"
+        },
+        {
+            "message": "unknown tag: exports",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/routes-sorter.js:116"
+        },
+        {
+            "message": "unknown tag: exports",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/index.js:118"
+        },
+        {
+            "message": "unknown tag: exports",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/configurator/index.js:108"
+        },
+        {
+            "message": "replacing incorrect tag: returns with return",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/content-type/index.js:48"
+        },
+        {
+            "message": "unknown tag: exports",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/content-type/index.js:62"
+        },
+        {
+            "message": "unknown tag: exports",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/core-object/index.js:144"
+        },
+        {
+            "message": "replacing incorrect tag: returns with return",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/custom-require/index.js:30"
+        },
+        {
+            "message": "unknown tag: exports",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/custom-require/index.js:49"
+        },
+        {
+            "message": "replacing incorrect tag: returns with return",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/error/index.js:47"
+        },
+        {
+            "message": "replacing incorrect tag: returns with return",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/error/index.js:58"
+        },
+        {
+            "message": "unknown tag: exports",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/error/index.js:87"
+        },
+        {
+            "message": "unknown tag: exports",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/errors/index.js:32"
+        },
+        {
+            "message": "unknown tag: exports",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/http/index.js:294"
+        },
+        {
+            "message": "unknown tag: exports",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/internal-utils/index.js:46"
+        },
+        {
+            "message": "replacing incorrect tag: returns with return",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/logger/index.js:99"
+        },
+        {
+            "message": "replacing incorrect tag: returns with return",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/logger/index.js:204"
+        },
+        {
+            "message": "replacing incorrect tag: returns with return",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/logger/index.js:231"
+        },
+        {
+            "message": "unknown tag: exports",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/logger/index.js:250"
+        },
+        {
+            "message": "unknown tag: exports",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/mongoose/lib/middlewares/use-timestamps.js:42"
+        },
+        {
+            "message": "replacing incorrect tag: returns with return",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/mongoose/lib/schema.js:33"
+        },
+        {
+            "message": "replacing incorrect tag: returns with return",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/mongoose/lib/schema.js:65"
+        },
+        {
+            "message": "replacing incorrect tag: returns with return",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/mongoose/lib/schema.js:117"
+        },
+        {
+            "message": "replacing incorrect tag: returns with return",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/mongoose/lib/schema.js:153"
+        },
+        {
+            "message": "unknown tag: exports",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/mongoose/lib/schema.js:197"
+        },
+        {
+            "message": "unknown tag: exports",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/noot/utils/lib/types.js:204"
+        },
+        {
+            "message": "unknown tag: exports",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/noot/utils/lib/validation.js:13"
+        },
+        {
+            "message": "replacing incorrect tag: returns with return",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/noot/manager.js:14"
+        },
+        {
+            "message": "replacing incorrect tag: returns with return",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/noot/manager.js:30"
+        },
+        {
+            "message": "replacing incorrect tag: returns with return",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/noot/manager.js:41"
+        },
+        {
+            "message": "replacing incorrect tag: returns with return",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/noot/manager.js:55"
+        },
+        {
+            "message": "replacing incorrect tag: returns with return",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/noot/manager.js:66"
+        },
+        {
+            "message": "replacing incorrect tag: returns with return",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/noot/manager.js:81"
+        },
+        {
+            "message": "unknown tag: exports",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/noot/manager.js:100"
+        },
+        {
+            "message": "unknown tag: exports",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/tasks-runner/lib/task.js:56"
+        },
+        {
+            "message": "replacing incorrect tag: returns with return",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/tasks-runner/index.js:41"
+        },
+        {
+            "message": "unknown tag: exports",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/tasks-runner/index.js:67"
+        },
+        {
+            "message": "replacing incorrect tag: returns with return",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/time/lib/measure.js:16"
+        },
+        {
+            "message": "replacing incorrect tag: returns with return",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/time/lib/measure.js:27"
+        },
+        {
+            "message": "replacing incorrect tag: returns with return",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/time/lib/measure.js:39"
+        },
+        {
+            "message": "replacing incorrect tag: returns with return",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/time/lib/measure.js:48"
+        },
+        {
+            "message": "replacing incorrect tag: returns with return",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/time/lib/measure.js:58"
+        },
+        {
+            "message": "replacing incorrect tag: returns with return",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/time/lib/measure.js:68"
+        },
+        {
+            "message": "replacing incorrect tag: returns with return",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/time/lib/measure.js:78"
+        },
+        {
+            "message": "unknown tag: exports",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/time/lib/measure.js:93"
+        },
+        {
+            "message": "unknown tag: exports",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/time/index.js:63"
+        },
+        {
+            "message": "replacing incorrect tag: returns with return",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/url/index.js:29"
+        },
+        {
+            "message": "replacing incorrect tag: returns with return",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/url/index.js:45"
+        },
+        {
+            "message": "unknown tag: exports",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/url/index.js:65"
+        },
+        {
+            "message": "Missing item type\nDependencies",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/count-cache.js:1"
+        },
+        {
+            "message": "Missing item type\nCountCache\n**********************************************************************************************************************",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/count-cache.js:8"
+        },
+        {
+            "message": "Missing item type\nGet count for a given filter, returning either a cached value or fetching a new one",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/count-cache.js:28"
+        },
+        {
+            "message": "Missing item type",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/count-cache.js:60"
+        },
+        {
+            "message": "Missing item type\nDependencies",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/default-routes.js:1"
+        },
+        {
+            "message": "Missing item type\nDefaultRoutes\n**********************************************************************************************************************",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/default-routes.js:7"
+        },
+        {
+            "message": "Missing item type",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/default-routes.js:23"
+        },
+        {
+            "message": "Missing item type\nDependencies",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/query-mode.js:1"
+        },
+        {
+            "message": "Missing item type\nQueryMode\n**********************************************************************************************************************",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/query-mode.js:6"
+        },
+        {
+            "message": "Missing item type",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/query-mode.js:16"
+        },
+        {
+            "message": "Missing item type\nDependencies",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/resource.js:1"
+        },
+        {
+            "message": "Missing item type\nConstructor",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/resource.js:45"
+        },
+        {
+            "message": "Missing item type\nBuild, sort and register routes on the app",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/resource.js:82"
+        },
+        {
+            "message": "Missing item type\nC . . .\n\nCreate a new item",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/resource.js:91"
+        },
+        {
+            "message": "Missing item type\n. R . .\n\nRead single/multiple item(s)",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/resource.js:189"
+        },
+        {
+            "message": "Missing item type\n. . U .\n\nUpdate a single item",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/resource.js:229"
+        },
+        {
+            "message": "Missing item type\n. . . D\n\nDelete a single item",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/resource.js:248"
+        },
+        {
+            "message": "Missing item type\nParse offset, limit, filters, sorting and select from request query string",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/resource.js:266"
+        },
+        {
+            "message": "Missing item type\nBuild metadata for multiple reads (ie, GET without identifier)",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/resource.js:282"
+        },
+        {
+            "message": "Missing item type\nBuild new uri from the original, modifying limit and offset parameters",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/resource.js:301"
+        },
+        {
+            "message": "Missing item type\nFilter fields depending on query mode (read, write, select, sort...)",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/resource.js:316"
+        },
+        {
+            "message": "Missing item type\nParse fields from a comma separated list",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/resource.js:334"
+        },
+        {
+            "message": "Missing item type\nBuild routes",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/resource.js:349"
+        },
+        {
+            "message": "Missing item type\nBuild allowed fields for all types",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/resource.js:366"
+        },
+        {
+            "message": "Missing item type\nBuild allowed fields for a single type",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/resource.js:380"
+        },
+        {
+            "message": "Missing item type\nGet an exhaustive list of paths for model (nested paths use dot notation)",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/resource.js:394"
+        },
+        {
+            "message": "Missing item type\nDefault values",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/resource.js:406"
+        },
+        {
+            "message": "Missing item type\nQuery modes",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/resource.js:416"
+        },
+        {
+            "message": "Missing item type\nModule's supported methods",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/resource.js:425"
+        },
+        {
+            "message": "Missing item type\nEnsure array only contains supported methods",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/resource.js:435"
+        },
+        {
+            "message": "Missing item type",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/resource.js:450"
+        },
+        {
+            "message": "Missing item type\nDependencies",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/route.js:1"
+        },
+        {
+            "message": "Missing item type\nConstructor",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/route.js:20"
+        },
+        {
+            "message": "Missing item type\nValidate body against JSON schema",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/route.js:32"
+        },
+        {
+            "message": "Missing item type",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/route.js:45"
+        },
+        {
+            "message": "Missing item type\nDependencies",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/routes-sorter.js:1"
+        },
+        {
+            "message": "Missing item type\nRoutesSorter\n**********************************************************************************************************************",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/routes-sorter.js:7"
+        },
+        {
+            "message": "Missing item type\nPath part weights enumeration",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/routes-sorter.js:16"
+        },
+        {
+            "message": "Missing item type",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/routes-sorter.js:21"
+        },
+        {
+            "message": "Missing item type",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/routes-sorter.js:49"
+        },
+        {
+            "message": "Missing item type",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/routes-sorter.js:86"
+        },
+        {
+            "message": "Missing item type",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/routes-sorter.js:99"
+        },
+        {
+            "message": "Missing item type",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/lib/routes-sorter.js:116"
+        },
+        {
+            "message": "Missing item type\nDependencies",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/index.js:1"
+        },
+        {
+            "message": "Missing item type\nConstructor",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/index.js:25"
+        },
+        {
+            "message": "Missing item type\nRegister a single resource",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/index.js:58"
+        },
+        {
+            "message": "Missing item type\nRegister multiple resources",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/index.js:71"
+        },
+        {
+            "message": "Missing item type\nEnsure resources are not added after API is launched. Throw an error if need be",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/index.js:82"
+        },
+        {
+            "message": "Missing item type",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/api/index.js:118"
+        },
+        {
+            "message": "Missing item type\nDependencies",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/configurator/index.js:1"
+        },
+        {
+            "message": "Missing item type",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/configurator/index.js:108"
+        },
+        {
+            "message": "Missing item type\nDependencies",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/content-type/index.js:1"
+        },
+        {
+            "message": "Missing item type",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/content-type/index.js:62"
+        },
+        {
+            "message": "Missing item type\nDependencies",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/core-object/index.js:1"
+        },
+        {
+            "message": "Missing item type",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/core-object/index.js:144"
+        },
+        {
+            "message": "Missing item type\nDependencies",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/custom-require/index.js:1"
+        },
+        {
+            "message": "Missing item type",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/custom-require/index.js:20"
+        },
+        {
+            "message": "Missing item type\nCreate a new instance",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/custom-require/index.js:30"
+        },
+        {
+            "message": "Missing item type",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/custom-require/index.js:49"
+        },
+        {
+            "message": "Missing item type\nDependencies",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/error/index.js:1"
+        },
+        {
+            "message": "Missing item type\nConstructor",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/error/index.js:17"
+        },
+        {
+            "message": "Missing item type\nInherit from Error",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/error/index.js:33"
+        },
+        {
+            "message": "Missing item type\nDefault values",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/error/index.js:40"
+        },
+        {
+            "message": "Missing item type\ntoJSON",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/error/index.js:47"
+        },
+        {
+            "message": "Missing item type",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/error/index.js:58"
+        },
+        {
+            "message": "Missing item type",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/error/index.js:87"
+        },
+        {
+            "message": "Missing item type\nDependencies",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/errors/index.js:1"
+        },
+        {
+            "message": "Missing item type\n50? errors",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/errors/index.js:13"
+        },
+        {
+            "message": "Missing item type\n40? errors",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/errors/index.js:20"
+        },
+        {
+            "message": "Missing item type",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/errors/index.js:32"
+        },
+        {
+            "message": "Missing item type\nDependencies",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/http/index.js:1"
+        },
+        {
+            "message": "Missing item type",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/http/index.js:294"
+        },
+        {
+            "message": "Missing item type\nDependencies",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/internal-utils/index.js:1"
+        },
+        {
+            "message": "Missing item type\n**********************************************************************************************************************",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/internal-utils/index.js:6"
+        },
+        {
+            "message": "Missing item type\nBuild \"_super\" implementation",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/internal-utils/index.js:16"
+        },
+        {
+            "message": "Missing item type",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/internal-utils/index.js:46"
+        },
+        {
+            "message": "Missing item type\nDependencies",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/logger/index.js:1"
+        },
+        {
+            "message": "Missing item type\nConstructor",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/logger/index.js:27"
+        },
+        {
+            "message": "Missing item type\nTrace logging level",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/logger/index.js:35"
+        },
+        {
+            "message": "Missing item type\nDebug log level",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/logger/index.js:44"
+        },
+        {
+            "message": "Missing item type\nInfo log level",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/logger/index.js:53"
+        },
+        {
+            "message": "Missing item type\nWarn log level",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/logger/index.js:62"
+        },
+        {
+            "message": "Missing item type\nError level log",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/logger/index.js:72"
+        },
+        {
+            "message": "Missing item type\nApplication level log",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/logger/index.js:81"
+        },
+        {
+            "message": "Missing item type\nHigh visibility log",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/logger/index.js:90"
+        },
+        {
+            "message": "Missing item type\nFormat message before logging",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/logger/index.js:99"
+        },
+        {
+            "message": "Missing item type\nTransport method(s)",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/logger/index.js:110"
+        },
+        {
+            "message": "Missing item type\nDefine logging styles",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/logger/index.js:122"
+        },
+        {
+            "message": "Missing item type\nDefine logging level",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/logger/index.js:131"
+        },
+        {
+            "message": "Missing item type",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/logger/index.js:155"
+        },
+        {
+            "message": "Missing item type\nString used to concatenate messages",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/logger/index.js:180"
+        },
+        {
+            "message": "Missing item type\nLevels enumeration",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/logger/index.js:185"
+        },
+        {
+            "message": "Missing item type\nDefault values",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/logger/index.js:190"
+        },
+        {
+            "message": "Missing item type\nConcatenate arguments into a single valid string",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/logger/index.js:204"
+        },
+        {
+            "message": "Missing item type\nBuild an object containing all styles properties",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/logger/index.js:231"
+        },
+        {
+            "message": "Missing item type",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/logger/index.js:250"
+        },
+        {
+            "message": "Missing item type",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/mongoose/lib/middlewares/use-timestamps.js:42"
+        },
+        {
+            "message": "Missing item type\nDependencies",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/mongoose/lib/schema.js:1"
+        },
+        {
+            "message": "Missing item type\nVariables",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/mongoose/lib/schema.js:12"
+        },
+        {
+            "message": "Missing item type\nExtend schema, define discriminator, create model",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/mongoose/lib/schema.js:33"
+        },
+        {
+            "message": "Missing item type\nParse incoming arguments for find and findOne",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/mongoose/lib/schema.js:65"
+        },
+        {
+            "message": "Missing item type\nOverride findOne method to handle inheritance and find the right document based on the modelName",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/mongoose/lib/schema.js:101"
+        },
+        {
+            "message": "Missing item type\nOverride find method to handle inheritance and find the right documents based on the modelName",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/mongoose/lib/schema.js:109"
+        },
+        {
+            "message": "Missing item type\nSet the prototype based on the discriminator __type",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/mongoose/lib/schema.js:117"
+        },
+        {
+            "message": "Missing item type\nAttach middlewares functions",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/mongoose/lib/schema.js:139"
+        },
+        {
+            "message": "Missing item type\nRedefine model creation to attach discriminators",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/mongoose/lib/schema.js:153"
+        },
+        {
+            "message": "Missing item type",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/mongoose/lib/schema.js:197"
+        },
+        {
+            "message": "Missing item type\nTypes mapping",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/noot/utils/lib/types.js:1"
+        },
+        {
+            "message": "Missing item type",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/noot/utils/lib/types.js:204"
+        },
+        {
+            "message": "Missing item type",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/noot/utils/lib/validation.js:13"
+        },
+        {
+            "message": "Missing item type\nDependencies",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/noot/utils/index.js:1"
+        },
+        {
+            "message": "Missing item type\nAttach other libraries",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/noot/utils/index.js:110"
+        },
+        {
+            "message": "Missing item type\nDependencies",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/noot/manager.js:1"
+        },
+        {
+            "message": "Missing item type",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/noot/manager.js:14"
+        },
+        {
+            "message": "Missing item type",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/noot/manager.js:30"
+        },
+        {
+            "message": "Missing item type",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/noot/manager.js:41"
+        },
+        {
+            "message": "Missing item type",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/noot/manager.js:55"
+        },
+        {
+            "message": "Missing item type",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/noot/manager.js:66"
+        },
+        {
+            "message": "Missing item type",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/noot/manager.js:81"
+        },
+        {
+            "message": "Missing item type",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/noot/manager.js:100"
+        },
+        {
+            "message": "Missing item type\nDependencies",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/tasks-runner/lib/task.js:1"
+        },
+        {
+            "message": "Missing item type",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/tasks-runner/lib/task.js:21"
+        },
+        {
+            "message": "Missing item type\nRun task",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/tasks-runner/lib/task.js:30"
+        },
+        {
+            "message": "Missing item type",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/tasks-runner/lib/task.js:56"
+        },
+        {
+            "message": "Missing item type\nDependencies",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/tasks-runner/index.js:1"
+        },
+        {
+            "message": "Missing item type\nRegister a new task",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/tasks-runner/index.js:16"
+        },
+        {
+            "message": "Missing item type",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/tasks-runner/index.js:41"
+        },
+        {
+            "message": "Missing item type",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/tasks-runner/index.js:67"
+        },
+        {
+            "message": "Missing item type\nDependencies",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/time/lib/measure.js:1"
+        },
+        {
+            "message": "Missing item type\nStart measure",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/time/lib/measure.js:16"
+        },
+        {
+            "message": "Missing item type\nStart measure",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/time/lib/measure.js:27"
+        },
+        {
+            "message": "Missing item type\nGet mesured time in nanoseconds",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/time/lib/measure.js:39"
+        },
+        {
+            "message": "Missing item type\nGet mesured time in microseconds",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/time/lib/measure.js:48"
+        },
+        {
+            "message": "Missing item type\nGet mesured time in milliseconds",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/time/lib/measure.js:58"
+        },
+        {
+            "message": "Missing item type\nGet mesured time in seconds",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/time/lib/measure.js:68"
+        },
+        {
+            "message": "Missing item type\nConvert to precision using given factor - Also rounds the returned value if asked for",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/time/lib/measure.js:78"
+        },
+        {
+            "message": "Missing item type",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/time/lib/measure.js:93"
+        },
+        {
+            "message": "Missing item type\nDependencies",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/time/index.js:1"
+        },
+        {
+            "message": "Missing item type",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/time/index.js:63"
+        },
+        {
+            "message": "Missing item type\nDependencies",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/url/index.js:1"
+        },
+        {
+            "message": "Missing item type\njoin\n\nparts {...String}",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/url/index.js:29"
+        },
+        {
+            "message": "Missing item type\nensureHTTPProtocol",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/url/index.js:45"
+        },
+        {
+            "message": "Missing item type",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/src/url/index.js:65"
+        },
+        {
+            "message": "Missing item type\nGit pre-commit hook",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/Gruntfile.js:22"
+        },
+        {
+            "message": "Missing item type\nJSHint",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/Gruntfile.js:31"
+        },
+        {
+            "message": "Missing item type\nJS Code Sniffer",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/Gruntfile.js:42"
+        },
+        {
+            "message": "Missing item type\nMocha",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/Gruntfile.js:52"
+        },
+        {
+            "message": "Missing item type\nDependencies",
+            "line": " /Users/sylvainestevez/Documents/Projects/Web/noot.js/index.js:1"
+        }
+    ]
+}

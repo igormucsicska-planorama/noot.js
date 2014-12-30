@@ -52,5 +52,37 @@ describe('NOOT.CoreObject', function() {
     it('child should inherit static method from parent', function() {
       Employee.doSomeStuff.should.be.a.function;
     });
+    it('should define `superClass` property', function() {
+      Person.superClass.should.eql(NOOT.CoreObject);
+      Employee.superClass.should.eql(Person);
+    });
+  });
+  describe('.detect()', function() {
+    it('should detect child class', function() {
+      Person.detect(Employee).should.eql(true);
+    });
+    it('should detect itself', function() {
+      Person.detect(Person).should.eql(true);
+    });
+    it('should not detect parent class', function() {
+      Employee.detect(Person).should.eql(false);
+    });
+  });
+  describe('.create()', function() {
+    it('should concatenate properties (defined on instance)', function() {
+      var Player = Person.extend({ hobbies: ['foot'] });
+      var player = Player.create({ hobbies: ['basket'], concatenatedProperties: ['hobbies'] });
+      player.hobbies.should.deep.eql(['foot', 'basket']);
+    });
+    it('should concatenate properties (defined on prototype)', function() {
+      var Player = Person.extend({ hobbies: ['foot'], concatenatedProperties: ['hobbies'] });
+      var player = Player.create({ hobbies: ['basket'] });
+      player.hobbies.should.deep.eql(['foot', 'basket']);
+    });
+    it('should not concatenate properties', function() {
+      var Player = Person.extend({ hobbies: ['foot'] });
+      var player = Player.create({ hobbies: ['basket'], concatenatedProperties: ['name'] });
+      player.hobbies.should.deep.eql(['basket']);
+    });
   });
 });
