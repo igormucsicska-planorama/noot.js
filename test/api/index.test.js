@@ -1,6 +1,7 @@
 var NOOT = nootrequire('api');
 var express = require('express');
 var _ = require('lodash');
+var mongoose = require('mongoose');
 
 
 describe('NOOT.API', function() {
@@ -12,7 +13,7 @@ describe('NOOT.API', function() {
 
     it('should create an instance and initialize properties', function() {
       var api = NOOT.API.create({ server: express() });
-      api.resources.should.deep.eql({});
+      api._resources.should.deep.eql([]);
       api._routes.should.deep.eql([]);
     });
   });
@@ -63,8 +64,6 @@ describe('NOOT.API', function() {
     });
 
   });
-
-
 
 
 });

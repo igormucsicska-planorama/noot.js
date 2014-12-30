@@ -2,27 +2,48 @@
  * Dependencies
  */
 var NOOT = require('../../')('object');
-var _ = require('lodash');
 var Resource = require('./lib/resource');
 var Route = require('./lib/route');
 var RoutesSorter = require('./lib/routes-sorter');
+var _ = require('lodash');
 
 
 /***********************************************************************************************************************
- *
- *
- *
  * @class API
  * @constructor
  * @namespace NOOT
+ * @extends NOOT.Object
  **********************************************************************************************************************/
 var API = NOOT.Object.extend({
-  version: '',
+
+  /**
+   * Prefix for this API, simply ignored if not provided. To be applied on all resources routes paths.
+   *
+   * @property [name]
+   * @type String
+   */
+  name: '',
+
+  /**
+   * An Express application.
+   *
+   * @property server
+   * @type Express
+   */
   server: null,
-  resources: null,
 
-  _isLaunched: false,
+  /**
+   * @property _resources
+   * @type Array
+   * @private
+   */
+  _resources: null,
 
+  /**
+   * @property _routes
+   * @type Array
+   * @private
+   */
   _routes: null,
 
   /**
@@ -30,77 +51,93 @@ var API = NOOT.Object.extend({
    */
   init: function() {
     NOOT.required(this, 'server');
-    this.resources = {};
+    this._resources = [];
     this._routes = [];
   },
 
   /**
+   * Launch the API.
    *
+   * @method launch
    */
   launch: function() {
-    this._checkLaunched();
-
     var self = this;
-
-    var routes = _.values(this.resources).reduce(function(prev, resource) {
-      return prev.concat(resource.getRoutes());
-    }, []);
-
-    API.orderRoutes(routes).forEach(function(route) {
-      if (!(route instanceof Route)) throw new Error('Not a `NOOT.API.Route`');
-      var args = route.handlers.slice(0);
-      args.unshift(route.path);
-      return self.server[route.method].apply(self.server, args);
+    var server = this.server;
+    var allRoutes = [];
+    this._resources = this._resources.map(function(resourceClass) {
+      var instance = resourceClass.create({ api: self });
+      allRoutes.push(instance._routes);
+      return instance;
     });
 
-    this._isLaunched = true;
+    this._routes = API.sortRoutes(allRoutes);
+
+    this._routes.forEach(function(route) {
+      server[route.method].apply(server, route.handlers);
+    });
   },
 
   /**
-   * Register a single resource
+   * Register a single resource.
    *
-   * @param {Resource} resource
+   * @method registerResource
+   * @chainable
+   * @param {Class} resource A {{#crossLink "NOOT.API.Resource"}}{{/crossLink}} **class** that will be
+   * instantiated by the API
    */
   registerResource: function(resource) {
-    this._checkLaunched();
-    if (!(resource instanceof Resource)) throw new Error('Not a NOOT resource');
-    this.resources[resource.model.modelName] = resource;
-    resource.apiVersion = this.version;
+    if (!Resource.detect(resource)) {
+      if (resource instanceof Resource) throw new Error('You must register classes, not instances');
+      throw new Error('Not a subclass of NOOT.API.Resource');
+    }
+    this._resources.push(resource);
     return this;
   },
 
   /**
-   * Register multiple resources
+   * Register multiple resources.
    *
-   * @param {Resource...} resources
+   * @method registerResources
+   * @chainable
+   * @param {Class} resources,... A list of arguments ({{#crossLink "NOOT.API.Resource"}}{{/crossLink}} **classes**)
    */
   registerResources: function() {
-    this._checkLaunched();
-    NOOT.toFlatArray(NOOT.makeArray(arguments)).forEach(this.registerResource.bind(this));
+    _.flatten(NOOT.makeArray(arguments)).forEach(this.registerResource.bind(this));
     return this;
-  },
-
-  /**
-   * Ensure resources are not added after API is launched. Throw an error if need be
-   *
-   * @private
-   */
-  _checkLaunched: function() {
-    if (this._isLaunched) throw new Error('Cannot modify API\'s routes once it\'s launched');
   }
 
 }, {
 
+  /**
+   *
+   * @method sortRoutes
+   * @static
+   * @param {[NOOT.API.Route]} routes An array of NOOT.API.Route
+   * @return {Array} The same array (same reference), sorted.
+   */
   sortRoutes: function(routes) {
     return RoutesSorter.compute(routes);
   }
 
 });
 
+
 /**
- * Attach some classes to main namespace
+ * See {{#crossLink "NOOT.API.Resource"}}{{/crossLink}}.
+ *
+ * @property Resource
+ * @static
+ * @type {*}
  */
 API.Resource = Resource;
+
+/**
+ * See {{#crossLink "NOOT.API.Route"}}{{/crossLink}}.
+ *
+ * @property Route
+ * @static
+ * @type {*}
+ */
 API.Route = Route;
 
 /**

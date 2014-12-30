@@ -6,8 +6,8 @@ var NOOTUtils = require('./src/noot/utils');
 var _ = require('lodash');
 
 /***********************************************************************************************************************
+ * @module noot
  * @class NOOT
- * @static
  **********************************************************************************************************************/
 module.exports = function() {
   return _.extend({}, NOOTManager, NOOTUtils, NOOTManager.require.apply(NOOTManager, arguments));

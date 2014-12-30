@@ -1,7 +1,7 @@
 /**
  * Dependencies
  */
-var NOOT = require('../../')('namespace', 'error');
+var NOOT = require('../../')('namespace', 'error', 'http');
 
 /***********************************************************************************************************************
  * @class Errors
@@ -11,20 +11,67 @@ var NOOT = require('../../')('namespace', 'error');
 var Errors = NOOT.Namespace.create({
 
   /**
-   * 50? errors
+   * @property InternalServerError
+   * @static
+   * @type Class
    */
-  InternalServerError: NOOT.Error.extend({ name: 'InternalServerError', statusCode: 500 }),
-  NotImplemented: NOOT.Error.extend({ name: 'NotImplementedError', statusCode: 501 }),
-  Unavailable: NOOT.Error.extend({ name: 'UnavailableError', statusCode: 503 }),
+  InternalServerError: NOOT.Error.extend({ name: 'InternalServerError', statusCode: NOOT.HTTP.InternalServerError }),
 
   /**
-   * 40? errors
+   * @property NotImplemented
+   * @static
+   * @type Class
    */
-  BadRequest: NOOT.Error.extend({ name: 'BadRequestError', statusCode: 400 }),
-  Unauthorized: NOOT.Error.extend({ name: 'UnauthorizedError', statusCode: 401 }),
-  Forbidden: NOOT.Error.extend({ name: 'ForbiddenError', statusCode: 403 }),
-  NotFound: NOOT.Error.extend({ name: 'NotFoundError', statusCode: 404 }),
-  Conflict: NOOT.Error.extend({ name: 'ConflictError', statusCode: 409 })
+  NotImplemented: NOOT.Error.extend({ name: 'NotImplementedError', statusCode: NOOT.HTTP.NotImplemented }),
+
+  /**
+   * @property Unavailable
+   * @static
+   * @type Class
+   */
+  Unavailable: NOOT.Error.extend({ name: 'UnavailableError', statusCode: NOOT.HTTP.ServiceUnavailable }),
+
+  /**
+   * @property BadRequest
+   * @static
+   * @type Class
+   */
+  BadRequest: NOOT.Error.extend({ name: 'BadRequestError', statusCode: NOOT.HTTP.BadRequest }),
+
+  /**
+   * @property Unauthorized
+   * @static
+   * @type Class
+   */
+  Unauthorized: NOOT.Error.extend({ name: 'UnauthorizedError', statusCode: NOOT.HTTP.Unauthorized }),
+
+  /**
+   * @property Forbidden
+   * @static
+   * @type Class
+   */
+  Forbidden: NOOT.Error.extend({ name: 'ForbiddenError', statusCode: NOOT.HTTP.Forbidden }),
+
+  /**
+   * @property NotFound
+   * @static
+   * @type Class
+   */
+  NotFound: NOOT.Error.extend({ name: 'NotFoundError', statusCode: NOOT.HTTP.NotFound }),
+
+  /**
+   * @property Conflict
+   * @static
+   * @type Class
+   */
+  Conflict: NOOT.Error.extend({ name: 'ConflictError', statusCode: NOOT.HTTP.Conflict }),
+
+  /**
+   * MongooseError
+   *
+   * @note Comments are defined in the module itself
+   */
+  MongooseError: require('./lib/mongoose-error')
 
 });
 

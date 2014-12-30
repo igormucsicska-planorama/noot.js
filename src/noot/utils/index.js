@@ -21,7 +21,7 @@ var Utils = {
    * @return {Array}
    */
   makeArray: function(arg) {
-    return Array.isArray(arg) ? arg : Array.prototype.slice.call(arg, 0);
+    return Array.prototype.slice.call(arg, 0);
   },
 
 
@@ -82,26 +82,16 @@ var Utils = {
   noop: function() { return this; },
 
   /**
-   * Convert nested arrays to a single flatten one
-   *
-   * ```javascript
-   * NOOT.toFlatArray([1, 2, 3]); // [1, 2, 3]
-   * NOOT.toFlatArray([[1], [2, 3]]); // [1, 2, 3]
-   * ```
+   * Escape a string to be RegExp compliant.
    *
    * @for NOOT
    * @static
-   * @method toFlatArray
-   * @return {Array}
+   * @method escapeForRegExp
+   * @param {String} str
+   * @return {String}
    */
-  toFlatArray: function() {
-    var ret = [];
-    var args = Utils.makeArray(arguments);
-    args.forEach(function(arg) {
-      if (Utils.isArray(arg)) ret = ret.concat(Utils.toFlatArray.apply(Utils, arg));
-      else ret.push(arg);
-    });
-    return ret;
+  escapeForRegExp: function(str) {
+    return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&');
   }
 
 };

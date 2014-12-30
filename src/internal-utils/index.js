@@ -2,6 +2,7 @@
  * Dependencies
  */
 var K = function() { return this; };
+var _ = require('lodash');
 
 /***********************************************************************************************************************
  *
@@ -38,6 +39,25 @@ var __Utils = {
     for (var parentProp in parent) {
       if (dest[parentProp] === undefined) dest[parentProp] = parent[parentProp];
     }
+  },
+
+  /**
+   * Build concatenated properties
+   *
+   * @param {Object} instance
+   * @param {Object} def
+   * @param {Array} properties
+   */
+  buildConcatenatedProperties: function(instance, def, properties) {
+    properties.forEach(function(propertyName) {
+      var instanceOwned = instance[propertyName];
+      var defOwned = def[propertyName];
+      if (instanceOwned) {
+        instance[propertyName] = _.toArray(instanceOwned).concat(defOwned);
+      } else {
+        instance[propertyName] = _.toArray(defOwned);
+      }
+    });
   }
 
 };
