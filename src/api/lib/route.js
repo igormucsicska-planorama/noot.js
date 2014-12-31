@@ -80,7 +80,7 @@ var Route = NOOT.Object.extend({
    */
   _buildHandlers: function() {
     var self = this;
-    var handlers = [];
+    var handlers;
 
     // TODO handle authentication and authorization
 
@@ -89,7 +89,7 @@ var Route = NOOT.Object.extend({
       handlers = NOOT.makeArray(this.handlers);
     } else {
       handlers = [];
-      if (this.handler) this.handlers.push(this.handler);
+      if (this.handler) handlers.push(this.handler);
     }
 
     if (this.schema) handlers.unshift(this.validateSchema);

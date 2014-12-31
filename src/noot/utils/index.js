@@ -21,7 +21,7 @@ var Utils = {
    * @return {Array}
    */
   makeArray: function(arg) {
-    return Array.prototype.slice.call(arg, 0);
+    return arg ? Array.prototype.slice.call(arg, 0) : [];
   },
 
 

@@ -1,7 +1,7 @@
 /**
  * Dependencies
  */
-var NOOT = require('../../../')('error');
+var NOOT = require('../../../')('error', 'http');
 var mongoose = require('mongoose');
 
 var ValidationError = mongoose.Error.ValidationError;
@@ -16,14 +16,26 @@ var CastError = mongoose.Error.CastError;
  * @static
  */
 var MongooseError = function(err) {
+  var message;
+  var statusCode;
+  var name;
+
   if (err instanceof ValidationError || err instanceof CastError) {
-    this.statusCode = NOOT.HTTP.BadRequest;
+    statusCode = NOOT.HTTP.BadRequest;
+    message = err.toString();
+    name = 'BadRequestError';
+  } else if (err.code === 11000) {
+    statusCode = NOOT.HTTP.Conflict;
+    message = err.message;
+    name = 'ConflictError';
+  } else {
+    statusCode = NOOT.HTTP.InternalServerError;
+    message = err.message;
+    name = 'InternalServerError';
   }
 
-  NOOT.Error.call(this);
+  return new (NOOT.Error.extend({ message: message, name: name, statusCode: statusCode }))();
 };
-
-MongooseError.prototype = NOOT.Error.prototype;
 
 /**
  * @exports

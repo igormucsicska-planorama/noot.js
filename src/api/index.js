@@ -66,14 +66,14 @@ var API = NOOT.Object.extend({
     var allRoutes = [];
     this._resources = this._resources.map(function(resourceClass) {
       var instance = resourceClass.create({ api: self });
-      allRoutes.push(instance._routes);
+      allRoutes = allRoutes.concat(instance._routes);
       return instance;
     });
 
     this._routes = API.sortRoutes(allRoutes);
 
     this._routes.forEach(function(route) {
-      server[route.method].apply(server, route.handlers);
+      server[route.method].apply(server, [route.path].concat(route._handlers));
     });
   },
 
