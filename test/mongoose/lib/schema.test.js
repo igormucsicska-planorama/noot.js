@@ -4,7 +4,7 @@
 var NOOT = nootrequire('mongoose');
 var Schema = NOOT.Mongoose.Schema;
 var async = require('async');
-var _ = require('lodash');
+var mongoose = require('mongoose');
 var Utils = require('../../test-utils');
 
 var TEST_DB_NAME = 'noot-mongoose-schema-test';
