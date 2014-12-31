@@ -23,7 +23,7 @@ var __Utils = {
    */
   buildSuper: function(dest, parent, child) {
     for (var prop in child) {
-      dest[prop] = (typeof child[prop] === 'function') ?
+      dest[prop] = (typeof child[prop] === 'function' && _.isEqual(child[prop].prototype, {})) ?
                    (function (name, fn) {
                      return function () {
                        var tmp = this._super;

@@ -10,11 +10,11 @@ var NOOT = require('../../../')('namespace');
  * @static
  **********************************************************************************************************************/
 var Routes = NOOT.Namespace.create({
-  get: require('./default-routes/get'),
-  delete: require('./default-routes/delete'),
-  post: require('./default-routes/post'),
-  put: require('./default-routes/put'),
-  patch: require('./default-routes/patch')
+  Get: require('./default-routes/get'),
+  Delete: require('./default-routes/delete'),
+  Post: require('./default-routes/post'),
+  Put: require('./default-routes/put'),
+  Patch: require('./default-routes/patch')
 });
 
 /**

@@ -11,7 +11,7 @@ var QueryMode = require('./query-mode');
 var Route = require('./route');
 var DefaultRoutes = require('./default-routes');
 var CountCache = require('./count-cache');
-var API; // To be assigned later to avoid conflicts with require
+
 
 /***********************************************************************************************************************
  * @class Resource
@@ -20,11 +20,11 @@ var API; // To be assigned later to avoid conflicts with require
  **********************************************************************************************************************/
 var Resource = NOOT.Object.extend({
 
-  model: undefined,
+  model: null,
   path: '',
   maxLimit: 0,
   defaultLimit: 0,
-  countCacheExpiration: 0,
+  countCacheExpiration: undefined,
   defaultResponseStatusCode: undefined,
   allowedResponseFields: undefined,
   areFindsLean: false,
@@ -60,7 +60,7 @@ var Resource = NOOT.Object.extend({
     this._buildFields();
     this._countCache = CountCache.create({
       model: this.model,
-      expiration: this.countCacheExpiration || Resource.DEFAULTS.countCacheExpiration
+      expiration: this.countCacheExpiration
     });
     this._buildRoutes();
   },
@@ -132,7 +132,7 @@ var Resource = NOOT.Object.extend({
   },
 
   get: function(req, callback) {
-    return this.getId(req) ? this.getSingle(req, callback) : this.getMultiple(req, callback);
+    return this.parseId(req) ? this.getSingle(req, callback) : this.getMultiple(req, callback);
   },
 
   /**
@@ -145,7 +145,7 @@ var Resource = NOOT.Object.extend({
    */
   getSingle: function(req, callback) {
     var query = this.parseQueryString(req.query);
-    return this.model.findById(this.getId(req), query.select, { lean: this.areFindsLean }, function(err, item) {
+    return this.model.findById(this.parseId(req), query.select, { lean: this.areFindsLean }, function(err, item) {
       if (err) return callback(new NOOT.Errors.MongooseError(err));
       if (!item) return callback(new NOOT.Errors.NotFound());
       return callback(null, { data: item, statusCode: NOOT.HTTP.OK });
@@ -184,7 +184,7 @@ var Resource = NOOT.Object.extend({
   },
 
 
-  getId: function(req) {
+  parseId: function(req) {
     return req.param(req.idProperty || 'id');
   },
 
@@ -204,9 +204,9 @@ var Resource = NOOT.Object.extend({
       data = undefined;
     }
 
-    res.status(status || this.defaultResponseStatusCode);
+    res.status(status || data && data.statusCode || this.defaultResponseStatusCode);
 
-    return this.getResponseHandler(res)(data);
+    return this.getResponseHandler(res)(res, data);
   },
 
 
@@ -225,17 +225,17 @@ var Resource = NOOT.Object.extend({
   },
 
   /**
-   * @method update
+   * @method patch
    * @async
    * @param {Request} req
    * @param {Function} callback
    */
-  update: function(req, callback) {
+  patch: function(req, callback) {
     var properties = this.filterFields(req.body, Resource.WRITE);
-    return this.model.update({ _id: this.getId(req) }, { $set: properties }, function(err, updated) {
+    return this.model.update({ _id: this.parseId(req) }, { $set: properties }, function(err, updated) {
       if (err) return callback(new NOOT.Errors.MongooseError(err));
       if (!updated) return callback(new NOOT.Errors.NotFound());
-      return callback();
+      return callback(null, { statusCode: NOOT.HTTP.NoContent });
     });
   },
 
@@ -248,10 +248,10 @@ var Resource = NOOT.Object.extend({
    * @param {Function} callback
    */
   delete: function(req, callback) {
-    return this.model.remove({ _id: this.getId(req) }, function(err, removed) {
+    return this.model.remove({ _id: this.parseId(req) }, function(err, removed) {
       if (err) return callback(new NOOT.Errors.MongooseError(err));
       if (!removed) return callback(new NOOT.Errors.NotFound());
-      return callback(null, { statusCode: 204 });
+      return callback(null, { statusCode: NOOT.HTTP.NoContent });
     });
   },
 
@@ -308,13 +308,14 @@ var Resource = NOOT.Object.extend({
   /**
    * Filter fields depending on query mode (read, write, select, sort...)
    *
+   * @method filterFields
    * @param {Array|Object} fields
    * @param {QueryMode} queryMode
-   * @returns {Array|Object}
+   * @return {Array|Object}
    */
   filterFields: function(fields, queryMode) {
     if (!(queryMode instanceof QueryMode)) throw new Error('Invalid query mode: ' + queryMode);
-    if (fields.toJSON) fields = fields.toJSON();
+    if (fields && fields.toJSON) fields = fields.toJSON();
 
     switch (queryMode) {
       case Resource.READ: return _.pick(fields, this._selectable);
@@ -375,7 +376,6 @@ var Resource = NOOT.Object.extend({
    * @private
    */
   _getModelPaths: function() {
-    console.log(this.model.modelName);
     return Object.keys(this.model.schema.paths);
   }
 
