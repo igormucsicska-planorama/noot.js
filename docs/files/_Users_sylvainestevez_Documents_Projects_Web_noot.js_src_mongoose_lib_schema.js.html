@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="NOOT.js"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 0.5.5</em>
+            <em>API Docs for: 0.5.8</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -38,7 +38,14 @@
                 
                         <div id="api-tabview-panel">
                             <ul id="api-classes" class="apis classes">
+                                <li><a href="../classes/NOOT.html">NOOT</a></li>
                                 <li><a href="../classes/NOOT.API.html">NOOT.API</a></li>
+                                <li><a href="../classes/NOOT.API.DefaultRoutes.html">NOOT.API.DefaultRoutes</a></li>
+                                <li><a href="../classes/NOOT.API.DefaultRoutes.Delete.html">NOOT.API.DefaultRoutes.Delete</a></li>
+                                <li><a href="../classes/NOOT.API.DefaultRoutes.Get.html">NOOT.API.DefaultRoutes.Get</a></li>
+                                <li><a href="../classes/NOOT.API.DefaultRoutes.Patch.html">NOOT.API.DefaultRoutes.Patch</a></li>
+                                <li><a href="../classes/NOOT.API.DefaultRoutes.Post.html">NOOT.API.DefaultRoutes.Post</a></li>
+                                <li><a href="../classes/NOOT.API.DefaultRoutes.Put.html">NOOT.API.DefaultRoutes.Put</a></li>
                                 <li><a href="../classes/NOOT.API.Resource.html">NOOT.API.Resource</a></li>
                                 <li><a href="../classes/NOOT.API.Route.html">NOOT.API.Route</a></li>
                                 <li><a href="../classes/NOOT.Configurator.html">NOOT.Configurator</a></li>
@@ -61,6 +68,7 @@
                             </ul>
                 
                             <ul id="api-modules" class="apis modules">
+                                <li><a href="../modules/noot.html">noot</a></li>
                             </ul>
                         </div>
                     </div>
@@ -108,7 +116,6 @@
                         var fs = require(&#x27;fs&#x27;);
                         var Case = require(&#x27;case&#x27;);
                         
-                        
                         /**
                          * Variables
                          */
@@ -137,9 +144,13 @@
                          * @param {Object} [ownStatics] Schema static properties
                          * @returns {MongooseSchema}
                          */
+                        
                         MongooseSchema.extend = function(definition, ownStatics) {
+                        
                           definition = definition || {};
-                          var properties = definition.schema || {};
+                          if (NOOT.isUndefined(definition.schema)) definition.schema = {};
+                        
+                          var properties = definition.schema;
                           var parentProperties = (this.__nootDef &amp;&amp; this.__nootDef.schema) || {};
                           for (var key in parentProperties) {
                             if (NOOT.isUndefined(properties[key])) properties[key] = _.cloneDeep(parentProperties[key]);
@@ -161,6 +172,21 @@
                           return schema;
                         };
                         
+                        var SchemaBase = MongooseSchema.extend({
+                          statics : {
+                            migrate : function (match, callback) {
+                              var self = this;
+                              var __t = self.modelName;
+                              var __ts = self.schema.__nootDef.parents;
+                              __ts.push(__t);
+                        
+                              return self.update(match || {}, { __ts: __ts,  __t: __t }, { multi: true }, function (err) {
+                                if (err) return callback(err);
+                                return callback();
+                              });
+                            }
+                          }
+                        });
                         
                         /**
                          * Parse incoming arguments for find and findOne
@@ -172,28 +198,34 @@
                          * @returns {Array}
                          */
                         var parseArguments = function(conditions, fields, options, callback) {
-                          if (&#x27;function&#x27; === typeof conditions) {
+                          if (NOOT.isFunction(conditions)) {
                             callback = conditions;
                             conditions = {};
                             fields = null;
                             options = null;
-                          } else if (&#x27;function&#x27; === typeof fields) {
+                          } else if (NOOT.isFunction(fields)) {
                             callback = fields;
                             fields = null;
                             options = null;
-                          } else if (&#x27;function&#x27; === typeof options) {
+                          } else if (NOOT.isFunction(options)) {
                             callback = options;
                             options = null;
-                            fields = fields + &#x27; __type&#x27;;
-                          } else if (&#x27;function&#x27; !== typeof callback) {
-                            fields = fields + &#x27; __type&#x27;;
+                            fields = fields;
+                          } else if (NOOT.isFunction(callback)) {
+                            fields = fields;
                           }
                         
                           if (!conditions) conditions = {};
                           if (!options) options = {};
-                          if (options.strict) conditions.__type = this.modelName;
-                          else conditions.__types = this.modelName;
                         
+                          if (options.bypass === true) return [conditions, fields, options, callback];
+                        
+                          if (!_.isEmpty(this.schema.__nootDef.parents)) {
+                            if (options.strict) conditions.__t = this.modelName;
+                            else conditions.__ts = this.modelName;
+                          } else {
+                            if (options.strict) conditions.__t = { $exists : false };
+                          }
                           return [conditions, fields, options, callback];
                         };
                         
@@ -215,30 +247,38 @@
                         
                         
                         /**
-                         * Set the prototype based on the discriminator __type
+                         * Set the prototype based on the discriminator __t
                          *
                          * @param {Object} doc
                          * @param {Object} query
                          * @param {function} fn
                          * @returns {*}
                          */
+                        
                         Model.prototype.init = function(doc, query, fn) {
-                          var model = this.db.model(doc.__type);
-                          var newFn = function() {
-                            process.nextTick(function() {
-                              fn.apply(this, arguments);
-                            });
-                          };
-                          this.schema = model.schema;
-                          var obj = oldInit.call(this, doc, query, newFn);
-                          obj.__proto__ = model.prototype;
-                          return obj;
+                        
+                          if (doc.__t) {
+                            var model = this.db.model(doc.__t);
+                            var newFn = function() {
+                              process.nextTick(function() {
+                                fn.apply(this, arguments);
+                              });
+                            };
+                            this.schema = model.schema;
+                            var obj = oldInit.call(this, doc, query, newFn);
+                            obj.__proto__ = model.prototype;
+                            return obj;
+                          }
+                        
+                          return oldInit.apply(this, arguments);
+                        
                         };
                         
                         
                         /**
                          * Attach middlewares functions
                          */
+                        
                         fs.readdirSync(path.resolve(__dirname, MIDDLEWARES_PATH)).forEach(function(middleware) {
                           var middlewareName = Case.camel(path.basename(middleware, &#x27;.js&#x27;));
                           middleware = require(path.join(__dirname, MIDDLEWARES_PATH, middleware));
@@ -249,44 +289,65 @@
                           };
                         });
                         
+                        /**
+                         * Check if parent schema is already registered in a model
+                         *
+                         * @param {Object} parent
+                         * @param {Object} models
+                         * @returns {Array}
+                         */
+                        function checkRegisteredModel(parent, models) {
+                          for (var registeredModelName in models) {
+                            if (models[registeredModelName].schema === parent) {
+                              return [registeredModelName];
+                            }
+                          }
+                          return [];
+                        }
+                        
                         
                         /**
                          * Redefine model creation to attach discriminators
                          *
                          * @param {String} modelName
                          * @param {Object} schema
+                         * @param {String} collection
+                         * @param {Object} options
                          * @returns {Object}
                          */
-                        mongoose.model = function(modelName, schema) {
+                        mongoose.model = function(modelName, schema, collection, options) {
                         
                           if (schema) {
                         
-                            var definition = schema.__nootDef;
+                            var definition = {};
+                            definition.parents = [];
                         
-                            if (definition) {
+                            if (schema.__nootDef) {
                               var parent = schema.__nootParent;
                               var parentDef = parent.__nootDef;
                         
-                              definition.parents = [modelName];
+                              if (options &amp;&amp; NOOT.isObject(options)) {
+                                definition.parents = checkRegisteredModel(parent, options.connection.models);
                         
-                              for (var registeredModelName in this.models) {
-                                if (this.models[registeredModelName].schema === parent) {
-                                  definition.parents.push(registeredModelName);
-                                  break;
-                                }
+                              } else {
+                                definition.parents = checkRegisteredModel(parent, this.models);
                               }
                         
                               definition.parents = ((parentDef &amp;&amp; parentDef.parents) || []).concat(definition.parents);
-                              definition.parents = _.uniq(definition.parents);
+                              schema.__nootDef.parents = _.cloneDeep(definition.parents);
+                              definition.parents.push(modelName);
                         
-                              var identificator = { __type: { type: String, default: modelName } };
-                        
+                              var identificator = { __t: { type: String, default: modelName, index: true } };
                               var discriminator = {
-                                __types: { type: Array, default: function() { return definition.parents; } }
+                                __ts: { type: Array, default: function () {
+                                  return definition.parents;
+                                } }
                               };
                         
-                              schema.add(discriminator);
-                              schema.add(identificator);
+                              if (!NOOT.isEmpty(schema.__nootDef.parents)) {
+                                schema.add(discriminator);
+                                schema.add(identificator);
+                              }
                             }
                           }
                         
@@ -297,7 +358,8 @@
                         /**
                          * @exports
                          */
-                        module.exports = MongooseSchema;
+                        module.exports = SchemaBase;
+                        
                             </pre>
                         </div>
                     </div>

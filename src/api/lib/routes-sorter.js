@@ -3,14 +3,12 @@
  */
 var NOOT = require('../../../')('namespace');
 var _ = require('lodash');
-var Route = require('./route');
 
 /***********************************************************************************************************************
- * RoutesSorter
- ***********************************************************************************************************************
- *
- *
- *
+ * @class RoutesSorter
+ * @namespace NOOT.API
+ * @static
+ * @extends NOOT.Namespace
  **********************************************************************************************************************/
 var RoutesSorter = NOOT.Namespace.create({
 
@@ -22,8 +20,9 @@ var RoutesSorter = NOOT.Namespace.create({
   /**
    *
    *
+   * @method compute
    * @param {Array} routes
-   * @returns {Array}
+   * @return {Array}
    */
   compute: function(routes) {
     var self = this;
@@ -50,6 +49,7 @@ var RoutesSorter = NOOT.Namespace.create({
   /**
    *
    *
+   * @method _computeMethodRoutes
    * @param {Array} routes
    * @private
    */
@@ -87,8 +87,9 @@ var RoutesSorter = NOOT.Namespace.create({
   /**
    *
    *
+   * @method _getPathWeight
    * @param {String} str
-   * @returns {Number}
+   * @return {Number}
    * @private
    */
   _getPathWeight: function(str) {
@@ -100,9 +101,10 @@ var RoutesSorter = NOOT.Namespace.create({
   /**
    *
    *
+   * @method _fillPartsArray
    * @param {Array} arr
    * @param {Number} length
-   * @returns {Array}
+   * @return {Array}
    * @private
    */
   _fillPartsArray: function(arr, length) {

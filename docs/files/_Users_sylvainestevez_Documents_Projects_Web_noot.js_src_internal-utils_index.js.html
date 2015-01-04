@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="NOOT.js"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 0.5.5</em>
+            <em>API Docs for: 0.5.8</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -38,7 +38,14 @@
                 
                         <div id="api-tabview-panel">
                             <ul id="api-classes" class="apis classes">
+                                <li><a href="../classes/NOOT.html">NOOT</a></li>
                                 <li><a href="../classes/NOOT.API.html">NOOT.API</a></li>
+                                <li><a href="../classes/NOOT.API.DefaultRoutes.html">NOOT.API.DefaultRoutes</a></li>
+                                <li><a href="../classes/NOOT.API.DefaultRoutes.Delete.html">NOOT.API.DefaultRoutes.Delete</a></li>
+                                <li><a href="../classes/NOOT.API.DefaultRoutes.Get.html">NOOT.API.DefaultRoutes.Get</a></li>
+                                <li><a href="../classes/NOOT.API.DefaultRoutes.Patch.html">NOOT.API.DefaultRoutes.Patch</a></li>
+                                <li><a href="../classes/NOOT.API.DefaultRoutes.Post.html">NOOT.API.DefaultRoutes.Post</a></li>
+                                <li><a href="../classes/NOOT.API.DefaultRoutes.Put.html">NOOT.API.DefaultRoutes.Put</a></li>
                                 <li><a href="../classes/NOOT.API.Resource.html">NOOT.API.Resource</a></li>
                                 <li><a href="../classes/NOOT.API.Route.html">NOOT.API.Route</a></li>
                                 <li><a href="../classes/NOOT.Configurator.html">NOOT.Configurator</a></li>
@@ -61,6 +68,7 @@
                             </ul>
                 
                             <ul id="api-modules" class="apis modules">
+                                <li><a href="../modules/noot.html">noot</a></li>
                             </ul>
                         </div>
                     </div>
@@ -102,6 +110,7 @@
                          * Dependencies
                          */
                         var K = function() { return this; };
+                        var _ = require(&#x27;lodash&#x27;);
                         
                         /***********************************************************************************************************************
                          *
@@ -122,7 +131,7 @@
                            */
                           buildSuper: function(dest, parent, child) {
                             for (var prop in child) {
-                              dest[prop] = (typeof child[prop] === &#x27;function&#x27;) ?
+                              dest[prop] = (typeof child[prop] === &#x27;function&#x27; &amp;&amp; _.isEqual(child[prop].prototype, {})) ?
                                            (function (name, fn) {
                                              return function () {
                                                var tmp = this._super;
@@ -138,6 +147,25 @@
                             for (var parentProp in parent) {
                               if (dest[parentProp] === undefined) dest[parentProp] = parent[parentProp];
                             }
+                          },
+                        
+                          /**
+                           * Build concatenated properties
+                           *
+                           * @param {Object} instance
+                           * @param {Object} def
+                           * @param {Array} properties
+                           */
+                          buildConcatenatedProperties: function(instance, def, properties) {
+                            properties.forEach(function(propertyName) {
+                              var instanceOwned = instance[propertyName];
+                              var defOwned = def[propertyName];
+                              if (instanceOwned) {
+                                instance[propertyName] = _.toArray(instanceOwned).concat(defOwned);
+                              } else {
+                                instance[propertyName] = _.toArray(defOwned);
+                              }
+                            });
                           }
                         
                         };

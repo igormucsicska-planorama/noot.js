@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="NOOT.js"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 0.5.5</em>
+            <em>API Docs for: 0.5.8</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -38,7 +38,14 @@
                 
                         <div id="api-tabview-panel">
                             <ul id="api-classes" class="apis classes">
+                                <li><a href="../classes/NOOT.html">NOOT</a></li>
                                 <li><a href="../classes/NOOT.API.html">NOOT.API</a></li>
+                                <li><a href="../classes/NOOT.API.DefaultRoutes.html">NOOT.API.DefaultRoutes</a></li>
+                                <li><a href="../classes/NOOT.API.DefaultRoutes.Delete.html">NOOT.API.DefaultRoutes.Delete</a></li>
+                                <li><a href="../classes/NOOT.API.DefaultRoutes.Get.html">NOOT.API.DefaultRoutes.Get</a></li>
+                                <li><a href="../classes/NOOT.API.DefaultRoutes.Patch.html">NOOT.API.DefaultRoutes.Patch</a></li>
+                                <li><a href="../classes/NOOT.API.DefaultRoutes.Post.html">NOOT.API.DefaultRoutes.Post</a></li>
+                                <li><a href="../classes/NOOT.API.DefaultRoutes.Put.html">NOOT.API.DefaultRoutes.Put</a></li>
                                 <li><a href="../classes/NOOT.API.Resource.html">NOOT.API.Resource</a></li>
                                 <li><a href="../classes/NOOT.API.Route.html">NOOT.API.Route</a></li>
                                 <li><a href="../classes/NOOT.Configurator.html">NOOT.Configurator</a></li>
@@ -61,6 +68,7 @@
                             </ul>
                 
                             <ul id="api-modules" class="apis modules">
+                                <li><a href="../modules/noot.html">noot</a></li>
                             </ul>
                         </div>
                     </div>
@@ -102,22 +110,19 @@
                          * Dependencies
                          */
                         var NOOT = require(&#x27;../../../&#x27;)(&#x27;namespace&#x27;);
-                        var Route = require(&#x27;./route&#x27;);
                         
                         /***********************************************************************************************************************
-                         * DefaultRoutes
-                         ***********************************************************************************************************************
-                         *
-                         * @info configurations for default routes by verb
-                         *
-                         *
+                         * @class DefaultRoutes
+                         * @namespace NOOT.API
+                         * @extends NOOT.Namespace
+                         * @static
                          **********************************************************************************************************************/
                         var Routes = NOOT.Namespace.create({
-                          get: Route.extend({ path: &#x27;/:id?&#x27;, method: &#x27;get&#x27; }, { defaultHandler: &#x27;read&#x27; }),
-                          delete: Route.extend({ path: &#x27;/:id&#x27;, method: &#x27;delete&#x27; }, { defaultHandler: &#x27;delete&#x27; }),
-                          post: Route.extend({ path: &#x27;/&#x27;, method: &#x27;post&#x27; }, { defaultHandler: &#x27;create&#x27; }),
-                          put: Route.extend({ path: &#x27;/:id&#x27;, method: &#x27;put&#x27; }, { defaultHandler: &#x27;update&#x27; }),
-                          patch: Route.extend({ path: &#x27;/:id&#x27;, method: &#x27;patch&#x27; }, { defaultHandler: &#x27;update&#x27; })
+                          Get: require(&#x27;./default-routes/get&#x27;),
+                          Delete: require(&#x27;./default-routes/delete&#x27;),
+                          Post: require(&#x27;./default-routes/post&#x27;),
+                          Put: require(&#x27;./default-routes/put&#x27;),
+                          Patch: require(&#x27;./default-routes/patch&#x27;)
                         });
                         
                         /**

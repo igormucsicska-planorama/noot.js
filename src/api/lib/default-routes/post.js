@@ -2,6 +2,7 @@
  * Dependencies
  */
 var Route = require('../route');
+var NOOT = require('../../../../')('errors');
 
 /***********************************************************************************************************************
  * @class Post
@@ -11,16 +12,16 @@ var Route = require('../route');
  *
  **********************************************************************************************************************/
 var Post = Route.extend({
-
   method: 'post',
   path: '/',
 
-  handler: function(req, res, next) {
-    var self = this;
-    return this.resource.post(req, function(err, data) {
-      if (err) return next(err);
-      return self.resource.createResponse(res, data);
-    });
+  allowMany: true,
+
+  handler: function(stack) {
+    if (!this.allowMany && NOOT.isArray(stack.body)) {
+      return stack.next(new NOOT.Errors.Forbidden('Cannot post multiple items at a time'));
+    }
+    return stack.create(stack);
   }
 
 });

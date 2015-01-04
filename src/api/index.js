@@ -5,6 +5,9 @@ var NOOT = require('../../')('object');
 var Resource = require('./lib/resource');
 var Route = require('./lib/route');
 var RoutesSorter = require('./lib/routes-sorter');
+var Queryable = require('./lib/queryable');
+var Stack = require('./lib/stack');
+var Authable = require('./lib/authable');
 var _ = require('lodash');
 
 
@@ -13,6 +16,7 @@ var _ = require('lodash');
  * @constructor
  * @namespace NOOT
  * @extends NOOT.Object
+ * @uses NOOT.API.Authable
  **********************************************************************************************************************/
 var API = NOOT.Object.extend({
 
@@ -65,7 +69,7 @@ var API = NOOT.Object.extend({
     var server = this.server;
     var allRoutes = [];
     this._resources = this._resources.map(function(resourceClass) {
-      var instance = resourceClass.create({ api: self });
+      var instance = resourceClass.create({ api: self, _authableParent: self });
       allRoutes = allRoutes.concat(instance._routes);
       return instance;
     });
@@ -122,6 +126,9 @@ var API = NOOT.Object.extend({
 });
 
 
+API = API.extend(Authable);
+
+
 /**
  * See {{#crossLink "NOOT.API.Resource"}}{{/crossLink}}.
  *
@@ -139,6 +146,14 @@ API.Resource = Resource;
  * @type {*}
  */
 API.Route = Route;
+
+
+API.Queryable = Queryable;
+
+API.Authable = Authable;
+
+API.Stack = Stack;
+
 
 /**
  * @exports

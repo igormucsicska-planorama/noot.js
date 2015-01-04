@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="NOOT.js"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 0.5.5</em>
+            <em>API Docs for: 0.5.8</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -38,7 +38,14 @@
                 
                         <div id="api-tabview-panel">
                             <ul id="api-classes" class="apis classes">
+                                <li><a href="../classes/NOOT.html">NOOT</a></li>
                                 <li><a href="../classes/NOOT.API.html">NOOT.API</a></li>
+                                <li><a href="../classes/NOOT.API.DefaultRoutes.html">NOOT.API.DefaultRoutes</a></li>
+                                <li><a href="../classes/NOOT.API.DefaultRoutes.Delete.html">NOOT.API.DefaultRoutes.Delete</a></li>
+                                <li><a href="../classes/NOOT.API.DefaultRoutes.Get.html">NOOT.API.DefaultRoutes.Get</a></li>
+                                <li><a href="../classes/NOOT.API.DefaultRoutes.Patch.html">NOOT.API.DefaultRoutes.Patch</a></li>
+                                <li><a href="../classes/NOOT.API.DefaultRoutes.Post.html">NOOT.API.DefaultRoutes.Post</a></li>
+                                <li><a href="../classes/NOOT.API.DefaultRoutes.Put.html">NOOT.API.DefaultRoutes.Put</a></li>
                                 <li><a href="../classes/NOOT.API.Resource.html">NOOT.API.Resource</a></li>
                                 <li><a href="../classes/NOOT.API.Route.html">NOOT.API.Route</a></li>
                                 <li><a href="../classes/NOOT.Configurator.html">NOOT.Configurator</a></li>
@@ -61,6 +68,7 @@
                             </ul>
                 
                             <ul id="api-modules" class="apis modules">
+                                <li><a href="../modules/noot.html">noot</a></li>
                             </ul>
                         </div>
                     </div>
@@ -102,43 +110,161 @@
                          * Dependencies
                          */
                         var NOOT = require(&#x27;../../../&#x27;)(&#x27;object&#x27;, &#x27;url&#x27;);
+                        var _ = require(&#x27;lodash&#x27;);
+                        var Query = require(&#x27;./query&#x27;);
                         
                         /***********************************************************************************************************************
                          * @class Route
                          * @namespace NOOT.API
+                         * @extends NOOT.Object
                          * @constructor
                          **********************************************************************************************************************/
                         var Route = NOOT.Object.extend({
+                        
+                          /**
+                           * @property method
+                           * @type String
+                           * @default get
+                           */
                           method: &#x27;get&#x27;,
+                        
+                          /**
+                           * @property path
+                           * @type String
+                           */
                           path: &#x27;&#x27;,
                         
+                          /**
+                           * @property resource
+                           * @type NOOT.API.Resource
+                           */
                           resource: null,
+                        
+                          /**
+                           * @property schema
+                           * @type Object
+                           */
                           schema: null,
+                        
+                          /**
+                           * @property handlers
+                           * @type Array of middlewares
+                           * @default []
+                           */
                           handlers: null,
-                          authHandler: null,
+                        
+                          /**
+                           * Final array of middlewares for this route
+                           *
+                           * @property _handlers
+                           * @type Array of middlewares
+                           * @private
+                           * @default []
+                           */
+                          _handlers: null,
+                        
+                          /**
+                           * @property handler
+                           * @type middleware
+                           */
+                          handler: null,
                         
                           /**
                            * Constructor
                            */
                           init: function() {
                             NOOT.required(this, &#x27;path&#x27;, &#x27;resource&#x27;);
-                            this.path = NOOT.Url.join(&#x27;/&#x27;, this.path).replace(/\/$/, &#x27;&#x27;);
+                            _.defaults(this, Route._DEFAULTS);
                             this.method = this.method.toLowerCase();
-                            this.handlers = this.handlers || [];
-                            if (this.schema) this.handlers.unshift(this.validate);
-                            if (this.authHandler) this.handlers.unshift(this.authHandler);
+                            this._buildPath();
+                            this._buildHandlers();
                           },
                         
                           /**
-                           * Validate body against JSON schema
+                           * Define routes&#x27;s handlers array.
                            *
+                           * @method _buildHandlers
+                           * @return {Array}
+                           * @private
+                           */
+                          _buildHandlers: function() {
+                            var self = this;
+                            var handlers;
+                        
+                            // TODO handle authentication and authorization
+                        
+                            if (this.handlers) {
+                              if (this.handler) throw new Error(&#x27;Cannot provide both &#x60;handler&#x60; and &#x60;handlers&#x60;&#x27;);
+                              handlers = NOOT.makeArray(this.handlers);
+                            } else {
+                              handlers = [];
+                              if (this.handler) handlers.push(this.handler);
+                            }
+                        
+                            handlers.unshift(this.validate);
+                        
+                            if (this.schema) handlers.unshift(this._validateSchema);
+                        
+                            handlers.unshift(this._attachQuery);
+                        
+                            this._handlers = handlers.map(function(handler) {
+                              return handler.bind(self);
+                            });
+                        
+                            return this._handlers;
+                          },
+                        
+                          /**
+                           * Safely build route&#x27;s path for it to include its resource path.
+                           *
+                           * @method _buildPath
+                           * @private
+                           */
+                          _buildPath: function() {
+                            var resourcePath = this.resource.path;
+                            var path = this.path.replace(new RegExp(&#x27;^&#x27; + NOOT.escapeForRegExp(resourcePath)), &#x27;&#x27;);
+                            this.path = NOOT.Url.join(&#x27;/&#x27;, resourcePath, path).replace(/\/$/, &#x27;&#x27;);
+                          },
+                        
+                          /**
+                           * Validate body against JSON schema.
+                           *
+                           * @method _validateSchema
+                           * @async
+                           * @private
                            * @param {Request} req
                            * @param {Response} res
                            * @param {Function} next
                            */
-                          validate: function(req, res, next) {
+                          _validateSchema: function(req, res, next) {
+                            return Route.validateSchema(req.body, this.schema, function(err) {
+                              if (err) return next(new NOOT.Errors.BadRequest(err));
+                              return next();
+                            });
                         
+                          },
+                        
+                          _attachQuery: function(req, res, next) {
+                            req.nootApiQuery = Query.create({ req: req, res: res });
                             return next();
+                          },
+                        
+                          createResponse: function(query) {
+                        
+                          },
+                        
+                        
+                          validate: function(req, res, next) {
+                            return next();
+                          }
+                        }, {
+                        
+                          _DEFAULTS: {
+                            method: &#x27;get&#x27;
+                          },
+                        
+                          validateSchema: function(obj, schema, callback) {
+                            return callback();
                           }
                         });
                         

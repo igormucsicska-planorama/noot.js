@@ -2,6 +2,10 @@
  * Dependencies
  */
 var NOOT = require('../../')('namespace', 'error', 'http');
+var mongoose = require('mongoose');
+
+var ValidationError = mongoose.Error.ValidationError;
+var CastError = mongoose.Error.CastError;
 
 /***********************************************************************************************************************
  * @class Errors
@@ -66,12 +70,12 @@ var Errors = NOOT.Namespace.create({
    */
   Conflict: NOOT.Error.extend({ name: 'ConflictError', statusCode: NOOT.HTTP.Conflict }),
 
-  /**
-   * MongooseError
-   *
-   * @note Comments are defined in the module itself
-   */
-  MongooseError: require('./lib/mongoose-error')
+
+  fromMongoose: function(err) {
+    if (err instanceof ValidationError || err instanceof CastError) return new this.BadRequest(err.toString());
+    else if (err.code === 11000) return new this.Conflict(err.message);
+    return new this.InternalServerError(err.message);
+  }
 
 });
 

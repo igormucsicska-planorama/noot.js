@@ -1,7 +1,14 @@
 YUI.add("yuidoc-meta", function(Y) {
    Y.YUIDoc = { meta: {
     "classes": [
+        "NOOT",
         "NOOT.API",
+        "NOOT.API.DefaultRoutes",
+        "NOOT.API.DefaultRoutes.Delete",
+        "NOOT.API.DefaultRoutes.Get",
+        "NOOT.API.DefaultRoutes.Patch",
+        "NOOT.API.DefaultRoutes.Post",
+        "NOOT.API.DefaultRoutes.Put",
         "NOOT.API.Resource",
         "NOOT.API.Route",
         "NOOT.Configurator",
@@ -22,7 +29,14 @@ YUI.add("yuidoc-meta", function(Y) {
         "NOOT.Time.Measure",
         "NOOT.Url"
     ],
-    "modules": [],
-    "allModules": []
+    "modules": [
+        "noot"
+    ],
+    "allModules": [
+        {
+            "displayName": "noot",
+            "name": "noot"
+        }
+    ]
 } };
 });

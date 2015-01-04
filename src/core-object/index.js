@@ -3,6 +3,7 @@
  */
 var _ = require('lodash');
 var InternalUtils = require('../internal-utils');
+var TypeUtils = require('../noot/utils/lib/types');
 
 /***********************************************************************************************************************
  * The purpose of this module is to provide a clear object model for OOJS programming. This is a base Class
@@ -95,8 +96,13 @@ Obj.extend = function (prototype, statics) {
   _.extend(Class, this, stat);
 
   Class.prototype = new Surrogate();
+
   for (var key in proto) {
-    Class.prototype[key] = proto[key];
+    if (TypeUtils.isGetterOrSetter(proto, key)) {
+      Object.defineProperty(Class.prototype, key, Object.getOwnPropertyDescriptor(proto, key));
+    } else {
+      Class.prototype[key] = proto[key];
+    }
   }
 
   // Keep a reference
@@ -131,7 +137,7 @@ Obj.create = function(def) {
     });
   }
 
-  instance.init.call(instance);
+  if (instance.init) instance.init.call(instance);
 
   return instance;
 };

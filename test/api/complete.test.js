@@ -2,7 +2,6 @@ var NOOT = nootrequire('api', 'mongoose', 'errors', 'http');
 var mongoose = require('mongoose');
 var express = require('express');
 var supertest = require('supertest');
-var _ = require('lodash');
 var async = require('async');
 var Utils = require('../test-utils');
 var http = require('http');
@@ -25,9 +24,6 @@ var db;
 
 var app = express();
 app.use(require('body-parser')());
-app.use(function(err, req, res, next) {
-  return res.status(err.statusCode || 500).json({ message: err.message, code: err.code, error: true });
-});
 
 
 var UserSchema;
@@ -46,6 +42,7 @@ var BlogResource;
 var PostResource;
 
 var UserGetInfoRoute;
+var UserGetInfoFromStackRoute;
 var BlogGetPostsRoute;
 
 
@@ -91,39 +88,46 @@ describe('NOOT.API - Complete test', function() {
       Blog = db.model('Blog', BlogSchema);
       Post = db.model('Post', PostSchema);
 
-
       UserGetInfoRoute = Route.extend({
         method: 'get',
-        path: '/:id?/info',
-        handler: function(req, res, next) {
-          var self = this;
-          req.query = { select: 'name.first, name.last, age, -_id' };
-          return this.resource.get(req, function(err, data) {
-            if (err) return next(err);
-            return self.resource.createResponse(res, data);
-          });
+        isDetail: true,
+        selectable: ['name', 'fullName', 'email'],
+        path: '/info',
+        handler: function(stack) {
+          return stack.read(stack);
         }
       });
+
+      UserGetInfoFromStackRoute = Route.extend({
+        method: 'get',
+        isDetail: true,
+        path: '/info-from-stack',
+        handlers: [
+          function(stack) {
+            stack.setSelectable(['name', 'fullName', 'email']);
+            return stack.next();
+          },
+          function(stack) {
+            return stack.read(stack);
+          }
+        ]
+      });
+
 
       var UserRegisterRoute = Route.extend({
         method: 'post',
         path: '/register',
-        handler: function(req, res, next) {
-          var resource = this.resource;
-          return resource.model.create(req.body, function(err, created) {
-            if (err) return next(new NOOT.Errors.MongooseError(err));
-            return resource.createResponse(res, {
-              data: resource.filterFields(created, Resource.READ)
-            }, NOOT.HTTP.Created);
-          });
+        handler: function(stack) {
+          return stack.create(stack);
         }
       });
 
 
       UserResource = Resource.extend({
         model: User,
-        routes: [UserRegisterRoute, UserGetInfoRoute],
-        methods: ['get', 'patch', 'delete']
+        customRoutes: [UserRegisterRoute, UserGetInfoFromStackRoute, UserGetInfoRoute],
+        methods: ['get', 'patch', 'delete'],
+        nonSelectable: ['password']
       });
 
       privateAPI = API.create({
@@ -135,6 +139,11 @@ describe('NOOT.API - Complete test', function() {
 
       privateAPI.launch();
 
+      app.use(function(err, req, res, next) {
+        //console.log(err.stack.toString());
+        return res.status(err.statusCode || 500).json({ message: err.message, code: err.code, error: true });
+      });
+
       return done();
     });
   });
@@ -145,7 +154,6 @@ describe('NOOT.API - Complete test', function() {
   var him;
 
   before(function(done) {
-    console.log(_.pluck(app._router.stack, 'route'));
     return http.createServer(app).listen(8788, done);
   });
 
@@ -154,21 +162,28 @@ describe('NOOT.API - Complete test', function() {
     her = { name: { first: 'Jane', last: 'Doe' }, password: 'youllnotfind', email: 'janedoe@nootjs.com' };
     him = { name: { first: 'John', last: 'Estevez' }, password: 'youllnotfind', email: 'johndoe@nootjs.com' };
 
-    return async.each([me, her, him], function(item, cb) {
+    return async.eachSeries([me, her, him], function(item, cb) {
       return supertest(app)
         .post('/private/users/register')
         .send(item)
-        .expect(201, cb);
+        .expect(201, function(err, res) {
+          if (err) return cb(err);
+          var body = res.body.data;
+          body.should.include.key('_id');
+          body.name.should.deep.eql(item.name);
+          body.email.should.eql(item.email);
+          return cb();
+        });
     }, done);
   });
+
+
 
   it('should not create user (duplicate email)', function(done) {
     return supertest(app)
       .post('/private/users/register')
       .send(me)
-      .expect(409, function(err, res) {
-        return done();
-      });
+      .expect(409, done);
   });
 
   it('should find 3 users', function(done) {
@@ -177,7 +192,12 @@ describe('NOOT.API - Complete test', function() {
       .expect(200, function(err, res) {
         if (err) return done(err);
         res.body.data.should.have.lengthOf(3);
-        res.body.meta.total.should.eql(3);
+        var meta = res.body.meta;
+        (meta.next === null).should.eql(true);
+        (meta.prev === null).should.eql(true);
+        meta.limit.should.eql(20);
+        meta.total.should.eql(3);
+        meta.offset.should.eql(0);
         return done();
       });
   });
@@ -185,7 +205,7 @@ describe('NOOT.API - Complete test', function() {
   it('should retrieve each user by firstName', function(done) {
     return async.each([me, her, him], function(item, cb) {
       return supertest(app)
-        .get('/private/users?' + qs.stringify({ 'name.first': item.name.first }))
+        .get('/private/users?' + qs.stringify({ 'name.first': item.name.first, select: 'name,email' }))
         .expect(200)
         .end(function(err, res) {
           if (err) return cb(err);
@@ -226,7 +246,7 @@ describe('NOOT.API - Complete test', function() {
         .end(function(err, res) {
           if (err) return done(err);
           var body = res.body.data;
-          body.should.have.keys(['name', 'age']);
+          body.should.have.keys(['name', 'email']);
           body.name.first.should.eql(user.name.first);
           body.name.last.should.eql(user.name.last);
           return done();
@@ -234,42 +254,52 @@ describe('NOOT.API - Complete test', function() {
     });
   });
 
+  it('should retrieve user info-from-stack', function(done) {
+    return User.findOne({ email: 'se@nootjs.com' }, '_id name', function(err, user) {
+      if (err) return done(err);
+      return supertest(app)
+        .get('/private/users/' + user._id + '/info-from-stack')
+        .expect(200)
+        .end(function(err, res) {
+          if (err) return done(err);
+          var body = res.body.data;
+          body.should.have.keys(['name', 'email']);
+          body.name.first.should.eql(user.name.first);
+          body.name.last.should.eql(user.name.last);
+          return done();
+        });
+    });
+  });
+
+
   it('should update user', function(done) {
     return User.findOne({ email: 'janedoe@nootjs.com' }, '_id', function(err, user) {
       if (err) return done(err);
       return supertest(app)
         .patch('/private/users/' + user._id)
         .send({ age: 25 })
-        .expect(204, done);
+        .expect(204, function(err) {
+          if (err) return done(err);
+          return User.findOne({ email: 'janedoe@nootjs.com' }, 'age', function(err, user) {
+            if (err) done(err);
+            user.age.should.eql(25);
+            return done();
+          });
+        });
     });
   });
 
   it('should update user', function(done) {
-    return User.findOne({ email: 'johndoe@nootjs.com' }, '_id', function(err, user) {
-      if (err) return done(err);
-      return supertest(app)
-        .patch('/private/users/' + user._id)
-        .send({ age: 25 })
-        .expect(204, done);
-    });
+    return supertest(app)
+      .patch('/private/users?' + qs.stringify({ email: 'johndoe@nootjs.com' }))
+      .send({ age: 23 })
+      .expect(204, function(err) {
+        if (err) return done(err);
+        return User.findOne({ email: 'johndoe@nootjs.com' }, 'age', function(err, user) {
+          if (err) done(err);
+          user.age.should.eql(23);
+          return done();
+        });
+      });
   });
-
-  //it('should retrieve users info', function(done) {
-  //  return supertest(app)
-  //    .get('/private/users/info?' + qs.stringify({ 'age__gt': 25 }))
-  //    .expect(200)
-  //    .end(function(err, res) {
-  //      if (err) return done(err);
-  //      var body = res.body.data;
-  //      console.log(body);
-  //      body.should.have.keys(['name', 'age']);
-  //      body.name.first.should.eql(user.name.first);
-  //      body.name.last.should.eql(user.name.last);
-  //      return done();
-  //    });
-  //});
-
-
-
-
 });

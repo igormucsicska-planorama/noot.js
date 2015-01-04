@@ -3,14 +3,19 @@
  */
 var NOOT = require('../../../')('object', 'url');
 var _ = require('lodash');
+var Stack = require('./stack');
+var Queryable = require('./queryable');
+var Authable = require('./authable');
 
 /***********************************************************************************************************************
  * @class Route
  * @namespace NOOT.API
  * @extends NOOT.Object
+ * @uses NOOT.API.Queryable
+ * @uses NOOT.API.Authable
  * @constructor
  **********************************************************************************************************************/
-var Route = NOOT.Object.extend({
+var Route = NOOT.Object.extend(Authable).extend(Queryable).extend({
 
   /**
    * @property method
@@ -61,6 +66,15 @@ var Route = NOOT.Object.extend({
   handler: null,
 
   /**
+   * Define if route concerns only one item, in which case an `:id` parameter will be added to the route's path
+   *
+   * @property isDetail
+   * @type Boolean
+   * @default false
+   */
+  isDetail: false,
+
+  /**
    * Constructor
    */
   init: function() {
@@ -68,7 +82,18 @@ var Route = NOOT.Object.extend({
     _.defaults(this, Route._DEFAULTS);
     this.method = this.method.toLowerCase();
     this._buildPath();
+    this._computeQueryable();
     this._buildHandlers();
+  },
+
+  /**
+   *
+   *
+   * @method createResponse
+   * @param {NOOT.API.Stack} stack
+   */
+  createResponse: function(stack) {
+    return this.resource.createResponse(stack);
   },
 
   /**
@@ -92,14 +117,30 @@ var Route = NOOT.Object.extend({
       if (this.handler) handlers.push(this.handler);
     }
 
-    if (this.schema) handlers.unshift(this.validateSchema);
+    if (this.authorization) this.handlers.unshift(this.authorization);
+
+    if (this.authentication) this.handlers.unshift(this.authentication);
+
+    handlers.unshift(this.validate);
+
+    if (this.schema) handlers.unshift(this._validateSchema);
+
+    handlers.unshift(this.createStack);
+
+    handlers.push(this.createResponse);
 
     this._handlers = handlers.map(function(handler) {
-      return handler.bind(self);
+      if (handler.length > 1) return handler.bind(self);
+      return function(req, res, next) {
+        var stack = req.nootApiStack;
+        stack.next = next;
+        return handler.call(self, stack);
+      };
     });
 
     return this._handlers;
   },
+
 
   /**
    * Safely build route's path for it to include its resource path.
@@ -110,24 +151,37 @@ var Route = NOOT.Object.extend({
   _buildPath: function() {
     var resourcePath = this.resource.path;
     var path = this.path.replace(new RegExp('^' + NOOT.escapeForRegExp(resourcePath)), '');
-    this.path = NOOT.Url.join('/', resourcePath, path).replace(/\/$/, '');
+    this.path = NOOT.Url.join('/', resourcePath, this.isDetail ? ':id' : '', path).replace(/\/$/, '');
   },
 
   /**
    * Validate body against JSON schema.
    *
-   * @method validateSchema
+   * @method _validateSchema
    * @async
+   * @private
    * @param {Request} req
    * @param {Response} res
    * @param {Function} next
    */
-  validateSchema: function(req, res, next) {
+  _validateSchema: function(req, res, next) {
     return Route.validateSchema(req.body, this.schema, function(err) {
       if (err) return next(new NOOT.Errors.BadRequest(err));
       return next();
     });
-  }
+
+  },
+
+  createStack: function(req, res, next) {
+    req.nootApiStack = Stack.create({ req: req, res: res, _queryableParent: this, route: this });
+    return next();
+  },
+
+  validate: function(stack) {
+    return stack.next();
+  },
+
+  get model() { return this.resource.model; }
 }, {
 
   _DEFAULTS: {
@@ -138,6 +192,7 @@ var Route = NOOT.Object.extend({
     return callback();
   }
 });
+
 
 /**
  * @exports

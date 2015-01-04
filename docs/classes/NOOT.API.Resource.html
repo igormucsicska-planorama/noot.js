@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="NOOT.js"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 0.5.5</em>
+            <em>API Docs for: 0.5.8</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -38,7 +38,14 @@
                 
                         <div id="api-tabview-panel">
                             <ul id="api-classes" class="apis classes">
+                                <li><a href="../classes/NOOT.html">NOOT</a></li>
                                 <li><a href="../classes/NOOT.API.html">NOOT.API</a></li>
+                                <li><a href="../classes/NOOT.API.DefaultRoutes.html">NOOT.API.DefaultRoutes</a></li>
+                                <li><a href="../classes/NOOT.API.DefaultRoutes.Delete.html">NOOT.API.DefaultRoutes.Delete</a></li>
+                                <li><a href="../classes/NOOT.API.DefaultRoutes.Get.html">NOOT.API.DefaultRoutes.Get</a></li>
+                                <li><a href="../classes/NOOT.API.DefaultRoutes.Patch.html">NOOT.API.DefaultRoutes.Patch</a></li>
+                                <li><a href="../classes/NOOT.API.DefaultRoutes.Post.html">NOOT.API.DefaultRoutes.Post</a></li>
+                                <li><a href="../classes/NOOT.API.DefaultRoutes.Put.html">NOOT.API.DefaultRoutes.Put</a></li>
                                 <li><a href="../classes/NOOT.API.Resource.html">NOOT.API.Resource</a></li>
                                 <li><a href="../classes/NOOT.API.Route.html">NOOT.API.Route</a></li>
                                 <li><a href="../classes/NOOT.Configurator.html">NOOT.Configurator</a></li>
@@ -61,6 +68,7 @@
                             </ul>
                 
                             <ul id="api-modules" class="apis modules">
+                                <li><a href="../modules/noot.html">noot</a></li>
                             </ul>
                         </div>
                     </div>
@@ -99,9 +107,10 @@
                         
                         
                                 <div class="foundat">
-                                    Defined in: <a href="../files/_Users_sylvainestevez_Documents_Projects_Web_noot.js_src_api_lib_resource.js.html#l14"><code>&#x2F;Users&#x2F;sylvainestevez&#x2F;Documents&#x2F;Projects&#x2F;Web&#x2F;noot.js&#x2F;src&#x2F;api&#x2F;lib&#x2F;resource.js:14</code></a>
+                                    Defined in: <a href="../files/_Users_sylvainestevez_Documents_Projects_Web_noot.js_src_api_lib_resource.js.html#l16"><code>&#x2F;Users&#x2F;sylvainestevez&#x2F;Documents&#x2F;Projects&#x2F;Web&#x2F;noot.js&#x2F;src&#x2F;api&#x2F;lib&#x2F;resource.js:16</code></a>
                                 </div>
                         
+                                    Module: <a href="../modules/noot.html">noot</a>
                         
                         </div>
                         
@@ -127,7 +136,7 @@
                                     <div class="meta">
                                                 <p>
                                                 Defined in
-                                        <a href="../files/_Users_sylvainestevez_Documents_Projects_Web_noot.js_src_api_lib_resource.js.html#l14"><code>&#x2F;Users&#x2F;sylvainestevez&#x2F;Documents&#x2F;Projects&#x2F;Web&#x2F;noot.js&#x2F;src&#x2F;api&#x2F;lib&#x2F;resource.js:14</code></a>
+                                        <a href="../files/_Users_sylvainestevez_Documents_Projects_Web_noot.js_src_api_lib_resource.js.html#l16"><code>&#x2F;Users&#x2F;sylvainestevez&#x2F;Documents&#x2F;Projects&#x2F;Web&#x2F;noot.js&#x2F;src&#x2F;api&#x2F;lib&#x2F;resource.js:16</code></a>
                                         </p>
                                 
                                 
@@ -148,6 +157,7 @@
                                 <li class="api-class-tab index"><a href="#index">Index</a></li>
                         
                                     <li class="api-class-tab methods"><a href="#methods">Methods</a></li>
+                                    <li class="api-class-tab attrs"><a href="#attrs">Attributes</a></li>
                             </ul>
                         
                             <div>
@@ -159,25 +169,141 @@
                         
                                             <ul class="index-list methods">
                                                     <li class="index-item method">
+                                                        <a href="#method_createResponse">createResponse</a>
+                        
+                                                    </li>
+                                                    <li class="index-item method">
+                                                        <a href="#method_delete">delete</a>
+                        
+                                                    </li>
+                                                    <li class="index-item method">
+                                                        <a href="#method_filterFields">filterFields</a>
+                        
+                                                    </li>
+                                                    <li class="index-item method">
                                                         <a href="#method_getMultiple">getMultiple</a>
                         
                                                     </li>
                                                     <li class="index-item method">
-                                                        <a href="#method_respond">respond</a>
+                                                        <a href="#method_getSingle">getSingle</a>
+                        
+                                                    </li>
+                                                    <li class="index-item method">
+                                                        <a href="#method_patch">patch</a>
+                        
+                                                    </li>
+                                                    <li class="index-item method">
+                                                        <a href="#method_post">post</a>
+                        
+                                                    </li>
+                                                    <li class="index-item method">
+                                                        <a href="#method_registerRoute">registerRoute</a>
+                        
+                                                    </li>
+                                                    <li class="index-item method">
+                                                        <a href="#method_registerRoutes">registerRoutes</a>
                         
                                                     </li>
                                             </ul>
                                         </div>
                         
                         
+                                        <div class="index-section attrs">
+                                            <h3>Attributes</h3>
+                        
+                                            <ul class="index-list attrs">
+                                                    <li class="index-item attr private">
+                                                        <a href="#attr__DEFAULT">_DEFAULT</a>
+                                                    </li>
+                                            </ul>
+                                        </div>
                         
                                 </div>
                         
                                     <div id="methods" class="api-class-tabpanel">
                                         <h2 class="off-left">Methods</h2>
                         
-                                            <div id="method_getMultiple" class="method item">
-                                                <h3 class="name"><code>getMultiple</code></h3>
+                                            <div id="method_createResponse" class="method item">
+                                                <h3 class="name"><code>createResponse</code></h3>
+                                            
+                                                    <div class="args">
+                                                        <span class="paren">(</span><ul class="args-list inline commas">
+                                                            <li class="arg">
+                                                                    <code>res</code>
+                                                            </li>
+                                                            <li class="arg">
+                                                                    <code class="optional">[data]</code>
+                                                            </li>
+                                                            <li class="arg">
+                                                                    <code class="optional">[status]</code>
+                                                            </li>
+                                                        </ul><span class="paren">)</span>
+                                                    </div>
+                                            
+                                            
+                                            
+                                            
+                                            
+                                            
+                                            
+                                            
+                                                <div class="meta">
+                                                            <p>
+                                                            Defined in
+                                                    <a href="../files/_Users_sylvainestevez_Documents_Projects_Web_noot.js_src_api_lib_resource.js.html#l245"><code>&#x2F;Users&#x2F;sylvainestevez&#x2F;Documents&#x2F;Projects&#x2F;Web&#x2F;noot.js&#x2F;src&#x2F;api&#x2F;lib&#x2F;resource.js:245</code></a>
+                                                    </p>
+                                            
+                                            
+                                            
+                                                </div>
+                                            
+                                                <div class="description">
+                                                    
+                                                </div>
+                                            
+                                                    <div class="params">
+                                                        <h4>Parameters:</h4>
+                                            
+                                                        <ul class="params-list">
+                                                            <li class="param">
+                                                                    <code class="param-name">res</code>
+                                                                    <span class="type">Response</span>
+                                            
+                                            
+                                                                <div class="param-description">
+                                                                     
+                                                                </div>
+                                            
+                                                            </li>
+                                                            <li class="param">
+                                                                    <code class="param-name optional">[data]</code>
+                                                                    <span class="type">Object</span>
+                                                                    <span class="flag optional" title="This parameter is optional.">optional</span>
+                                            
+                                            
+                                                                <div class="param-description">
+                                                                     
+                                                                </div>
+                                            
+                                                            </li>
+                                                            <li class="param">
+                                                                    <code class="param-name optional">[status]</code>
+                                                                    <span class="type">Number</span>
+                                                                    <span class="flag optional" title="This parameter is optional.">optional</span>
+                                            
+                                            
+                                                                <div class="param-description">
+                                                                     
+                                                                </div>
+                                            
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                            
+                                            
+                                            </div>
+                                            <div id="method_delete" class="method item">
+                                                <h3 class="name"><code>delete</code></h3>
                                             
                                                     <div class="args">
                                                         <span class="paren">(</span><ul class="args-list inline commas">
@@ -201,7 +327,7 @@
                                                 <div class="meta">
                                                             <p>
                                                             Defined in
-                                                    <a href="../files/_Users_sylvainestevez_Documents_Projects_Web_noot.js_src_api_lib_resource.js.html#l108"><code>&#x2F;Users&#x2F;sylvainestevez&#x2F;Documents&#x2F;Projects&#x2F;Web&#x2F;noot.js&#x2F;src&#x2F;api&#x2F;lib&#x2F;resource.js:108</code></a>
+                                                    <a href="../files/_Users_sylvainestevez_Documents_Projects_Web_noot.js_src_api_lib_resource.js.html#l296"><code>&#x2F;Users&#x2F;sylvainestevez&#x2F;Documents&#x2F;Projects&#x2F;Web&#x2F;noot.js&#x2F;src&#x2F;api&#x2F;lib&#x2F;resource.js:296</code></a>
                                                     </p>
                                             
                                             
@@ -209,7 +335,7 @@
                                                 </div>
                                             
                                                 <div class="description">
-                                                    <p>Read multiple items</p>
+                                                    <p>Delete a single item</p>
                                             
                                                 </div>
                                             
@@ -242,23 +368,23 @@
                                             
                                             
                                             </div>
-                                            <div id="method_respond" class="method item">
-                                                <h3 class="name"><code>respond</code></h3>
+                                            <div id="method_filterFields" class="method item">
+                                                <h3 class="name"><code>filterFields</code></h3>
                                             
                                                     <div class="args">
                                                         <span class="paren">(</span><ul class="args-list inline commas">
                                                             <li class="arg">
-                                                                    <code>res</code>
+                                                                    <code>fields</code>
                                                             </li>
                                                             <li class="arg">
-                                                                    <code class="optional">[data={}]</code>
-                                                            </li>
-                                                            <li class="arg">
-                                                                    <code class="optional">[status=200]</code>
+                                                                    <code>queryMode</code>
                                                             </li>
                                                         </ul><span class="paren">)</span>
                                                     </div>
                                             
+                                                    <span class="returns-inline">
+                                                        <span class="type">Array | Object</span>
+                                                    </span>
                                             
                                             
                                             
@@ -269,7 +395,212 @@
                                                 <div class="meta">
                                                             <p>
                                                             Defined in
-                                                    <a href="../files/_Users_sylvainestevez_Documents_Projects_Web_noot.js_src_api_lib_resource.js.html#l147"><code>&#x2F;Users&#x2F;sylvainestevez&#x2F;Documents&#x2F;Projects&#x2F;Web&#x2F;noot.js&#x2F;src&#x2F;api&#x2F;lib&#x2F;resource.js:147</code></a>
+                                                    <a href="../files/_Users_sylvainestevez_Documents_Projects_Web_noot.js_src_api_lib_resource.js.html#l362"><code>&#x2F;Users&#x2F;sylvainestevez&#x2F;Documents&#x2F;Projects&#x2F;Web&#x2F;noot.js&#x2F;src&#x2F;api&#x2F;lib&#x2F;resource.js:362</code></a>
+                                                    </p>
+                                            
+                                            
+                                            
+                                                </div>
+                                            
+                                                <div class="description">
+                                                    <p>Filter fields depending on query mode (read, write, select, sort...)</p>
+                                            
+                                                </div>
+                                            
+                                                    <div class="params">
+                                                        <h4>Parameters:</h4>
+                                            
+                                                        <ul class="params-list">
+                                                            <li class="param">
+                                                                    <code class="param-name">fields</code>
+                                                                    <span class="type">Array | Object</span>
+                                            
+                                            
+                                                                <div class="param-description">
+                                                                     
+                                                                </div>
+                                            
+                                                            </li>
+                                                            <li class="param">
+                                                                    <code class="param-name">queryMode</code>
+                                                                    <span class="type">QueryMode</span>
+                                            
+                                            
+                                                                <div class="param-description">
+                                                                     
+                                                                </div>
+                                            
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                            
+                                                    <div class="returns">
+                                                        <h4>Returns:</h4>
+                                            
+                                                        <div class="returns-description">
+                                                                    <span class="type">Array | Object</span>:
+                                                        </div>
+                                                    </div>
+                                            
+                                            </div>
+                                            <div id="method_getMultiple" class="method item">
+                                                <h3 class="name"><code>getMultiple</code></h3>
+                                            
+                                                    <div class="args">
+                                                        <span class="paren">(</span><ul class="args-list inline commas">
+                                                            <li class="arg">
+                                                                    <code>req</code>
+                                                            </li>
+                                                            <li class="arg">
+                                                                    <code>callback</code>
+                                                            </li>
+                                                        </ul><span class="paren">)</span>
+                                                    </div>
+                                            
+                                            
+                                            
+                                            
+                                            
+                                            
+                                            
+                                                    <span class="flag async">async</span>
+                                            
+                                                <div class="meta">
+                                                            <p>
+                                                            Defined in
+                                                    <a href="../files/_Users_sylvainestevez_Documents_Projects_Web_noot.js_src_api_lib_resource.js.html#l209"><code>&#x2F;Users&#x2F;sylvainestevez&#x2F;Documents&#x2F;Projects&#x2F;Web&#x2F;noot.js&#x2F;src&#x2F;api&#x2F;lib&#x2F;resource.js:209</code></a>
+                                                    </p>
+                                            
+                                            
+                                            
+                                                </div>
+                                            
+                                                <div class="description">
+                                                    <p>Read multiple items.</p>
+                                            
+                                                </div>
+                                            
+                                                    <div class="params">
+                                                        <h4>Parameters:</h4>
+                                            
+                                                        <ul class="params-list">
+                                                            <li class="param">
+                                                                    <code class="param-name">req</code>
+                                                                    <span class="type">Request</span>
+                                            
+                                            
+                                                                <div class="param-description">
+                                                                     
+                                                                </div>
+                                            
+                                                            </li>
+                                                            <li class="param">
+                                                                    <code class="param-name">callback</code>
+                                                                    <span class="type">Function</span>
+                                            
+                                            
+                                                                <div class="param-description">
+                                                                     
+                                                                </div>
+                                            
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                            
+                                            
+                                            </div>
+                                            <div id="method_getSingle" class="method item">
+                                                <h3 class="name"><code>getSingle</code></h3>
+                                            
+                                                    <div class="args">
+                                                        <span class="paren">(</span><ul class="args-list inline commas">
+                                                            <li class="arg">
+                                                                    <code>req</code>
+                                                            </li>
+                                                            <li class="arg">
+                                                                    <code>callback</code>
+                                                            </li>
+                                                        </ul><span class="paren">)</span>
+                                                    </div>
+                                            
+                                            
+                                            
+                                            
+                                            
+                                            
+                                            
+                                                    <span class="flag async">async</span>
+                                            
+                                                <div class="meta">
+                                                            <p>
+                                                            Defined in
+                                                    <a href="../files/_Users_sylvainestevez_Documents_Projects_Web_noot.js_src_api_lib_resource.js.html#l192"><code>&#x2F;Users&#x2F;sylvainestevez&#x2F;Documents&#x2F;Projects&#x2F;Web&#x2F;noot.js&#x2F;src&#x2F;api&#x2F;lib&#x2F;resource.js:192</code></a>
+                                                    </p>
+                                            
+                                            
+                                            
+                                                </div>
+                                            
+                                                <div class="description">
+                                                    <p>Read a single item.</p>
+                                            
+                                                </div>
+                                            
+                                                    <div class="params">
+                                                        <h4>Parameters:</h4>
+                                            
+                                                        <ul class="params-list">
+                                                            <li class="param">
+                                                                    <code class="param-name">req</code>
+                                                                    <span class="type">Request</span>
+                                            
+                                            
+                                                                <div class="param-description">
+                                                                     
+                                                                </div>
+                                            
+                                                            </li>
+                                                            <li class="param">
+                                                                    <code class="param-name">callback</code>
+                                                                    <span class="type">Function</span>
+                                            
+                                            
+                                                                <div class="param-description">
+                                                                     
+                                                                </div>
+                                            
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                            
+                                            
+                                            </div>
+                                            <div id="method_patch" class="method item">
+                                                <h3 class="name"><code>patch</code></h3>
+                                            
+                                                    <div class="args">
+                                                        <span class="paren">(</span><ul class="args-list inline commas">
+                                                            <li class="arg">
+                                                                    <code>req</code>
+                                                            </li>
+                                                            <li class="arg">
+                                                                    <code>callback</code>
+                                                            </li>
+                                                        </ul><span class="paren">)</span>
+                                                    </div>
+                                            
+                                            
+                                            
+                                            
+                                            
+                                            
+                                            
+                                                    <span class="flag async">async</span>
+                                            
+                                                <div class="meta">
+                                                            <p>
+                                                            Defined in
+                                                    <a href="../files/_Users_sylvainestevez_Documents_Projects_Web_noot.js_src_api_lib_resource.js.html#l281"><code>&#x2F;Users&#x2F;sylvainestevez&#x2F;Documents&#x2F;Projects&#x2F;Web&#x2F;noot.js&#x2F;src&#x2F;api&#x2F;lib&#x2F;resource.js:281</code></a>
                                                     </p>
                                             
                                             
@@ -285,8 +616,8 @@
                                             
                                                         <ul class="params-list">
                                                             <li class="param">
-                                                                    <code class="param-name">res</code>
-                                                                    <span class="type">Response</span>
+                                                                    <code class="param-name">req</code>
+                                                                    <span class="type">Request</span>
                                             
                                             
                                                                 <div class="param-description">
@@ -295,20 +626,8 @@
                                             
                                                             </li>
                                                             <li class="param">
-                                                                    <code class="param-name optional">[data={}]</code>
-                                                                    <span class="type">Object</span>
-                                                                    <span class="flag optional" title="This parameter is optional.">optional</span>
-                                            
-                                            
-                                                                <div class="param-description">
-                                                                     
-                                                                </div>
-                                            
-                                                            </li>
-                                                            <li class="param">
-                                                                    <code class="param-name optional">[status=200]</code>
-                                                                    <span class="type">Number</span>
-                                                                    <span class="flag optional" title="This parameter is optional.">optional</span>
+                                                                    <code class="param-name">callback</code>
+                                                                    <span class="type">Function</span>
                                             
                                             
                                                                 <div class="param-description">
@@ -321,9 +640,219 @@
                                             
                                             
                                             </div>
+                                            <div id="method_post" class="method item">
+                                                <h3 class="name"><code>post</code></h3>
+                                            
+                                                    <div class="args">
+                                                        <span class="paren">(</span><ul class="args-list inline commas">
+                                                            <li class="arg">
+                                                                    <code>req</code>
+                                                            </li>
+                                                            <li class="arg">
+                                                                    <code>callback</code>
+                                                            </li>
+                                                        </ul><span class="paren">)</span>
+                                                    </div>
+                                            
+                                            
+                                            
+                                            
+                                            
+                                            
+                                            
+                                                    <span class="flag async">async</span>
+                                            
+                                                <div class="meta">
+                                                            <p>
+                                                            Defined in
+                                                    <a href="../files/_Users_sylvainestevez_Documents_Projects_Web_noot.js_src_api_lib_resource.js.html#l118"><code>&#x2F;Users&#x2F;sylvainestevez&#x2F;Documents&#x2F;Projects&#x2F;Web&#x2F;noot.js&#x2F;src&#x2F;api&#x2F;lib&#x2F;resource.js:118</code></a>
+                                                    </p>
+                                            
+                                            
+                                            
+                                                </div>
+                                            
+                                                <div class="description">
+                                                    <p>Create a new item</p>
+                                            
+                                                </div>
+                                            
+                                                    <div class="params">
+                                                        <h4>Parameters:</h4>
+                                            
+                                                        <ul class="params-list">
+                                                            <li class="param">
+                                                                    <code class="param-name">req</code>
+                                                                    <span class="type">Request</span>
+                                            
+                                            
+                                                                <div class="param-description">
+                                                                     
+                                                                </div>
+                                            
+                                                            </li>
+                                                            <li class="param">
+                                                                    <code class="param-name">callback</code>
+                                                                    <span class="type">Function</span>
+                                            
+                                            
+                                                                <div class="param-description">
+                                                                     
+                                                                </div>
+                                            
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                            
+                                            
+                                            </div>
+                                            <div id="method_registerRoute" class="method item">
+                                                <h3 class="name"><code>registerRoute</code></h3>
+                                            
+                                                    <div class="args">
+                                                        <span class="paren">(</span><ul class="args-list inline commas">
+                                                            <li class="arg">
+                                                                    <code>route</code>
+                                                            </li>
+                                                        </ul><span class="paren">)</span>
+                                                    </div>
+                                            
+                                            
+                                            
+                                            
+                                            
+                                            
+                                                    <span class="flag chainable">chainable</span>
+                                            
+                                            
+                                                <div class="meta">
+                                                            <p>
+                                                            Defined in
+                                                    <a href="../files/_Users_sylvainestevez_Documents_Projects_Web_noot.js_src_api_lib_resource.js.html#l89"><code>&#x2F;Users&#x2F;sylvainestevez&#x2F;Documents&#x2F;Projects&#x2F;Web&#x2F;noot.js&#x2F;src&#x2F;api&#x2F;lib&#x2F;resource.js:89</code></a>
+                                                    </p>
+                                            
+                                            
+                                            
+                                                </div>
+                                            
+                                                <div class="description">
+                                                    <p>Register a single route.</p>
+                                            
+                                                </div>
+                                            
+                                                    <div class="params">
+                                                        <h4>Parameters:</h4>
+                                            
+                                                        <ul class="params-list">
+                                                            <li class="param">
+                                                                    <code class="param-name">route</code>
+                                                                    <span class="type">Class</span>
+                                            
+                                            
+                                                                <div class="param-description">
+                                                                    <p>A <a href="../classes/NOOT.API.Route.html" class="crosslink">NOOT.API.Route</a> <strong>class</strong> that will be instantiated
+                                            by the resource</p>
+                                            
+                                                                </div>
+                                            
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                            
+                                            
+                                            </div>
+                                            <div id="method_registerRoutes" class="method item">
+                                                <h3 class="name"><code>registerRoutes</code></h3>
+                                            
+                                                    <div class="args">
+                                                        <span class="paren">(</span><ul class="args-list inline commas">
+                                                            <li class="arg">
+                                                                    <code>routes,...</code>
+                                                            </li>
+                                                        </ul><span class="paren">)</span>
+                                                    </div>
+                                            
+                                            
+                                            
+                                            
+                                            
+                                            
+                                                    <span class="flag chainable">chainable</span>
+                                            
+                                            
+                                                <div class="meta">
+                                                            <p>
+                                                            Defined in
+                                                    <a href="../files/_Users_sylvainestevez_Documents_Projects_Web_noot.js_src_api_lib_resource.js.html#l106"><code>&#x2F;Users&#x2F;sylvainestevez&#x2F;Documents&#x2F;Projects&#x2F;Web&#x2F;noot.js&#x2F;src&#x2F;api&#x2F;lib&#x2F;resource.js:106</code></a>
+                                                    </p>
+                                            
+                                            
+                                            
+                                                </div>
+                                            
+                                                <div class="description">
+                                                    <p>Register multiple routes.</p>
+                                            
+                                                </div>
+                                            
+                                                    <div class="params">
+                                                        <h4>Parameters:</h4>
+                                            
+                                                        <ul class="params-list">
+                                                            <li class="param">
+                                                                    <code class="param-name">routes,...</code>
+                                                                    <span class="type">Class</span>
+                                            
+                                            
+                                                                <div class="param-description">
+                                                                    <p>A list of arguments (<a href="../classes/NOOT.API.Route.html" class="crosslink">NOOT.API.Route</a> <strong>classes</strong>)</p>
+                                            
+                                                                </div>
+                                            
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                            
+                                            
+                                            </div>
                                     </div>
                         
                         
+                                    <div id="attrs" class="api-class-tabpanel">
+                                        <h2 class="off-left">Attributes</h2>
+                        
+                                            <div id="attr__DEFAULT" class="attr item private">
+                                                <a name="config__DEFAULT"></a> 
+                                                <h3 class="name"><code>_DEFAULT</code></h3>
+                                                <span class="type">Object</span>
+                                            
+                                            
+                                                    <span class="flag private">private</span>
+                                            
+                                            
+                                                    <span class="flag static">static</span>
+                                            
+                                            
+                                            
+                                                    <span class="flag readonly">readonly</span>
+                                            
+                                                <div class="meta">
+                                                            <p>
+                                                            Defined in
+                                                    <a href="../files/_Users_sylvainestevez_Documents_Projects_Web_noot.js_src_api_lib_resource.js.html#l438"><code>&#x2F;Users&#x2F;sylvainestevez&#x2F;Documents&#x2F;Projects&#x2F;Web&#x2F;noot.js&#x2F;src&#x2F;api&#x2F;lib&#x2F;resource.js:438</code></a>
+                                                    </p>
+                                            
+                                            
+                                                </div>
+                                            
+                                                <div class="description">
+                                                    
+                                                </div>
+                                            
+                                            
+                                            
+                                            </div>
+                                    </div>
                         
                             </div>
                         </div>

@@ -197,6 +197,21 @@ var Utils = {
       default:
         return false;
     }
+  },
+
+  isGetter: function(obj, prop) {
+    var desc = Object.getOwnPropertyDescriptor(obj, prop);
+    return desc && desc.get;
+  },
+
+  isSetter: function(obj, prop) {
+    var desc = Object.getOwnPropertyDescriptor(obj, prop);
+    return desc && desc.set;
+  },
+
+  isGetterOrSetter: function(obj, prop) {
+    var desc = Object.getOwnPropertyDescriptor(obj, prop);
+    return desc && (desc.get || desc.set);
   }
 
 };

@@ -13,14 +13,17 @@ var Route = require('../route');
 var Get = Route.extend({
 
   method: 'get',
-  path: '/:id?',
+  path: '/:id',
 
-  handler: function(req, res, next) {
-    var self = this;
-    return this.resource.get(req, function(err, data) {
-      if (err) return next(err);
-      return self.resource.createResponse(res, data);
-    });
+  allowMany: true,
+
+  init: function() {
+    if (this.allowMany) this.path += '?';
+    this._super();
+  },
+
+  handler: function(stack) {
+    return stack.req.param('id') ? stack.read(stack) : stack.readMany(stack);
   }
 
 });

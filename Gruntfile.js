@@ -11,7 +11,8 @@ module.exports = function(grunt) {
 
   var TO_IGNORE = [
     '**/*.js',
-    '!**/node_modules/**'
+    '!**/node_modules/**',
+    '!**/docs/**'
   ];
 
 
