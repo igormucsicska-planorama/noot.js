@@ -15,12 +15,8 @@ describe('NOOT.API.Queryable', function() {
       __filterable: ['fromChild']
     });
 
-    child.selectable.should.deep.eql(['fromParent']);
-    child.filterable.should.deep.eql(['fromChild']);
-    child.sortable.should.deep.eql([]);
+    child._selectable.should.deep.eql(['fromParent']);
+    child._filterable.should.deep.eql(['fromChild']);
+    child._sortable.should.deep.eql([]);
   });
-
-
-
-
 });

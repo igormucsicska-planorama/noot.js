@@ -1,8 +1,10 @@
 var NOOT = require('../../../')('object', 'http');
 var _ = require('lodash');
-var Queryable = require('./queryable');
-var QueryModes = require('./query-modes');
 var qs = require('querystring');
+
+var Queryable = require('./queryable');
+var Filters = require('./filters');
+var ConditionsParser = require('./conditions-parser');
 
 /***********************************************************************************************************************
  * @class Stack
@@ -20,56 +22,133 @@ var Stack = NOOT.Object.extend(Queryable).extend({
 
   route: null,
 
+  _conditionsParser: null,
+
+  get model() { return this.route.model; },
+
   init: function() {
     NOOT.required(this, 'req', 'res', 'route');
     this.package = Stack.getDefaultPackage();
     this._computeQueryable();
+    this._conditionsParser = ConditionsParser.create({ fields: this._filterable, operators: this._allowedOperators });
     this.query = this.parseQueryString(this.req.query);
     this.body = this.req.body || {};
   },
 
+  /**
+   *
+   *
+   *
+   * @chainable
+   * @param status
+   * @returns {Stack}
+   */
   status: function(status) {
     this.package.statusCode = status;
     return this;
   },
 
+  /**
+   *
+   *
+   *
+   * @chainable
+   * @param data
+   * @returns {Stack}
+   */
   data: function(data) {
     this.package.data = data;
     return this;
   },
 
+  /**
+   *
+   *
+   *
+   * @chainable
+   * @param meta
+   * @returns {Stack}
+   */
   meta: function(meta) {
     this.package.meta = meta;
     return this;
   },
 
+  /**
+   *
+   *
+   *
+   * @chainable
+   * @param message
+   * @returns {Stack}
+   */
   message: function(message) {
     this.package.message = message;
     return this;
   },
 
+  /**
+   *
+   *
+   *
+   * @chainable
+   * @returns {Stack}
+   */
   setSelectable: function() { return this._setFields('selectable', arguments); },
 
+  /**
+   *
+   *
+   *
+   * @chainable
+   * @returns {Stack}
+   */
   setFilterable: function() { return this._setFields('filterable', arguments); },
 
+  /**
+   *
+   *
+   *
+   * @chainable
+   * @returns {Stack}
+   */
   setSortable: function() { return this._setFields('sortable', arguments); },
 
+  /**
+   *
+   *
+   *
+   * @chainable
+   * @returns {Stack}
+   */
   setWritable: function() { return this._setFields('writable', arguments); },
 
   /**
-   * Parse offset, limit, filters, sorting and select from request query string
+   * Parse offset, limit, filters, sort and select from request query string
    *
+   * @method parseQueryString
    * @param {Object} query
-   * @returns {Object}
+   * @return {Object}
    */
   parseQueryString: function(query) {
     return {
       offset: parseInt(query.offset, 10) || 0,
       limit: Math.min(parseInt(query.limit, 10) || this.readDefaultLimit, this.readMaxLimit),
-      filter: this.filterFields(query, QueryModes.FILTER),
-      sort: this.filterFields(query.sort, QueryModes.SORT) || '-_id',
-      select: this.filterFields(query.select, QueryModes.SELECT) || this._selectable.join(' ')
+      filter: this.parseConditions(query),
+      sort: this.filterFields(query.sort, Filters.SORT) || '-_id',
+      select: this.filterFields(query.select, Filters.SELECT) || this._selectable.join(' ')
     };
+  },
+
+  /**
+   *
+   *
+   * @method parseConditions
+   * @param {Object} query
+   * @return {Object}
+   */
+  parseConditions: function(query) {
+    return this._conditionsParser.compute(query);
   },
 
   /**
@@ -93,7 +172,6 @@ var Stack = NOOT.Object.extend(Queryable).extend({
   },
 
 
-  get model() { return this.route.model; },
 
   /**
    * Build new uri from the original, modifying limit and offset parameters
@@ -130,11 +208,19 @@ var Stack = NOOT.Object.extend(Queryable).extend({
   }
 
 }, {
+
+  /**
+   *
+   *
+   *
+   * @returns {{statusCode: number}}
+   */
   getDefaultPackage: function() {
     return {
       statusCode: NOOT.HTTP.OK
     };
   }
+
 });
 
 

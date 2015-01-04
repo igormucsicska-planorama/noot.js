@@ -6,8 +6,8 @@ var Inflector = require('inflected');
 var _ = require('lodash');
 
 var Utils = require('./utils');
-var QueryModes = require('./query-modes');
-var QueryMode = require('./query-mode');
+var Filters = require('./filters');
+var Filter = require('./filter');
 
 /**
  * Defaults values for bubbled properties
@@ -21,7 +21,8 @@ var DEFAULTS = {
   get __selectable() { return []; },
   get __writable() { return []; },
   get __sortable() { return []; },
-  get __filterable() { return []; }
+  get __filterable() { return []; },
+  get _allowedOperators() { return []; }
 };
 
 
@@ -66,6 +67,9 @@ var Queryable = {
   set deleteMaxLimit(value) { this._deleteMaxLimit = value; },
   get deleteMaxLimit() { return this._bubbleProperty('_deleteMaxLimit', 'deleteMaxLimit'); },
 
+  allowedOperators: null,
+  get _allowedOperators() { return this._bubbleProperty('allowedOperators', '_allowedOperators'); },
+
   selectable: null,
   nonSelectable: null,
   __selectable: null,
@@ -102,7 +106,7 @@ var Queryable = {
 
     return this.model.create(stack.body, function(err, item) {
       if (err) return (callback || stack.next)(NOOT.Errors.fromMongoose(err));
-      item = self.filterFields(item, QueryModes.READ);
+      item = self.filterFields(item, Filters.READ);
       return callback ? callback(null, item) : stack.status(NOOT.HTTP.Created).data(item).next();
     });
   },
@@ -120,7 +124,7 @@ var Queryable = {
 
     return this.model.create(stack.body, function(err, items) {
       if (err) return (callback || stack.next)(NOOT.Errors.fromMongoose(err));
-      items = items.map(function(item) { return self.filterFields(item, QueryModes.READ); });
+      items = items.map(function(item) { return self.filterFields(item, Filters.READ); });
       return callback ? callback(null, items) : stack.status(NOOT.HTTP.Created).data(items).next();
     });
   },
@@ -142,7 +146,7 @@ var Queryable = {
       .exec(function(err, item) {
         if (err) return (callback || stack.next)(NOOT.Errors.fromMongoose(err));
         if (!item) return (callback || stack.next)(new NOOT.Errors.NotFound());
-        item = self.filterFields(item, QueryModes.READ);
+        item = self.filterFields(item, Filters.READ);
         return callback ? callback(null, item) : stack.status(NOOT.HTTP.OK).data(item).next();
       });
   },
@@ -167,7 +171,7 @@ var Queryable = {
       .limit(query.limit)
       .exec(function(err, items) {
         if (err) return (callback || stack.next)(NOOT.Errors.fromMongoose(err));
-        items = items.map(function(item) { return self.filterFields(item, QueryModes.READ); });
+        items = items.map(function(item) { return self.filterFields(item, Filters.READ); });
         if (callback) return callback(null, items);
         return self.getCount(query.filter, function(err, count) {
           if (err) return stack.next(err);
@@ -190,13 +194,13 @@ var Queryable = {
     var self = this;
     var shouldSendData = this._shouldAlwaysSendData;
     var method = shouldSendData ? 'update' : 'findOneAndUpdate';
-    var methodArgs = [{ _id: this.parseId(stack) }, { $set: this.filterFields(stack.body, QueryModes.WRITE) }];
+    var methodArgs = [{ _id: this.parseId(stack) }, { $set: this.filterFields(stack.body, Filters.WRITE) }];
     if (shouldSendData) methodArgs.push({ select: stack.query.select, new: true });
 
     return this.model[method].apply(this.model, methodArgs.concat(function(err, updated) {
       if (err) return (callback || stack.next)(NOOT.Errors.fromMongoose(err));
       if (!updated) return (callback || stack.next)(new NOOT.Errors.NotFound());
-      if (shouldSendData) updated = self.filterFields(updated, QueryModes.READ);
+      if (shouldSendData) updated = self.filterFields(updated, Filters.READ);
       if (callback) return callback(null, updated);
       if (shouldSendData) stack.status(NOOT.HTTP.OK).data(updated);
       else stack.status(NOOT.HTTP.NoContent);
@@ -227,7 +231,7 @@ var Queryable = {
           if (err) return (callback || stack.next)(NOOT.Errors.fromMongoose(err));
           return self.model.find({ _id: { $in: ids } }, stack.query.select, function(err, items) {
             if (err) return (callback || stack.next)(NOOT.Errors.fromMongoose(err));
-            items = items.map(function(item) { return self.filterFields(item, QueryModes.READ); });
+            items = items.map(function(item) { return self.filterFields(item, Filters.READ); });
             if (callback) return callback(null, items);
             return stack.status(NOOT.HTTP.OK).data(items).next();
           });
@@ -260,7 +264,7 @@ var Queryable = {
     return this.model[method].apply(this.model, methodArgs.concat(function (err, removed) {
       if (err) return (callback || stack.next)(NOOT.Errors.fromMongoose(err));
       if (!removed) return (callback || stack.next)(new NOOT.Errors.NotFound());
-      if (shouldSendData) removed = self.filterFields(removed, QueryModes.READ);
+      if (shouldSendData) removed = self.filterFields(removed, Filters.READ);
       if (callback) return callback(null, removed);
       if (shouldSendData) stack.status(NOOT.HTTP.OK).data(removed);
       else stack.status(NOOT.HTTP.NoContent);
@@ -285,7 +289,7 @@ var Queryable = {
 
     return this.model[method].apply(this.model, methodArgs.concat(function(err, removed) {
       if (err) return (callback || stack.next)(NOOT.Errors.fromMongoose(err));
-      if (shouldSendData) removed = removed.map(function(item) { return self.filterFields(item, QueryModes.READ); });
+      if (shouldSendData) removed = removed.map(function(item) { return self.filterFields(item, Filters.READ); });
       if (callback) return callback(null, removed);
       if (shouldSendData) stack.status(NOOT.HTTP.OK).data(removed);
       else stack.status(NOOT.HTTP.NoContent);
@@ -298,19 +302,19 @@ var Queryable = {
    *
    * @method filterFields
    * @param {Array|Object} fields
-   * @param {QueryMode} queryMode
+   * @param {NOOT.API.Filter} queryMode
    * @return {Array|Object}
    */
   filterFields: function(fields, queryMode) {
-    if (!(queryMode instanceof QueryMode)) throw new Error('Invalid query mode: ' + queryMode);
+    if (!(queryMode instanceof Filter)) throw new Error('Invalid query mode: ' + queryMode);
     if (fields && fields.toJSON) fields = fields.toJSON();
 
     switch (queryMode) {
-      case QueryModes.READ: return NOOT.pickProperties(fields, this._selectable);
-      case QueryModes.SELECT: return this.parseFieldsList(fields, this._selectable);
-      case QueryModes.WRITE: return NOOT.pickProperties(fields, this._writable);
-      case QueryModes.FILTER: return _.pick(fields, this._filterable);
-      case QueryModes.SORT: return this.parseFieldsList(fields, this._sortable);
+      case Filters.READ: return NOOT.pickProperties(fields, this._selectable);
+      case Filters.SELECT: return this.parseFieldsList(fields, this._selectable);
+      case Filters.WRITE: return NOOT.pickProperties(fields, this._writable);
+      case Filters.FILTER: return _.pick(fields, this._filterable);
+      case Filters.SORT: return this.parseFieldsList(fields, this._sortable);
     }
   },
 
