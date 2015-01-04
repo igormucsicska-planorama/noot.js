@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="NOOT.js"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 0.5.5</em>
+            <em>API Docs for: 0.5.8</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -38,7 +38,14 @@
                 
                         <div id="api-tabview-panel">
                             <ul id="api-classes" class="apis classes">
+                                <li><a href="../classes/NOOT.html">NOOT</a></li>
                                 <li><a href="../classes/NOOT.API.html">NOOT.API</a></li>
+                                <li><a href="../classes/NOOT.API.DefaultRoutes.html">NOOT.API.DefaultRoutes</a></li>
+                                <li><a href="../classes/NOOT.API.DefaultRoutes.Delete.html">NOOT.API.DefaultRoutes.Delete</a></li>
+                                <li><a href="../classes/NOOT.API.DefaultRoutes.Get.html">NOOT.API.DefaultRoutes.Get</a></li>
+                                <li><a href="../classes/NOOT.API.DefaultRoutes.Patch.html">NOOT.API.DefaultRoutes.Patch</a></li>
+                                <li><a href="../classes/NOOT.API.DefaultRoutes.Post.html">NOOT.API.DefaultRoutes.Post</a></li>
+                                <li><a href="../classes/NOOT.API.DefaultRoutes.Put.html">NOOT.API.DefaultRoutes.Put</a></li>
                                 <li><a href="../classes/NOOT.API.Resource.html">NOOT.API.Resource</a></li>
                                 <li><a href="../classes/NOOT.API.Route.html">NOOT.API.Route</a></li>
                                 <li><a href="../classes/NOOT.Configurator.html">NOOT.Configurator</a></li>
@@ -61,6 +68,7 @@
                             </ul>
                 
                             <ul id="api-modules" class="apis modules">
+                                <li><a href="../modules/noot.html">noot</a></li>
                             </ul>
                         </div>
                     </div>
@@ -121,7 +129,7 @@
                            * @return {Array}
                            */
                           makeArray: function(arg) {
-                            return Array.isArray(arg) ? arg : Array.prototype.slice.call(arg, 0);
+                            return arg ? Array.prototype.slice.call(arg, 0) : [];
                           },
                         
                         
@@ -182,26 +190,16 @@
                           noop: function() { return this; },
                         
                           /**
-                           * Convert nested arrays to a single flatten one
-                           *
-                           * &#x60;&#x60;&#x60;javascript
-                           * NOOT.toFlatArray([1, 2, 3]); // [1, 2, 3]
-                           * NOOT.toFlatArray([[1], [2, 3]]); // [1, 2, 3]
-                           * &#x60;&#x60;&#x60;
+                           * Escape a string to be RegExp compliant.
                            *
                            * @for NOOT
                            * @static
-                           * @method toFlatArray
-                           * @return {Array}
+                           * @method escapeForRegExp
+                           * @param {String} str
+                           * @return {String}
                            */
-                          toFlatArray: function() {
-                            var ret = [];
-                            var args = Utils.makeArray(arguments);
-                            args.forEach(function(arg) {
-                              if (Utils.isArray(arg)) ret = ret.concat(Utils.toFlatArray.apply(Utils, arg));
-                              else ret.push(arg);
-                            });
-                            return ret;
+                          escapeForRegExp: function(str) {
+                            return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, &#x27;\\$&amp;&#x27;);
                           }
                         
                         };

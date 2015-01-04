@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="NOOT.js"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 0.5.5</em>
+            <em>API Docs for: 0.5.8</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -38,7 +38,14 @@
                 
                         <div id="api-tabview-panel">
                             <ul id="api-classes" class="apis classes">
+                                <li><a href="../classes/NOOT.html">NOOT</a></li>
                                 <li><a href="../classes/NOOT.API.html">NOOT.API</a></li>
+                                <li><a href="../classes/NOOT.API.DefaultRoutes.html">NOOT.API.DefaultRoutes</a></li>
+                                <li><a href="../classes/NOOT.API.DefaultRoutes.Delete.html">NOOT.API.DefaultRoutes.Delete</a></li>
+                                <li><a href="../classes/NOOT.API.DefaultRoutes.Get.html">NOOT.API.DefaultRoutes.Get</a></li>
+                                <li><a href="../classes/NOOT.API.DefaultRoutes.Patch.html">NOOT.API.DefaultRoutes.Patch</a></li>
+                                <li><a href="../classes/NOOT.API.DefaultRoutes.Post.html">NOOT.API.DefaultRoutes.Post</a></li>
+                                <li><a href="../classes/NOOT.API.DefaultRoutes.Put.html">NOOT.API.DefaultRoutes.Put</a></li>
                                 <li><a href="../classes/NOOT.API.Resource.html">NOOT.API.Resource</a></li>
                                 <li><a href="../classes/NOOT.API.Route.html">NOOT.API.Route</a></li>
                                 <li><a href="../classes/NOOT.Configurator.html">NOOT.Configurator</a></li>
@@ -61,6 +68,7 @@
                             </ul>
                 
                             <ul id="api-modules" class="apis modules">
+                                <li><a href="../modules/noot.html">noot</a></li>
                             </ul>
                         </div>
                     </div>
@@ -102,6 +110,10 @@
                          * Dependencies
                          */
                         var NOOT = require(&#x27;../../&#x27;)(&#x27;namespace&#x27;, &#x27;error&#x27;, &#x27;http&#x27;);
+                        var mongoose = require(&#x27;mongoose&#x27;);
+                        
+                        var ValidationError = mongoose.Error.ValidationError;
+                        var CastError = mongoose.Error.CastError;
                         
                         /***********************************************************************************************************************
                          * @class Errors
@@ -111,20 +123,67 @@
                         var Errors = NOOT.Namespace.create({
                         
                           /**
-                           * 50? errors
+                           * @property InternalServerError
+                           * @static
+                           * @type Class
                            */
                           InternalServerError: NOOT.Error.extend({ name: &#x27;InternalServerError&#x27;, statusCode: NOOT.HTTP.InternalServerError }),
-                          NotImplemented: NOOT.Error.extend({ name: &#x27;NotImplementedError&#x27;, statusCode: NOOT.HTTP.NotImplemented }),
-                          Unavailable: NOOT.Error.extend({ name: &#x27;UnavailableError&#x27;, statusCode: NOOT.HTTP.Unavailable }),
                         
                           /**
-                           * 40? errors
+                           * @property NotImplemented
+                           * @static
+                           * @type Class
+                           */
+                          NotImplemented: NOOT.Error.extend({ name: &#x27;NotImplementedError&#x27;, statusCode: NOOT.HTTP.NotImplemented }),
+                        
+                          /**
+                           * @property Unavailable
+                           * @static
+                           * @type Class
+                           */
+                          Unavailable: NOOT.Error.extend({ name: &#x27;UnavailableError&#x27;, statusCode: NOOT.HTTP.ServiceUnavailable }),
+                        
+                          /**
+                           * @property BadRequest
+                           * @static
+                           * @type Class
                            */
                           BadRequest: NOOT.Error.extend({ name: &#x27;BadRequestError&#x27;, statusCode: NOOT.HTTP.BadRequest }),
+                        
+                          /**
+                           * @property Unauthorized
+                           * @static
+                           * @type Class
+                           */
                           Unauthorized: NOOT.Error.extend({ name: &#x27;UnauthorizedError&#x27;, statusCode: NOOT.HTTP.Unauthorized }),
+                        
+                          /**
+                           * @property Forbidden
+                           * @static
+                           * @type Class
+                           */
                           Forbidden: NOOT.Error.extend({ name: &#x27;ForbiddenError&#x27;, statusCode: NOOT.HTTP.Forbidden }),
+                        
+                          /**
+                           * @property NotFound
+                           * @static
+                           * @type Class
+                           */
                           NotFound: NOOT.Error.extend({ name: &#x27;NotFoundError&#x27;, statusCode: NOOT.HTTP.NotFound }),
-                          Conflict: NOOT.Error.extend({ name: &#x27;ConflictError&#x27;, statusCode: NOOT.HTTP.Conflict })
+                        
+                          /**
+                           * @property Conflict
+                           * @static
+                           * @type Class
+                           */
+                          Conflict: NOOT.Error.extend({ name: &#x27;ConflictError&#x27;, statusCode: NOOT.HTTP.Conflict }),
+                        
+                        
+                          fromMongoose: function(err) {
+                            if (err instanceof ValidationError || err instanceof CastError) return new this.BadRequest(err.toString());
+                            else if (err.code === 11000) return new this.Conflict(err.message);
+                            return new this.InternalServerError(err.message);
+                          }
                         
                         });
                         

@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="NOOT.js"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 0.5.5</em>
+            <em>API Docs for: 0.5.8</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -38,7 +38,14 @@
                 
                         <div id="api-tabview-panel">
                             <ul id="api-classes" class="apis classes">
+                                <li><a href="../classes/NOOT.html">NOOT</a></li>
                                 <li><a href="../classes/NOOT.API.html">NOOT.API</a></li>
+                                <li><a href="../classes/NOOT.API.DefaultRoutes.html">NOOT.API.DefaultRoutes</a></li>
+                                <li><a href="../classes/NOOT.API.DefaultRoutes.Delete.html">NOOT.API.DefaultRoutes.Delete</a></li>
+                                <li><a href="../classes/NOOT.API.DefaultRoutes.Get.html">NOOT.API.DefaultRoutes.Get</a></li>
+                                <li><a href="../classes/NOOT.API.DefaultRoutes.Patch.html">NOOT.API.DefaultRoutes.Patch</a></li>
+                                <li><a href="../classes/NOOT.API.DefaultRoutes.Post.html">NOOT.API.DefaultRoutes.Post</a></li>
+                                <li><a href="../classes/NOOT.API.DefaultRoutes.Put.html">NOOT.API.DefaultRoutes.Put</a></li>
                                 <li><a href="../classes/NOOT.API.Resource.html">NOOT.API.Resource</a></li>
                                 <li><a href="../classes/NOOT.API.Route.html">NOOT.API.Route</a></li>
                                 <li><a href="../classes/NOOT.Configurator.html">NOOT.Configurator</a></li>
@@ -61,6 +68,7 @@
                             </ul>
                 
                             <ul id="api-modules" class="apis modules">
+                                <li><a href="../modules/noot.html">noot</a></li>
                             </ul>
                         </div>
                     </div>
@@ -97,11 +105,15 @@
                         <h1>NOOT.API.Route Class</h1>
                         <div class="box meta">
                         
-                        
-                                <div class="foundat">
-                                    Defined in: <a href="../files/_Users_sylvainestevez_Documents_Projects_Web_noot.js_src_api_lib_route.js.html#l6"><code>&#x2F;Users&#x2F;sylvainestevez&#x2F;Documents&#x2F;Projects&#x2F;Web&#x2F;noot.js&#x2F;src&#x2F;api&#x2F;lib&#x2F;route.js:6</code></a>
+                                <div class="extends">
+                                    Extends <a href="../classes/NOOT.Object.html" class="crosslink">NOOT.Object</a>
                                 </div>
                         
+                                <div class="foundat">
+                                    Defined in: <a href="../files/_Users_sylvainestevez_Documents_Projects_Web_noot.js_src_api_lib_route.js.html#l8"><code>&#x2F;Users&#x2F;sylvainestevez&#x2F;Documents&#x2F;Projects&#x2F;Web&#x2F;noot.js&#x2F;src&#x2F;api&#x2F;lib&#x2F;route.js:8</code></a>
+                                </div>
+                        
+                                    Module: <a href="../modules/noot.html">noot</a>
                         
                         </div>
                         
@@ -127,7 +139,7 @@
                                     <div class="meta">
                                                 <p>
                                                 Defined in
-                                        <a href="../files/_Users_sylvainestevez_Documents_Projects_Web_noot.js_src_api_lib_route.js.html#l6"><code>&#x2F;Users&#x2F;sylvainestevez&#x2F;Documents&#x2F;Projects&#x2F;Web&#x2F;noot.js&#x2F;src&#x2F;api&#x2F;lib&#x2F;route.js:6</code></a>
+                                        <a href="../files/_Users_sylvainestevez_Documents_Projects_Web_noot.js_src_api_lib_route.js.html#l8"><code>&#x2F;Users&#x2F;sylvainestevez&#x2F;Documents&#x2F;Projects&#x2F;Web&#x2F;noot.js&#x2F;src&#x2F;api&#x2F;lib&#x2F;route.js:8</code></a>
                                         </p>
                                 
                                 
@@ -147,18 +159,405 @@
                             <ul class="api-class-tabs">
                                 <li class="api-class-tab index"><a href="#index">Index</a></li>
                         
+                                    <li class="api-class-tab methods"><a href="#methods">Methods</a></li>
+                                    <li class="api-class-tab properties"><a href="#properties">Properties</a></li>
                             </ul>
                         
                             <div>
                                 <div id="index" class="api-class-tabpanel index">
                                     <h2 class="off-left">Item Index</h2>
                         
+                                        <div class="index-section methods">
+                                            <h3>Methods</h3>
                         
+                                            <ul class="index-list methods extends">
+                                                    <li class="index-item method private">
+                                                        <a href="#method__buildHandlers">_buildHandlers</a>
+                        
+                                                    </li>
+                                                    <li class="index-item method private">
+                                                        <a href="#method__buildPath">_buildPath</a>
+                        
+                                                    </li>
+                                                    <li class="index-item method private">
+                                                        <a href="#method__validateSchema">_validateSchema</a>
+                        
+                                                    </li>
+                                            </ul>
+                                        </div>
+                        
+                                        <div class="index-section properties">
+                                            <h3>Properties</h3>
+                        
+                                            <ul class="index-list properties extends">
+                                                    <li class="index-item property private">
+                                                        <a href="#property__handlers">_handlers</a>
+                        
+                                                    </li>
+                                                    <li class="index-item property">
+                                                        <a href="#property_handler">handler</a>
+                        
+                                                    </li>
+                                                    <li class="index-item property">
+                                                        <a href="#property_handlers">handlers</a>
+                        
+                                                    </li>
+                                                    <li class="index-item property">
+                                                        <a href="#property_method">method</a>
+                        
+                                                    </li>
+                                                    <li class="index-item property">
+                                                        <a href="#property_path">path</a>
+                        
+                                                    </li>
+                                                    <li class="index-item property">
+                                                        <a href="#property_resource">resource</a>
+                        
+                                                    </li>
+                                                    <li class="index-item property">
+                                                        <a href="#property_schema">schema</a>
+                        
+                                                    </li>
+                                            </ul>
+                                        </div>
                         
                         
                                 </div>
                         
+                                    <div id="methods" class="api-class-tabpanel">
+                                        <h2 class="off-left">Methods</h2>
                         
+                                            <div id="method__buildHandlers" class="method item private">
+                                                <h3 class="name"><code>_buildHandlers</code></h3>
+                                            
+                                                    <span class="paren">()</span>
+                                            
+                                                    <span class="returns-inline">
+                                                        <span class="type">Array</span>
+                                                    </span>
+                                            
+                                            
+                                                    <span class="flag private">private</span>
+                                            
+                                            
+                                            
+                                            
+                                            
+                                                <div class="meta">
+                                                            <p>
+                                                            Defined in
+                                                    <a href="../files/_Users_sylvainestevez_Documents_Projects_Web_noot.js_src_api_lib_route.js.html#l75"><code>&#x2F;Users&#x2F;sylvainestevez&#x2F;Documents&#x2F;Projects&#x2F;Web&#x2F;noot.js&#x2F;src&#x2F;api&#x2F;lib&#x2F;route.js:75</code></a>
+                                                    </p>
+                                            
+                                            
+                                            
+                                                </div>
+                                            
+                                                <div class="description">
+                                                    <p>Define routes&#39;s handlers array.</p>
+                                            
+                                                </div>
+                                            
+                                            
+                                                    <div class="returns">
+                                                        <h4>Returns:</h4>
+                                            
+                                                        <div class="returns-description">
+                                                                    <span class="type">Array</span>:
+                                                        </div>
+                                                    </div>
+                                            
+                                            </div>
+                                            <div id="method__buildPath" class="method item private">
+                                                <h3 class="name"><code>_buildPath</code></h3>
+                                            
+                                                    <span class="paren">()</span>
+                                            
+                                            
+                                            
+                                                    <span class="flag private">private</span>
+                                            
+                                            
+                                            
+                                            
+                                            
+                                                <div class="meta">
+                                                            <p>
+                                                            Defined in
+                                                    <a href="../files/_Users_sylvainestevez_Documents_Projects_Web_noot.js_src_api_lib_route.js.html#l109"><code>&#x2F;Users&#x2F;sylvainestevez&#x2F;Documents&#x2F;Projects&#x2F;Web&#x2F;noot.js&#x2F;src&#x2F;api&#x2F;lib&#x2F;route.js:109</code></a>
+                                                    </p>
+                                            
+                                            
+                                            
+                                                </div>
+                                            
+                                                <div class="description">
+                                                    <p>Safely build route&#39;s path for it to include its resource path.</p>
+                                            
+                                                </div>
+                                            
+                                            
+                                            
+                                            </div>
+                                            <div id="method__validateSchema" class="method item private">
+                                                <h3 class="name"><code>_validateSchema</code></h3>
+                                            
+                                                    <div class="args">
+                                                        <span class="paren">(</span><ul class="args-list inline commas">
+                                                            <li class="arg">
+                                                                    <code>req</code>
+                                                            </li>
+                                                            <li class="arg">
+                                                                    <code>res</code>
+                                                            </li>
+                                                            <li class="arg">
+                                                                    <code>next</code>
+                                                            </li>
+                                                        </ul><span class="paren">)</span>
+                                                    </div>
+                                            
+                                            
+                                            
+                                                    <span class="flag private">private</span>
+                                            
+                                            
+                                            
+                                            
+                                                    <span class="flag async">async</span>
+                                            
+                                                <div class="meta">
+                                                            <p>
+                                                            Defined in
+                                                    <a href="../files/_Users_sylvainestevez_Documents_Projects_Web_noot.js_src_api_lib_route.js.html#l121"><code>&#x2F;Users&#x2F;sylvainestevez&#x2F;Documents&#x2F;Projects&#x2F;Web&#x2F;noot.js&#x2F;src&#x2F;api&#x2F;lib&#x2F;route.js:121</code></a>
+                                                    </p>
+                                            
+                                            
+                                            
+                                                </div>
+                                            
+                                                <div class="description">
+                                                    <p>Validate body against JSON schema.</p>
+                                            
+                                                </div>
+                                            
+                                                    <div class="params">
+                                                        <h4>Parameters:</h4>
+                                            
+                                                        <ul class="params-list">
+                                                            <li class="param">
+                                                                    <code class="param-name">req</code>
+                                                                    <span class="type">Request</span>
+                                            
+                                            
+                                                                <div class="param-description">
+                                                                    
+                                                                </div>
+                                            
+                                                            </li>
+                                                            <li class="param">
+                                                                    <code class="param-name">res</code>
+                                                                    <span class="type">Response</span>
+                                            
+                                            
+                                                                <div class="param-description">
+                                                                    
+                                                                </div>
+                                            
+                                                            </li>
+                                                            <li class="param">
+                                                                    <code class="param-name">next</code>
+                                                                    <span class="type">Function</span>
+                                            
+                                            
+                                                                <div class="param-description">
+                                                                    
+                                                                </div>
+                                            
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                            
+                                            
+                                            </div>
+                                    </div>
+                        
+                                    <div id="properties" class="api-class-tabpanel">
+                                        <h2 class="off-left">Properties</h2>
+                        
+                                            <div id="property__handlers" class="property item private">
+                                                <h3 class="name"><code>_handlers</code></h3>
+                                                <span class="type">Array of middlewares</span>
+                                            
+                                            
+                                                    <span class="flag private">private</span>
+                                            
+                                            
+                                            
+                                                <div class="meta">
+                                                            <p>
+                                                            Defined in
+                                                    <a href="../files/_Users_sylvainestevez_Documents_Projects_Web_noot.js_src_api_lib_route.js.html#l48"><code>&#x2F;Users&#x2F;sylvainestevez&#x2F;Documents&#x2F;Projects&#x2F;Web&#x2F;noot.js&#x2F;src&#x2F;api&#x2F;lib&#x2F;route.js:48</code></a>
+                                                    </p>
+                                            
+                                            
+                                                </div>
+                                            
+                                                <div class="description">
+                                                    <p>Final array of middlewares for this route</p>
+                                            
+                                                </div>
+                                            
+                                                    <p><strong>Default:</strong> []</p>
+                                            
+                                            
+                                            </div>
+                                            <div id="property_handler" class="property item">
+                                                <h3 class="name"><code>handler</code></h3>
+                                                <span class="type">Middleware</span>
+                                            
+                                            
+                                            
+                                            
+                                            
+                                                <div class="meta">
+                                                            <p>
+                                                            Defined in
+                                                    <a href="../files/_Users_sylvainestevez_Documents_Projects_Web_noot.js_src_api_lib_route.js.html#l58"><code>&#x2F;Users&#x2F;sylvainestevez&#x2F;Documents&#x2F;Projects&#x2F;Web&#x2F;noot.js&#x2F;src&#x2F;api&#x2F;lib&#x2F;route.js:58</code></a>
+                                                    </p>
+                                            
+                                            
+                                                </div>
+                                            
+                                                <div class="description">
+                                                    
+                                                </div>
+                                            
+                                            
+                                            
+                                            </div>
+                                            <div id="property_handlers" class="property item">
+                                                <h3 class="name"><code>handlers</code></h3>
+                                                <span class="type">Array of middlewares</span>
+                                            
+                                            
+                                            
+                                            
+                                            
+                                                <div class="meta">
+                                                            <p>
+                                                            Defined in
+                                                    <a href="../files/_Users_sylvainestevez_Documents_Projects_Web_noot.js_src_api_lib_route.js.html#l41"><code>&#x2F;Users&#x2F;sylvainestevez&#x2F;Documents&#x2F;Projects&#x2F;Web&#x2F;noot.js&#x2F;src&#x2F;api&#x2F;lib&#x2F;route.js:41</code></a>
+                                                    </p>
+                                            
+                                            
+                                                </div>
+                                            
+                                                <div class="description">
+                                                    
+                                                </div>
+                                            
+                                                    <p><strong>Default:</strong> []</p>
+                                            
+                                            
+                                            </div>
+                                            <div id="property_method" class="property item">
+                                                <h3 class="name"><code>method</code></h3>
+                                                <span class="type">String</span>
+                                            
+                                            
+                                            
+                                            
+                                            
+                                                <div class="meta">
+                                                            <p>
+                                                            Defined in
+                                                    <a href="../files/_Users_sylvainestevez_Documents_Projects_Web_noot.js_src_api_lib_route.js.html#l16"><code>&#x2F;Users&#x2F;sylvainestevez&#x2F;Documents&#x2F;Projects&#x2F;Web&#x2F;noot.js&#x2F;src&#x2F;api&#x2F;lib&#x2F;route.js:16</code></a>
+                                                    </p>
+                                            
+                                            
+                                                </div>
+                                            
+                                                <div class="description">
+                                                    
+                                                </div>
+                                            
+                                                    <p><strong>Default:</strong> get</p>
+                                            
+                                            
+                                            </div>
+                                            <div id="property_path" class="property item">
+                                                <h3 class="name"><code>path</code></h3>
+                                                <span class="type">String</span>
+                                            
+                                            
+                                            
+                                            
+                                            
+                                                <div class="meta">
+                                                            <p>
+                                                            Defined in
+                                                    <a href="../files/_Users_sylvainestevez_Documents_Projects_Web_noot.js_src_api_lib_route.js.html#l23"><code>&#x2F;Users&#x2F;sylvainestevez&#x2F;Documents&#x2F;Projects&#x2F;Web&#x2F;noot.js&#x2F;src&#x2F;api&#x2F;lib&#x2F;route.js:23</code></a>
+                                                    </p>
+                                            
+                                            
+                                                </div>
+                                            
+                                                <div class="description">
+                                                    
+                                                </div>
+                                            
+                                            
+                                            
+                                            </div>
+                                            <div id="property_resource" class="property item">
+                                                <h3 class="name"><code>resource</code></h3>
+                                                <span class="type"><a href="../classes/NOOT.API.Resource.html" class="crosslink">NOOT.API.Resource</a></span>
+                                            
+                                            
+                                            
+                                            
+                                            
+                                                <div class="meta">
+                                                            <p>
+                                                            Defined in
+                                                    <a href="../files/_Users_sylvainestevez_Documents_Projects_Web_noot.js_src_api_lib_route.js.html#l29"><code>&#x2F;Users&#x2F;sylvainestevez&#x2F;Documents&#x2F;Projects&#x2F;Web&#x2F;noot.js&#x2F;src&#x2F;api&#x2F;lib&#x2F;route.js:29</code></a>
+                                                    </p>
+                                            
+                                            
+                                                </div>
+                                            
+                                                <div class="description">
+                                                    
+                                                </div>
+                                            
+                                            
+                                            
+                                            </div>
+                                            <div id="property_schema" class="property item">
+                                                <h3 class="name"><code>schema</code></h3>
+                                                <span class="type">Object</span>
+                                            
+                                            
+                                            
+                                            
+                                            
+                                                <div class="meta">
+                                                            <p>
+                                                            Defined in
+                                                    <a href="../files/_Users_sylvainestevez_Documents_Projects_Web_noot.js_src_api_lib_route.js.html#l35"><code>&#x2F;Users&#x2F;sylvainestevez&#x2F;Documents&#x2F;Projects&#x2F;Web&#x2F;noot.js&#x2F;src&#x2F;api&#x2F;lib&#x2F;route.js:35</code></a>
+                                                    </p>
+                                            
+                                            
+                                                </div>
+                                            
+                                                <div class="description">
+                                                    
+                                                </div>
+                                            
+                                            
+                                            
+                                            </div>
+                                    </div>
                         
                         
                             </div>

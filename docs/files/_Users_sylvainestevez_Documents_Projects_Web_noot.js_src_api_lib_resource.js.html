@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="NOOT.js"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 0.5.5</em>
+            <em>API Docs for: 0.5.8</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -38,7 +38,14 @@
                 
                         <div id="api-tabview-panel">
                             <ul id="api-classes" class="apis classes">
+                                <li><a href="../classes/NOOT.html">NOOT</a></li>
                                 <li><a href="../classes/NOOT.API.html">NOOT.API</a></li>
+                                <li><a href="../classes/NOOT.API.DefaultRoutes.html">NOOT.API.DefaultRoutes</a></li>
+                                <li><a href="../classes/NOOT.API.DefaultRoutes.Delete.html">NOOT.API.DefaultRoutes.Delete</a></li>
+                                <li><a href="../classes/NOOT.API.DefaultRoutes.Get.html">NOOT.API.DefaultRoutes.Get</a></li>
+                                <li><a href="../classes/NOOT.API.DefaultRoutes.Patch.html">NOOT.API.DefaultRoutes.Patch</a></li>
+                                <li><a href="../classes/NOOT.API.DefaultRoutes.Post.html">NOOT.API.DefaultRoutes.Post</a></li>
+                                <li><a href="../classes/NOOT.API.DefaultRoutes.Put.html">NOOT.API.DefaultRoutes.Put</a></li>
                                 <li><a href="../classes/NOOT.API.Resource.html">NOOT.API.Resource</a></li>
                                 <li><a href="../classes/NOOT.API.Route.html">NOOT.API.Route</a></li>
                                 <li><a href="../classes/NOOT.Configurator.html">NOOT.Configurator</a></li>
@@ -61,6 +68,7 @@
                             </ul>
                 
                             <ul id="api-modules" class="apis modules">
+                                <li><a href="../modules/noot.html">noot</a></li>
                             </ul>
                         </div>
                     </div>
@@ -101,15 +109,17 @@
                         /**
                          * Dependencies
                          */
-                        var NOOT = require(&#x27;../../../&#x27;)(&#x27;object&#x27;, &#x27;url&#x27;, &#x27;time&#x27;);
+                        var NOOT = require(&#x27;../../../&#x27;)(&#x27;object&#x27;, &#x27;url&#x27;, &#x27;time&#x27;, &#x27;errors&#x27;, &#x27;http&#x27;);
                         var Inflector = require(&#x27;inflected&#x27;);
                         var _ = require(&#x27;lodash&#x27;);
                         var qs = require(&#x27;querystring&#x27;);
+                        var http = require(&#x27;http&#x27;);
                         
                         var QueryMode = require(&#x27;./query-mode&#x27;);
                         var Route = require(&#x27;./route&#x27;);
                         var DefaultRoutes = require(&#x27;./default-routes&#x27;);
                         var CountCache = require(&#x27;./count-cache&#x27;);
+                        
                         
                         /***********************************************************************************************************************
                          * @class Resource
@@ -122,56 +132,61 @@
                           path: &#x27;&#x27;,
                           maxLimit: 0,
                           defaultLimit: 0,
-                          countCacheExpiration: 0,
+                          countCacheExpiration: undefined,
+                          defaultResponseStatusCode: undefined,
+                          allowedResponseFields: undefined,
+                          areFindsLean: false,
+                          defaultResponseType: undefined,
+                          allowedResponseTypes: undefined,
                         
-                          methods: null,
+                          methods: undefined,
                         
-                          _routes: null,
-                          _isComputed: false,
+                          _routes: undefined,
                         
-                          selectable: null,
-                          _selectable: null,
-                          nonSelectable: null,
-                          writable: null,
-                          _writable: null,
-                          nonWritable: null,
-                          sortable: null,
-                          _sortable: null,
-                          nonSortable: null,
-                          filterable: null,
-                          _filterable: null,
-                          nonFilterable: null,
+                          selectable: undefined,
+                          _selectable: undefined,
+                          nonSelectable: undefined,
+                          writable: undefined,
+                          _writable: undefined,
+                          nonWritable: undefined,
+                          sortable: undefined,
+                          _sortable: undefined,
+                          nonSortable: undefined,
+                          filterable: undefined,
+                          _filterable: undefined,
+                          nonFilterable: undefined,
                         
                           /**
                            * Constructor
                            */
                           init: function() {
-                            NOOT.required(this, &#x27;api&#x27;, &#x27;model&#x27;);
-                        
-                            // Initialize routes
-                            this._routes = [];
-                        
-                            // Path defaults to model name
-                            this.path = this.path || NOOT.dasherize(Inflector.pluralize(this.model.modelName));
-                        
-                            // Methods
-                            this.methods = this.methods ?
-                              this.methods.map(function(method) { return method.toLowerCase(); }) :
-                              Resource._getDefaultMethods();
-                        
+                            NOOT.required(this, &#x27;model&#x27;);
+                            if (!(this.api instanceof require(&#x27;../index&#x27;))) throw new Error(&#x27;Not a NOOT.API&#x27;);
+                            _.defaults(this, Resource._DEFAULTS);
                             Resource.validateMethods(this.methods);
-                        
-                            // Limits
-                            this.defaultLimit = this.defaultLimit || Resource._DEFAULTS.defaultLimit;
-                            this.maxLimit = this.maxLimit || Resource._DEFAULTS.maxLimit;
-                        
-                            // Build allowed fields
+                            this._buildPath();
                             this._buildFields();
-                        
                             this._countCache = CountCache.create({
                               model: this.model,
-                              expiration: this.countCacheExpiration || Resource.DEFAULTS.countCacheExpiration
+                              expiration: this.countCacheExpiration
                             });
+                            this._buildRoutes();
+                          },
+                        
+                          _buildRoutes: function() {
+                            var self = this;
+                            var routes = (NOOT.makeArray(this.routes) || []).concat(this.methods.map(function(methodName) {
+                              return DefaultRoutes[Inflector.classify(methodName)];
+                            }));
+                        
+                            this._routes = routes.map(function(route) {
+                              return route.create({ resource: self });
+                            });
+                          },
+                        
+                          _buildPath: function() {
+                            var path = this.path || NOOT.dasherize(Inflector.pluralize(this.model.modelName));
+                            this.path = NOOT.Url.join(&#x27;/&#x27;, this.api.name || &#x27;&#x27;, path).replace(/\/$/, &#x27;&#x27;);
                           },
                         
                         
@@ -180,33 +195,127 @@
                           },
                         
                           /**
-                           * Build, sort and register routes on the app
+                           * Register a single route.
+                           *
+                           * @method registerRoute
+                           * @chainable
+                           * @param {Class} route A {{#crossLink &quot;NOOT.API.Route&quot;}}{{/crossLink}} **class** that will be instantiated
+                           * by the resource
                            */
-                          getRoutes: function() {
-                            if (this._isComputed) return this._routes;
-                            this._isComputed = true;
-                            return this._buildRoutes();
+                          registerRoute: function(route) {
+                            if (!Route.detect(route)) {
+                              if (route instanceof Route) throw new Error(&#x27;You must register classes, not instances&#x27;);
+                              throw new Error(&#x27;Not a subclass of NOOT.API.Route&#x27;);
+                            }
+                            this._routes.push(route);
+                            return this;
                           },
                         
                           /**
-                           * C . . .
+                           * Register multiple routes.
                            *
+                           * @method registerRoutes
+                           * @chainable
+                           * @param {Class} routes,... A list of arguments ({{#crossLink &quot;NOOT.API.Route&quot;}}{{/crossLink}} **classes**)
+                           */
+                          registerRoutes: function() {
+                            _.flatten(NOOT.makeArray(arguments)).forEach(this.registerRoute.bind(this));
+                            return this;
+                          },
+                        
+                          /**
                            * Create a new item
                            *
+                           * @async
+                           * @method post
                            * @param {Request} req
-                           * @param {Response} res
-                           * @param {Function} next
+                           * @param {Function} callback
                            */
-                          create: function(req, res, next) {
+                          post: function(req, callback) {
                             var self = this;
                             return this.model.create(this.filterFields(req.body, Resource.WRITE), function(err, item) {
-                              if (err) return next(err);
-                              return res.status(201).json({ data: self.filterFields(item.toObject(), Resource.READ) });
+                              if (err) return callback(new NOOT.Errors.fromMongoose(err));
+                              return callback(null, { data: self.filterFields(item.toObject(), Resource.READ), statusCode: NOOT.HTTP.Created });
+                            });
+                          },
+                        
+                          find: function(query, callback) {
+                            var self = this;
+                            var options = this.parseQueryString(query.req.query);
+                        
+                            callback = callback || query.next;
+                        
+                            return this.getCount(options.filter, function(err, count) {
+                              if (err) return callback(err);
+                        
+                              query.meta = self.getMeta(query.req, options, count);
+                        
+                              if (!count) {
+                                query.data = [];
+                                return callback(null, query);
+                              }
+                        
+                              return self.model.find(options.filter, options.select)
+                                .limit(options.limit)
+                                .skip(options.offset)
+                                .sort(options.sort)
+                                .setOptions({ lean: self.areFindsLean })
+                                .exec(function(err, items) {
+                                  if (err) return callback(new NOOT.Errors.fromMongoose(err));
+                                  query.data = items;
+                                  query.statusCode = NOOT.HTTP.OK;
+                                  return callback(null, query);
+                                });
+                            });
+                          },
+                        
+                          findOne: function(query, callback) {
+                            var options = this.parseQueryString(query.req.query);
+                            return this.model.findById(this.parseId(query.req), options.select, { lean: this.areFindsLean }, function(err, item) {
+                              if (err) return callback(new NOOT.Errors.fromMongoose(err));
+                              if (!item) return callback(new NOOT.Errors.NotFound());
+                              return callback(null, { data: item, statusCode: NOOT.HTTP.OK });
+                            });
+                          },
+                        
+                          update: function() {
+                        
+                          },
+                        
+                          create: function() {
+                        
+                          },
+                        
+                          remove: function() {
+                        
+                          },
+                        
+                        
+                        
+                        
+                          get: function(req, callback) {
+                            return this.parseId(req) ? this.getSingle(req, callback) : this.getMultiple(req, callback);
+                          },
+                        
+                          /**
+                           * Read a single item.
+                           *
+                           * @method getSingle
+                           * @async
+                           * @param {Request} req
+                           * @param {Function} callback
+                           */
+                          getSingle: function(req, callback) {
+                            var query = this.parseQueryString(req.query);
+                            return this.model.findById(this.parseId(req), query.select, { lean: this.areFindsLean }, function(err, item) {
+                              if (err) return callback(new NOOT.Errors.fromMongoose(err));
+                              if (!item) return callback(new NOOT.Errors.NotFound());
+                              return callback(null, { data: item, statusCode: NOOT.HTTP.OK });
                             });
                           },
                         
                           /**
-                           * Read multiple items
+                           * Read multiple items.
                            *
                            * @method getMultiple
                            * @async
@@ -228,138 +337,83 @@
                                 .limit(query.limit)
                                 .skip(query.offset)
                                 .sort(query.sort)
+                                .setOptions({ lean: self.areFindsLean })
                                 .exec(function(err, items) {
-                                  if (err) return callback(err);
-                                  return callback(null, { meta: meta, data: items });
+                                  if (err) return callback(new NOOT.Errors.fromMongoose(err));
+                                  return callback(null, { meta: meta, data: items, statusCode: NOOT.HTTP.OK });
                                 });
                             });
                           },
                         
-                          getSingle: function(req, callback) {
-                            var query = this.parseQueryString(req.query);
-                            return this.model.findById(req.param(&#x27;id&#x27;), query.select, { lean: true }, function(err, item) {
-                              if (err) return callback(err);
-                              if (!item) return callback(new NOOT.Errors.NotFound());
-                              return callback(null, { data: item });
-                            });
+                        
+                          parseId: function(req) {
+                            return req.param(req.idProperty || &#x27;id&#x27;);
                           },
                         
                           /**
                            *
                            *
-                           * @method respond
+                           * @method createResponse
                            * @param {Response} res
-                           * @param {Object} [data={}]
-                           * @param {Number} [status=200]
+                           * @param {Object} [data]
+                           * @param {Number} [status]
                            */
-                          respond: function(res, data, status) {
-                            var args = NOOT.makeArray(arguments);
-                            res = args.shift();
+                          createResponse: function(res, data, status) {
+                            if (!(res instanceof http.ServerResponse)) throw new Error(&#x27;Not an http response&#x27;);
                         
-                            var statusCode;
-                            var json;
-                        
-                            switch (args.length) {
-                              case 2:
-                                if (NOOT.isNumber(options)) {
-                                  statusCode = options;
-                                  json = status;
-                                } else {
-                                  statusCode = status;
-                                  json = options;
-                                }
-                                break;
-                              case 1:
-                                if (NOOT.isNumber(options)) {
-                                  statusCode = options;
-                                  json = {};
-                                } else {
-                                  json = options;
-                                }
-                                break;
+                            if (!status &amp;&amp; NOOT.isNumber(data)) {
+                              status = data;
+                              data = undefined;
                             }
                         
-                            if (!statusCode) statusCode = 200;
-                            if (!json) json = {};
+                            res.status(status || data &amp;&amp; data.statusCode || this.defaultResponseStatusCode);
                         
-                            res.status(statusCode);
-                            return res.json(_.pick(json, [&#x27;message&#x27;, &#x27;data&#x27;, &#x27;code&#x27;, &#x27;error&#x27;]));
+                            return this.getResponseHandler(res)(res, data);
                           },
                         
-                          /**
-                           * . R . .
-                           *
-                           * Read single/multiple item(s)
-                           *
-                           * @param {Request} req
-                           * @param {Response} res
-                           * @param {Function} next
-                           */
-                          read: function(req, res, next) {
-                            var id = req.param(&#x27;id&#x27;);
-                            var query = this.parseQueryString(req.query);
                         
-                            if (id) {
-                              return this.model.findById(id, query.select, { lean: true }, function(err, item) {
-                                if (err) return next(err);
-                                if (!item) return next();
-                                return res.status(200).json({ data: item });
-                              });
-                            } else {
-                              var self = this;
-                              return this.getCount(query.filter, function(err, count) {
-                                if (err) return next(err);
-                        
-                                var meta = self.getMeta(req, query, count);
-                        
-                                if (!count) return res.json({ meta: meta, data: [] });
-                        
-                                return self.model.find(query.filter, query.select)
-                                  .limit(query.limit)
-                                  .skip(query.offset)
-                                  .sort(query.sort)
-                                  .exec(function(err, items) {
-                                    if (err) return next(err);
-                                    return res.status(200).json({ meta: meta, data: items });
-                                  });
-                              });
+                          getResponseHandler: function(res) {
+                            var type = res.req.accepts(this.allowedResponseTypes) || this.defaultResponseType;
+                            var handler;
+                            switch (type) {
+                              case &#x27;json&#x27;: handler = this.sendJSON; break;
+                              default: handler = this.sendJSON;
                             }
+                            return handler.bind(this);
+                          },
+                        
+                          sendJSON: function(res, json) {
+                            return res.json(json);
                           },
                         
                           /**
-                           * . . U .
-                           *
-                           * Update a single item
-                           *
+                           * @method patch
+                           * @async
                            * @param {Request} req
-                           * @param {Response} res
-                           * @param {Function} next
+                           * @param {Function} callback
                            */
-                          update: function(req, res, next) {
-                            var id = req.param(&#x27;id&#x27;);
+                          patch: function(req, callback) {
                             var properties = this.filterFields(req.body, Resource.WRITE);
-                            return this.model.update({ _id: id }, { $set: properties }, function(err, updated) {
-                              if (err) return next(err);
-                              if (!updated) return next();
-                              return res.status(204).json();
+                            return this.model.update({ _id: this.parseId(req) }, { $set: properties }, function(err, updated) {
+                              if (err) return callback(NOOT.Errors.fromMongoose(err));
+                              if (!updated) return callback(new NOOT.Errors.NotFound());
+                              return callback(null, { statusCode: NOOT.HTTP.NoContent });
                             });
                           },
                         
                           /**
-                           * . . . D
-                           *
                            * Delete a single item
                            *
+                           * @method delete
+                           * @async
                            * @param {Request} req
-                           * @param {Response} res
-                           * @param {Function} next
+                           * @param {Function} callback
                            */
-                          delete: function(req, res, next) {
-                            var id = req.param(&#x27;id&#x27;);
-                            return this.model.remove({ _id: id }, function(err, removed) {
-                              if (err) return next(err);
-                              if (!removed) return next();
-                              return res.status(204).json();
+                          delete: function(req, callback) {
+                            return this.model.remove({ _id: this.parseId(req) }, function(err, removed) {
+                              if (err) return callback(new NOOT.Errors.fromMongoose(err));
+                              if (!removed) return callback(new NOOT.Errors.NotFound());
+                              return callback(null, { statusCode: NOOT.HTTP.NoContent });
                             });
                           },
                         
@@ -416,12 +470,15 @@
                           /**
                            * Filter fields depending on query mode (read, write, select, sort...)
                            *
+                           * @method filterFields
                            * @param {Array|Object} fields
                            * @param {QueryMode} queryMode
-                           * @returns {Array|Object}
+                           * @return {Array|Object}
                            */
                           filterFields: function(fields, queryMode) {
                             if (!(queryMode instanceof QueryMode)) throw new Error(&#x27;Invalid query mode: &#x27; + queryMode);
+                            if (fields &amp;&amp; fields.toJSON) fields = fields.toJSON();
+                        
                             switch (queryMode) {
                               case Resource.READ: return _.pick(fields, this._selectable);
                               case Resource.SELECT: return this.parseFieldsList(fields, this._selectable);
@@ -444,23 +501,6 @@
                               .split(/\s*,\s*/)
                               .filter(function(field) { return ~allowedFields.indexOf(field.replace(/^(\+|-)/, &#x27;&#x27;)); })
                               .join(&#x27; &#x27;);
-                          },
-                        
-                          /**
-                           * Build routes
-                           *
-                           * @private
-                           */
-                          _buildRoutes: function() {
-                            var self = this;
-                            this._routes = this.methods.map(function(method) {
-                              var DefaultRoute = DefaultRoutes[method];
-                              return DefaultRoute.create({
-                                resource: self,
-                                handlers: [self[DefaultRoute.defaultHandler].bind(self)]
-                              });
-                            });
-                            return this._routes;
                           },
                         
                           /**
@@ -504,13 +544,21 @@
                         }, {
                         
                           /**
-                           * Default values
+                           * @attribute _DEFAULT
+                           * @static
+                           * @private
+                           * @readOnly
+                           * @type Object
                            */
                           _DEFAULTS: {
-                            methods: [&#x27;get&#x27;, &#x27;put&#x27;, &#x27;patch&#x27;, &#x27;delete&#x27;, &#x27;post&#x27;],
-                            maxLimit: 1000,
-                            defaultLimit: 20,
-                            countCacheExpiration: NOOT.Time.SECOND
+                            get methods() { return [&#x27;get&#x27;, &#x27;put&#x27;, &#x27;patch&#x27;, &#x27;delete&#x27;, &#x27;post&#x27;]; },
+                            get maxLimit() { return 1000; },
+                            get defaultLimit() { return 20; },
+                            get countCacheExpiration() { return NOOT.Time.SECOND; },
+                            get defaultResponseStatusCode() { return NOOT.HTTP.OK; },
+                            get allowedResponseFields() { return [&#x27;data&#x27;, &#x27;message&#x27;, &#x27;error&#x27;, &#x27;meta&#x27;, &#x27;code&#x27;]; },
+                            get defaultResponseType() { return &#x27;json&#x27;; },
+                            get allowedResponseTypes() { return [&#x27;json&#x27;]; }
                           },
                         
                           /**
@@ -526,11 +574,6 @@
                            * Module&#x27;s supported methods
                            */
                           _SUPPORTED_METHODS: [&#x27;get&#x27;, &#x27;put&#x27;, &#x27;patch&#x27;, &#x27;delete&#x27;, &#x27;post&#x27;],
-                        
-                        
-                          _getDefaultMethods: function() {
-                            return Resource._DEFAULTS.methods.slice(0);
-                          },
                         
                           /**
                            * Ensure array only contains supported methods

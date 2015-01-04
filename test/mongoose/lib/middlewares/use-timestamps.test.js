@@ -1,6 +1,4 @@
 var NOOT = nootrequire('mongoose');
-var mongoose = require('mongoose');
-var _ = require('lodash');
 var Utils = require('../../../test-utils');
 
 var Schema = NOOT.Mongoose.Schema;
@@ -19,11 +17,10 @@ describe('NOOT.Mongoose.useTimestamps()', function() {
     db = Utils.DB.create({ name: TEST_DB_NAME, drop: true }, function(err) {
       if (err) return done(err);
       UseTimestamps = db.model('UseTimestamps', Schema.extend({
-          schema: { foo: String, bar: Number },
-          options: { collection: TEST_COLLECTION_NAME }
-        })
-        .useTimestamps()
-      );
+        schema: { foo: String, bar: Number },
+        options: { collection: TEST_COLLECTION_NAME }
+      })
+      .useTimestamps());
 
       return done();
     });
