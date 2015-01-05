@@ -25,7 +25,6 @@ var db;
 var app = express();
 app.use(require('body-parser')());
 
-
 var UserSchema;
 var BlogSchema;
 var PostSchema;
@@ -35,15 +34,11 @@ var Blog;
 var Post;
 
 var privateAPI;
-var publicAPI;
 
 var UserResource;
-var BlogResource;
-var PostResource;
 
 var UserGetInfoRoute;
 var UserGetInfoFromStackRoute;
-var BlogGetPostsRoute;
 
 
 UserSchema = Schema.extend({
@@ -139,7 +134,7 @@ describe('NOOT.API - Complete test', function() {
 
       privateAPI.launch();
 
-      app.use(function(err, req, res, next) {
+      app.use(function(err, req, res, next) { // jshint ignore:line
         //console.log(err.stack.toString());
         return res.status(err.statusCode || 500).json({ message: err.message, code: err.code, error: true });
       });

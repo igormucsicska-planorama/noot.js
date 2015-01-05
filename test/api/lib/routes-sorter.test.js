@@ -1,24 +1,11 @@
 var NOOT = nootrequire('api');
-var express = require('express');
 var _ = require('lodash');
-var mongoose = require('mongoose');
 
+var RoutesSorter = NOOT.API.RoutesSorter;
 
-describe('NOOT.API', function() {
+describe('NOOT.API.RoutesSorter', function() {
 
-  describe('.init()', function() {
-    it('should not create an instance (missing `server`)', function() {
-      (function() { NOOT.API.create(); }).should.throw(/server/);
-    });
-
-    it('should create an instance and initialize properties', function() {
-      var api = NOOT.API.create({ server: express() });
-      api._resources.should.deep.eql([]);
-      api._routes.should.deep.eql([]);
-    });
-  });
-
-  describe('.sortRoutes()', function() {
+  describe('.compute()', function() {
     var result = [
       // DELETE
       { path: '/users/:id', method: 'DELETE' },
@@ -46,7 +33,7 @@ describe('NOOT.API', function() {
     it('should always return the same result', function() {
       var prev;
       _.times(100, function() {
-        var sorted = NOOT.API.sortRoutes(_.shuffle(result));
+        var sorted = RoutesSorter.compute(_.shuffle(result));
         if (prev) sorted.should.deep.eql(prev);
         prev = sorted;
       });
@@ -54,16 +41,14 @@ describe('NOOT.API', function() {
 
     it('should order shuffled routes (100 different shuffles)', function() {
       _.times(100, function() {
-        NOOT.API.sortRoutes(_.shuffle(result)).should.deep.eql(result);
+        RoutesSorter.compute(_.shuffle(result)).should.deep.eql(result);
       });
     });
 
     it('should have kept reference', function() {
       var toOrder = _.shuffle(result);
-      (NOOT.API.sortRoutes(toOrder) === toOrder).should.eql(true);
+      (RoutesSorter.compute(toOrder) === toOrder).should.eql(true);
     });
-
   });
-
 
 });

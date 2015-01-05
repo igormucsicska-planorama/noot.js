@@ -1,7 +1,7 @@
 /**
  * Dependencies
  */
-var NOOT = require('../../../')('object');
+var NOOT = require('../../../')('object', 'errors');
 var _ = require('lodash');
 
 /***********************************************************************************************************************
@@ -54,6 +54,8 @@ var ConditionsParser = NOOT.Object.extend({
    * @returns {Object}
    */
   compute: function(query) {
+    var self = this;
+
     var allowedFields = this.fields;
     var allowedOperators = this.operators;
 
@@ -74,7 +76,7 @@ var ConditionsParser = NOOT.Object.extend({
       };
     }).filter(function(key) {
       var isAllowed = !!~allowedFields.indexOf(key.path);
-      if (shouldThrowField && !isAllowed) throw new Error('Invalid field: ' + key.path);
+      if (shouldThrowField && !isAllowed) throw new NOOT.Errors.BadRequest('Invalid field: ' + key.path);
       return isAllowed;
     });
 
@@ -85,7 +87,9 @@ var ConditionsParser = NOOT.Object.extend({
         path: path,
         match: _.flatten(groupedByPath[path].map(function(item) { return item.match; })).filter(function(match) {
           var isAllowed = !!~allowedOperators.indexOf(match.operator);
-          if (shouldThrowOperator && !isAllowed) throw new Error('Invalid operator: ' + match.operator);
+          if (shouldThrowOperator && !isAllowed) {
+            throw new NOOT.Errors.BadRequest('Invalid operator: ' + match.operator);
+          }
           return isAllowed;
         })
       });
@@ -98,12 +102,29 @@ var ConditionsParser = NOOT.Object.extend({
       } else {
         key.match.forEach(function(match) {
           ret[key.path] = ret[key.path] || {};
-          ret[key.path][match.operator] = match.value;
+          ret[key.path][match.operator] = self.parseMatch(match);
         });
       }
     });
 
     return ret;
+  },
+
+  /**
+   *
+   *
+   *
+   * @method parseMatch
+   * @param {Object} match
+   * @return {*}
+   */
+  parseMatch: function(match) {
+    switch (match.operator) {
+      case '$in':
+      case '$nin':
+        return (match.value).toString().split(/\s*,\s*/);
+      default: return match.value;
+    }
   }
 
 });

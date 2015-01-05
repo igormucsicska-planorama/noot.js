@@ -105,7 +105,6 @@ describe('NOOT.API.ConditionsParser', function() {
         age: { $gt: 25, $lt: 30 }
       });
     });
-
   });
 
   describe('prototype.compute() (safe)', function() {
@@ -180,6 +179,25 @@ describe('NOOT.API.ConditionsParser', function() {
       }).should.throw('Invalid operator: $range');
     });
 
+  });
+
+  describe('prototype.parseMatch()', function() {
+    var parser = ConditionsParser.create({
+      fields: [],
+      operators: []
+    });
+
+    it('should parse list of fields ($in)', function() {
+      parser.parseMatch({ operator: '$in', value: '10, 12, 23' }).should.deep.eql(['10', '12', '23']);
+    });
+
+    it('should parse list of fields ($nin)', function() {
+      parser.parseMatch({ operator: '$nin', value: '10, 12, 23' }).should.deep.eql(['10', '12', '23']);
+    });
+
+    it('should return raw value', function() {
+      parser.parseMatch({ operator: '$gt', value: '10, 12, 23' }).should.eql('10, 12, 23');
+    });
   });
 
 });
