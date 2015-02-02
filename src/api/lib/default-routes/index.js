@@ -1,7 +1,9 @@
 /**
  * Dependencies
  */
-var NOOT = require('../../../')('namespace');
+var NOOT = require('../../../../')('namespace');
+
+var Route = require('../route');
 
 /***********************************************************************************************************************
  * @class DefaultRoutes
@@ -10,11 +12,16 @@ var NOOT = require('../../../')('namespace');
  * @static
  **********************************************************************************************************************/
 var Routes = NOOT.Namespace.create({
-  Get: require('./default-routes/get'),
-  Delete: require('./default-routes/delete'),
-  Post: require('./default-routes/post'),
-  Put: require('./default-routes/put'),
-  Patch: require('./default-routes/patch')
+  get: require('./get'),
+  delete: require('./delete'),
+  post: require('./post'),
+  put: require('./put'),
+  patch: require('./patch')
+});
+
+// List supported methods
+Routes.supportedMethods = Object.keys(Routes).filter(function(property) {
+  return Route.detect(Routes[property]);
 });
 
 /**

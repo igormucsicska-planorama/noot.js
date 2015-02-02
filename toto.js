@@ -5,7 +5,6 @@ var mongoose = require('mongoose');
 var app = express();
 
 
-
 var AuthRoute = NOOT.API.Route.extend({
   authorization: function(req, res, next) {
     if (req.user.level < this.level) return next(new NOOT.Errors.Unauthorized());
@@ -20,26 +19,38 @@ var AuthRoute = NOOT.API.Route.extend({
 
 
 
-var UserResource = NOOT.API.Resource.extend({
+var UserResource = NOOT.API.MongooseResource.extend({
+
   model: mongoose.model('User'),
+
   customRoutes: [
     AuthRoute.extend({
       path: '/users/me',
       handler: function(stack) {
-        stack.filter(['email', 'name']);
-
         stack.next();
       }
     })
   ]
+
 });
 
-var PostResource = NOOT.API.Resource.extend({
-  model: mongoose.model('Post')
+
+var PicturesResource = NOOT.API.S3Resource.extend({
+
+  path: 'pictures',
+
+  methods: [],
+
+
+
+});
+
+var PostResource = NOOT.API.RedisResource.extend({
+
 });
 
 NOOT.API
-  .create({ version: 'v1', server: app })
+  .create({ name: 'v1', server: app })
   .registerResources(UserResource, PostResource)
   .launch();
 

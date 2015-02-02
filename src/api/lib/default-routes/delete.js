@@ -23,21 +23,14 @@ var Delete = Route.extend({
    * @default /:id
    * @type String
    */
-  path: '/:id',
-
-  allowMany: true,
-
-  init: function() {
-    if (this.allowMany) this.path += '?';
-    this._super();
-  },
+  path: '/',
 
   /**
    * @property handler
    * @type middleware
    */
   handler: function(stack) {
-    return stack.req.param('id') ? stack.delete(stack) : stack.deleteMany(stack);
+    return this.resource.delete(stack);
   }
 
 });

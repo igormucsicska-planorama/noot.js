@@ -1,16 +1,15 @@
 /**
  * Dependencies
  */
-var NOOT = require('../../../')('namespace');
-var Filter = require('./filter');
+var NOOT = require('../../../')('enum');
 
 /***********************************************************************************************************************
- * @class Filters
+ * @class FilterModes
  * @static
  * @namespace NOOT.API
- * @extends NOOT.Namespace
+ * @extends NOOT.Enum
  **********************************************************************************************************************/
-var Filters = NOOT.Namespace.create({
+var FilterModes = NOOT.Enum.create({
 
   /**
    * @property READ
@@ -19,7 +18,7 @@ var Filters = NOOT.Namespace.create({
    * @static
    * @readOnly
    */
-  READ: Filter.create({}),
+  READ: 'read',
 
   /**
    * @property SELECT
@@ -28,7 +27,7 @@ var Filters = NOOT.Namespace.create({
    * @static
    * @readOnly
    */
-  SELECT: Filter.create({}),
+  SELECT: 'select',
 
   /**
    * @property WRITE
@@ -37,7 +36,7 @@ var Filters = NOOT.Namespace.create({
    * @static
    * @readOnly
    */
-  WRITE: Filter.create({}),
+  WRITE: 'write',
 
   /**
    * @property SORT
@@ -46,16 +45,21 @@ var Filters = NOOT.Namespace.create({
    * @static
    * @readOnly
    */
-  SORT: Filter.create({}),
+  SORT: 'sort',
 
   /**
-   * @property FILTER
+   * @property MATCH
    * @type NOOT.API.Filter
    * @final
    * @static
    * @readOnly
    */
-  FILTER: Filter.create({})
+  FILTER: 'filter'
+
 });
 
-module.exports = Filters;
+
+/**
+ * @exports
+ */
+module.exports = FilterModes;

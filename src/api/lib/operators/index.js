@@ -1,17 +1,22 @@
 /**
  * Dependencies
  */
-var NOOT = require('../../../')('object');
+var NOOT = require('../../../../')('namespace');
+
+var Operator = require('./lib/operator');
 
 /***********************************************************************************************************************
- * @class Filter
- * @constructor
- * @namespace NOOT.API
- * @extends NOOT.Object
+ *
+ *
+ *
+ *
  **********************************************************************************************************************/
-var Filter = NOOT.Object.extend();
+var Operators = NOOT.Namespace.create({
+
+});
+
 
 /**
  * @exports
  */
-module.exports = Filter;
+module.exports = Operators;

@@ -10,7 +10,7 @@ describe('NOOT.API', function() {
 
     it('should create an instance and initialize properties', function() {
       var api = NOOT.API.create({ server: express() });
-      api._resources.should.deep.eql([]);
+      api._resources.should.deep.eql({});
       api._routes.should.deep.eql([]);
     });
   });
