@@ -96,7 +96,11 @@ var DeveloperSchema = EmployeeSchema.extend({
 /**
  * ArtistSchema
  */
-var ArtistSchema = PersonSchema.extend({});
+var ArtistSchema = PersonSchema.extend({
+  schema: {
+    developer: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Singer' }]
+  }
+});
 
 /**
  * SingerSchema
@@ -164,6 +168,12 @@ describe('NOOT.Mongoose.Schema', function() {
       PersonLegacy = dbs.main.model('PersonLegacy', PersonLegacySchema);
       Artist = dbs.main.model('Artiste', ArtistSchema);
       Singer = dbs.main.model('Singer', SingerSchema);
+
+      var s = Artist.schema;
+
+      for (var pathName in s.paths) {
+        console.log(pathName, s.paths[pathName]);
+      }
 
 
       /**

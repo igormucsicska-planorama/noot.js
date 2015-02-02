@@ -13,17 +13,10 @@ var Route = require('../route');
 var Patch = Route.extend({
 
   method: 'patch',
-  path: '/:id',
-
-  allowMany: true,
-
-  init: function() {
-    if (this.allowMany) this.path += '?';
-    this._super();
-  },
+  path: '/',
 
   handler: function(stack) {
-    return stack.req.param('id') ? stack.update(stack) : stack.updateMany(stack);
+    return this.resource.update(stack);
   }
 
 });

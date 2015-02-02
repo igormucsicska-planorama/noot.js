@@ -15,13 +15,8 @@ var Post = Route.extend({
   method: 'post',
   path: '/',
 
-  allowMany: true,
-
   handler: function(stack) {
-    if (!this.allowMany && NOOT.isArray(stack.body)) {
-      return stack.next(new NOOT.Errors.Forbidden('Cannot post multiple items at a time'));
-    }
-    return stack.create(stack);
+    return this.resource.create(stack);
   }
 
 });

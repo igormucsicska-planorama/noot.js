@@ -89,19 +89,34 @@ var Utils = {
    *
    * @for NOOT
    * @static
-   * @method escapeForRegExp
+   * @method toRegExpString
    * @param {String} str
    * @return {String}
    */
-  escapeForRegExp: function(str) {
+  toRegExpString: function(str) {
     return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&');
   },
 
-  getFunctionParamsNames: function(fn) {
+  /**
+   *
+   *
+   *
+   * @param fn
+   * @returns {Array|{index: number, input: string}|Array}
+   */
+  getArgumentsNames: function(fn) {
     var fnStr = fn.toString().replace(STRIP_COMMENTS, '');
     return fnStr.slice(fnStr.indexOf('(') + 1, fnStr.indexOf(')')).match(ARGUMENT_NAMES) || [];
   },
 
+  /**
+   *
+   *
+   *
+   * @param obj
+   * @param path
+   * @param value
+   */
   trySet: function(obj, path, value) {
     var parts = path.split('.');
     var initial = parts.shift();
@@ -134,6 +149,14 @@ var Utils = {
     obj[initial] = context;
   },
 
+  /**
+   *
+   *
+   *
+   * @param obj
+   * @param path
+   * @returns {*}
+   */
   tryGet: function(obj, path) {
     var parts = path.split('.');
     var ret = obj[parts.shift()];
@@ -168,8 +191,6 @@ var Utils = {
 
     return ret;
   }
-
-
 
 };
 

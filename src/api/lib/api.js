@@ -6,7 +6,8 @@ var _ = require('lodash');
 
 var Resource = require('./resource');
 var RoutesSorter = require('./routes-sorter');
-var Authable = require('./authable');
+var Authable = require('./interfaces/authable');
+var Utils = require('./utils');
 
 
 /***********************************************************************************************************************
@@ -37,24 +38,48 @@ var API = NOOT.Object.extend(Authable).extend({
   /**
    * @property _resources
    * @type Array
-   * @private
    */
-  _resources: null,
+  resources: null,
 
   /**
    * @property _routes
    * @type Array
-   * @private
    */
-  _routes: null,
+  routes: null,
+
+  /**
+   *
+   */
+  requestsLogger: false,
+
+  /**
+   *
+   */
+  errorHandler: function(err, req, res, next) {
+    var stack = req.nootApiStack;
+    stack.append({ error: true });
+    if (err.message) stack.pushMessage(err.message);
+    if (err.statusCode) stack.setStatus(err.statusCode);
+    if (err.code) stack.append({ code: err.code });
+    if (stack.statusCode === 500) console.log(err.stack); // TODO remove this line
+    return stack.resource.sendResponse(stack);
+  },
+
+  /**
+   *
+   * @property routesPaths
+   * @type Array of String
+   * @readOnly
+   */
+  get routesPaths() { return this.routes.map(function(route) { return route.path; }); },
 
   /**
    * Constructor
    */
   init: function() {
     NOOT.required(this, 'server');
-    this._resources = [];
-    this._routes = [];
+    this.resources = {};
+    this.routes = [];
   },
 
   /**
@@ -66,17 +91,23 @@ var API = NOOT.Object.extend(Authable).extend({
     var self = this;
     var server = this.server;
     var allRoutes = [];
-    this._resources = this._resources.map(function(resourceClass) {
-      var instance = resourceClass.create({ api: self, _authableParent: self });
-      allRoutes = allRoutes.concat(instance._routes);
+
+    var resources = _.mapValues(this.resources, function(resourceClass) {
+      var instance = resourceClass.create({ api: self });
+      allRoutes = allRoutes.concat(instance.routes);
       return instance;
     });
 
-    this._routes = API.sortRoutes(allRoutes);
+    var routes = API.sortRoutes(allRoutes);
 
-    this._routes.forEach(function(route) {
-      server[route.method].apply(server, [route.path].concat(route._handlers));
+    routes.forEach(function(route) {
+      server[route.method].apply(server, [route.path].concat(route.handlers));
     });
+
+    if (this.errorHandler) server.use(this.errorHandler);
+
+    Utils.makeReadOnly(this, 'resources', resources);
+    Utils.makeReadOnly(this, 'routes', routes);
   },
 
   /**
@@ -84,15 +115,17 @@ var API = NOOT.Object.extend(Authable).extend({
    *
    * @method registerResource
    * @chainable
+   * @param {String} name Name of the resource to register
    * @param {Class} resource A {{#crossLink "NOOT.API.Resource"}}{{/crossLink}} **class** that will be
    * instantiated by the API
    */
-  registerResource: function(resource) {
+  registerResource: function(name, resource) {
+    if (this.resources[name]) throw new Error('A resource `' + name + '` is already registered');
     if (!Resource.detect(resource)) {
       if (resource instanceof Resource) throw new Error('You must register classes, not instances');
       throw new Error('Not a subclass of NOOT.API.Resource');
     }
-    this._resources.push(resource);
+    this.resources[name] = resource;
     return this;
   },
 
@@ -101,10 +134,12 @@ var API = NOOT.Object.extend(Authable).extend({
    *
    * @method registerResources
    * @chainable
-   * @param {Class} resources,... A list of arguments ({{#crossLink "NOOT.API.Resource"}}{{/crossLink}} **classes**)
+   * @param {Object} resources Map of resources ({{#crossLink "NOOT.API.Resource"}}{{/crossLink}} **classes**)
    */
-  registerResources: function() {
-    _.flatten(NOOT.makeArray(arguments)).forEach(this.registerResource.bind(this));
+  registerResources: function(resources) {
+    for (var name in resources) {
+      this.registerResource(name, resources[name]);
+    }
     return this;
   }
 

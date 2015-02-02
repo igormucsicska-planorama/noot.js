@@ -16,8 +16,10 @@
     "change-case": "~2.1.4",
     "colors": "^0.6.2",
     "cron": "^1.0.4",
+    "flat": "^1.5.0",
     "inflected": "^1.1.6",
     "lodash": "~2.4.1",
+    "moment": "^2.9.0",
     "underscore.string": "^2.4.0"
   },
   "devDependencies": {
@@ -34,7 +36,6 @@
     "lorem-ipsum": "^1.0.1",
     "minimist": "^1.1.0",
     "mocha": "~1.21.0",
-    "grunt-blanket": "0.0.8",
     "mongoose": "^3.8.21",
     "supertest": "^0.15.0"
   },

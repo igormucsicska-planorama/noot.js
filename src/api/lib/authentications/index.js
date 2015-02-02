@@ -1,29 +1,22 @@
 /**
  * Dependencies
  */
-var Route = require('../route');
+var NOOT = require('../../../../')('namespace');
+
+var Authentication = require('./lib/authentication');
 
 /***********************************************************************************************************************
- * @class Put
- * @namespace NOOT.API.DefaultRoutes
- * @extends NOOT.API.Route
- * @constructor
+ *
+ *
+ *
  *
  **********************************************************************************************************************/
-var Put = Route.extend({
-
-  method: 'put',
-  path: '/',
-
-  allowMany: true,
-
-  handler: function(stack) {
-    return stack.update(stack);
-  }
-
+var Authentications = NOOT.Namespace.create({
+  Authentication: Authentication
 });
+
 
 /**
  * @exports
  */
-module.exports = Put;
+module.exports = Authentications;

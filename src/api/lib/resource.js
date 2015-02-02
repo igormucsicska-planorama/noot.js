@@ -1,157 +1,169 @@
 /**
  * Dependencies
  */
-var NOOT = require('../../../')('object', 'url', 'time', 'errors', 'http');
-var Inflector = require('inflected');
 var _ = require('lodash');
+var NOOT = require('../../../')('object', 'http');
 
+var QueryField = require('./query-field');
+var Authable = require('./interfaces/authable');
+var Queryable = require('./interfaces/queryable');
 var DefaultRoutes = require('./default-routes');
-var Queryable = require('./queryable');
-var Authable = require('./authable');
-
+var Route = require('./route');
+var Utils = require('./utils');
 
 /***********************************************************************************************************************
- * @class Resource
- * @namespace NOOT.API
- * @constructor
- * @extends NOOT.Object
- * @uses NOOT.API.Queryable
- * @uses NOOT.API.Authable
+ *
+ *
+ *
+ *
  **********************************************************************************************************************/
 var Resource = NOOT.Object.extend(Authable).extend(Queryable).extend({
 
-  /**
-   *
-   *
-   * @property model
-   * @type Mongoose.Model
-   */
-  model: null,
-
-  /**
-   *
-   *
-   * @property path
-   * @type String
-   */
-  path: '',
-
-  /**
-   *
-   *
-   * @property defaultResponseStatusCode
-   * @type Number
-   */
-  defaultResponseStatusCode: null,
-
-  /**
-   *
-   *
-   * @property defaultResponseType
-   * @type String
-   */
+  methods: null,
+  detailMethods: null,
+  manyMethods: null,
+  defaultStatusCode: null,
+  supportedOperators: null,
+  allowedResponseTypes: null,
   defaultResponseType: null,
 
-  /**
-   *
-   *
-   * @property allowedResponseTypes
-   * @type Array
-   */
-  allowedResponseTypes: null,
+  fields: null,
 
   /**
    *
    *
-   * @property allowedResponseTypes
-   * @type Array
-   */
-  allowedOperators: null,
-
-  /**
    *
-   *
-   * @property customRoutes
-   * @type Array
-   */
-  customRoutes: null,
-
-  /**
-   *
-   *
-   * @property methods
-   * @type Array
-   */
-  methods: null,
-
-  /**
-   *
-   *
-   * @property listMethods
-   * @type Array
-   */
-  listMethods: null,
-
-  /**
-   *
-   *
-   * @property _routes
-   * @type Array
-   * @private
-   */
-  _routes: null,
-
-
-  /**
-   * Constructor
    */
   init: function() {
-    NOOT.required(this, 'model');
+    NOOT.defaults(this, Resource.DEFAULTS);
+    NOOT.required(this, 'api');
     if (!(this.api instanceof require('./api'))) throw new Error('Not a NOOT.API');
-
-    this.listMethods = this.listMethods || Resource._DEFAULTS.listMethods;
-    this.methods = this.methods || Resource._DEFAULTS.methods;
-    this.defaultResponseStatusCode = this.defaultResponseStatusCode || Resource._DEFAULTS.defaultResponseStatusCode;
-    this.allowedResponseFields = this.allowedResponseFields || Resource._DEFAULTS.allowedResponseFields;
-    this.defaultResponseType = this.defaultResponseType || Resource._DEFAULTS.defaultResponseType;
-    this.allowedResponseTypes = this.allowedResponseTypes || Resource._DEFAULTS.allowedResponseTypes;
-    this.allowedOperators = this.allowedOperators || Resource._DEFAULTS.allowedOperators;
-
-    Resource.validateMethods(this.methods);
-    Resource.validateMethods(this.listMethods);
-    this._buildPath();
-    this._computeQueryable();
+    this.fields = this.fields || this.getFields() || {};
+    this.computeQueryable();
+    this._buildMethods();
     this._buildRoutes();
   },
 
   /**
    *
    *
-   * @method createResponse
-   * @param {NOOT.API.Stack} stack
+   *
    */
-  createResponse: function(stack) {
-    stack.res.status(stack.package.statusCode || this.defaultResponseStatusCode);
-    stack.package = _.pick(stack.package, ['data', 'error', 'message', 'messages', 'meta']);
-    return this.getResponseHandler(stack)(stack);
+  getFields: function() {},
+
+  /**
+   *
+   *
+   *
+   * @private
+   */
+  _buildMethods: function() {
+    var detail = this.detailMethods;
+    var many = this.manyMethods;
+    var all = this.methods;
+
+    if (detail) {
+      detail.forEach(Resource.validateDefaultRouteMethod.bind(Resource));
+      detail = detail.map(function(method) { return method.toLowerCase(); });
+    }
+
+    if (many) {
+      many.forEach(Resource.validateDefaultRouteMethod.bind(Resource));
+      many = many.map(function(method) { return method.toLowerCase(); });
+    }
+
+    if (all) {
+      all.forEach(Resource.validateDefaultRouteMethod.bind(Resource));
+      all = all.map(function(method) { return method.toLowerCase(); });
+    } else {
+      all = Resource.DEFAULT_ROUTES_METHODS;
+    }
+
+    // Assign final values and make them readOnly
+    Utils.makeReadOnly(this, 'detailMethods', detail || all);
+    Utils.makeReadOnly(this, 'manyMethods', many || all);
+    Utils.makeReadOnly(this, 'methods', all);
   },
 
   /**
    *
    *
    *
-   * @method getResponseHandler
+   * @private
+   */
+  _buildRoutes: function() {
+    var self = this;
+    var routes = this.routes || [];
+
+    this.detailMethods.forEach(function(method) {
+      routes.push(DefaultRoutes[method].extend({ isDetail: true }));
+    });
+
+    this.manyMethods.forEach(function(method) {
+      routes.push(DefaultRoutes[method].extend({ isDetail: false }));
+    });
+
+    this.routes = routes.map(function(routeClass) {
+      if (!Route.detect(routeClass)) throw new Error('Not an NOOT.API.Route');
+      return routeClass.create({ resource: self, __queryableParent: self });
+    });
+  },
+
+  /**
+   *
+   *
+   *
+   *
    * @param stack
    * @returns {*}
    */
-  getResponseHandler: function(stack) {
+  validateFields: function(stack) {
+    return stack.next();
+  },
+
+  /**
+   *
+   *
+   *
+   *
+   * @param stack
+   * @returns {*}
+   */
+  validateOperators: function(stack) {
+    return stack.next();
+  },
+
+  /**
+   *
+   *
+   *
+   * @param stack
+   * @returns {*}
+   */
+  formatResponsePackage: function(stack) {
+    var pack = stack.package;
+    if (!pack.messages.length) delete pack.messages;
+    pack.statusCode = pack.statusCode || this.defaultStatusCode;
+    stack.package = _.pick(pack, ['data', 'error', 'message', 'messages', 'meta']);
+    return stack.next();
+  },
+
+  /**
+   *
+   *
+   *
+   * @param stack
+   * @returns {*}
+   */
+  sendResponse: function(stack) {
+    stack.res.status(stack.statusCode);
+
     var type = stack.req.accepts(this.allowedResponseTypes) || this.defaultResponseType;
-    var handler;
+
     switch (type) {
-      case 'json': handler = this.sendJSON; break;
-      default: handler = this.sendJSON;
+      case 'json': return this.sendJSON(stack);
+      default: return this.sendJSON(stack);
     }
-    return handler.bind(this);
   },
 
   /**
@@ -164,84 +176,47 @@ var Resource = NOOT.Object.extend(Authable).extend(Queryable).extend({
    */
   sendJSON: function(stack) {
     return stack.res.json(stack.package);
-  },
-
-  /**
-   *
-   *
-   * @method _buildRoutes
-   * @private
-   */
-  _buildRoutes: function() {
-    var self = this;
-    var routes = (NOOT.makeArray(this.customRoutes) || []).concat(this.methods.map(function(methodName) {
-      return DefaultRoutes[Inflector.classify(methodName)].extend({
-        allowMany: !!~self.listMethods.indexOf(methodName)
-      });
-    }));
-
-    this._routes = routes.map(function(route) {
-      return route.create({ resource: self, _queryableParent: self });
-    });
-
-  },
-
-  /**
-   *
-   *
-   * @method _buildPath
-   * @private
-   */
-  _buildPath: function() {
-    var path = this.path || NOOT.dasherize(Inflector.pluralize(this.model.modelName));
-    this.path = NOOT.Url.join('/', this.api.name || '', path).replace(/\/$/, '');
   }
-
 }, {
 
   /**
-   * @property _DEFAULT
-   * @static
-   * @private
-   * @readOnly
-   * @type Object
+   *
    */
-  _DEFAULTS: {
-    get methods() { return ['get', 'put', 'patch', 'delete', 'post']; },
-    get listMethods() { return ['get', 'put', 'patch', 'delete', 'post']; },
-    get defaultResponseStatusCode() { return NOOT.HTTP.OK; },
-    get allowedResponseFields() { return ['data', 'message', 'error', 'meta', 'code']; },
-    get defaultResponseType() { return 'json'; },
+  DEFAULTS: {
+    get methods() { return DefaultRoutes.supportedMethods; },
+    get defaultStatusCode() { return NOOT.HTTP.OK; },
     get allowedResponseTypes() { return ['json']; },
-    get allowedOperators() { return ['$eq', '$gt', '$gte', '$lt', '$lte', '$in', '$nin', '$ne']; }
+    get defaultResponseType() { return 'json'; },
+    get supportedOperators() { return this.SUPPORTED_OPERATORS; }
   },
 
-  /**
-   * @property _SUPPORTED_METHODS
-   * @static
-   * @private
-   * @readOnly
-   * @type Array
-   */
-  _SUPPORTED_METHODS: ['get', 'put', 'patch', 'delete', 'post'],
+
+  SUPPORTED_OPERATORS: ['gt', 'gte', 'lt', 'lte', 'eq', 'ne', 'in', 'nin', 'regex'],
+
+  parseFilter: function(filter) {
+    var fields = [];
+    for (var key in filter) {
+      fields.push(QueryField.create({ entry: _.pick(filter, [key]), separator: this.OPERATOR_SEPARATOR }));
+    }
+    return fields;
+  },
+
+  OPERATOR_SEPARATOR: '__',
 
   /**
-   * Ensure array only contains supported methods, throws an error if any is not supported
    *
-   * @static
-   * @method validateMethods
-   * @param {Array} methods
+   *
+   *
+   * @param method
    */
-  validateMethods: function(methods) {
-    if (!NOOT.isArray(methods)) throw new Error('`methods` should be an array of HTTP verbs');
-    var supported = this._SUPPORTED_METHODS;
-    return methods.forEach(function(method) {
-      if (!~supported.indexOf(method)) throw new Error('Method "' + method + '" is not supported');
-    });
+  validateDefaultRouteMethod: function(method) {
+    if (!_.contains(DefaultRoutes.supportedMethods, method.toLowerCase())) {
+      throw new Error('Invalid method for auto generated route: ' + method);
+    }
   }
+
 });
 
-/**
- * @exports
- */
+
+
 module.exports = Resource;
