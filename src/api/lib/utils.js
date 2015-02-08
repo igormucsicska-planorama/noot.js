@@ -3,7 +3,7 @@ var NOOT = require('../../../')('namespace');
 var Utils = NOOT.Namespace.create({
 
   parseFieldsList: function(str) {
-    return (str || '').split(/\s*,\s*/).join(' ') || null;
+    return (str || '').split(/\s*,\s*/);
   },
 
   makeReadOnly: function(obj, prop, value) {

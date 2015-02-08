@@ -17,7 +17,8 @@ var BUBBLED_PROPERTIES_DEFAULTS = {
   get _sortable() { return []; },
   get _filterable() { return []; },
   get _maxGetLimit() { return 100; },
-  get _defaultGetLimit() { return 20; }
+  get _defaultGetLimit() { return 20; },
+  get _operatorSeparator() { return '__'; }
 };
 
 
@@ -58,7 +59,10 @@ var Queryable = NOOT.Mixin.create({
   defaultGetLimit: null,
   _defaultGetLimit: null,
 
-  get fieldsPaths() { return (NOOT.isObject(this.fields) && Object.keys(this.fields)) || [];  },
+  operatorSeparator: null,
+  _operatorSeparator: null,
+
+  fieldsPaths: null,
 
   /**
    *
@@ -78,7 +82,7 @@ var Queryable = NOOT.Mixin.create({
    */
   _buildBubbledFields: function() {
     ['selectable', 'sortable', 'writable', 'filterable'].forEach(this._buildAllowedFieldsForType.bind(this));
-    ['maxGetLimit', 'defaultGetLimit'].forEach(this._defineBubbledProperty.bind(this));
+    ['maxGetLimit', 'defaultGetLimit', 'operatorSeparator'].forEach(this._defineBubbledProperty.bind(this));
   },
 
   /**
@@ -108,7 +112,7 @@ var Queryable = NOOT.Mixin.create({
 
     this['_' + type] = allowed;
 
-    this._defineBubbledProperty(type);
+    return this._defineBubbledProperty(type);
   },
 
   /**
@@ -119,7 +123,7 @@ var Queryable = NOOT.Mixin.create({
    * @private
    */
   _defineBubbledProperty: function(prop) {
-    Object.defineProperty(this, prop, {
+    return Object.defineProperty(this, prop, {
       get: function() { return this._bubbleProperty('_' + prop, prop); }
     });
   },

@@ -1,9 +1,11 @@
-var NOOT = require('../../../../')();
+var NOOT = require('../../../../../index')();
 
-var Field = require('./lib/field');
+var Field = require('./../lib/field');
 
 
 var DateField = Field.extend({
+  supportedOperators: ['gt', 'gte', 'lt', 'lte'],
+
   parseFromQueryString: function() {
     return this.isTimestamp() ? new Date(this.value) : Date.parse(this.value);
   },

@@ -11,12 +11,28 @@ var _ = require('lodash');
 var Field = NOOT.Object.extend({
 
   /**
+   * Value to be passed when instanciating the field.
+   *
+   * @property value
+   * @type *
+   */
+  value: null,
+
+  /**
    * Default value to be applied in case `value` is not provided.
    *
    * @property defaultValue
    * @type *
    */
   defaultValue: null,
+
+  /**
+   *
+   *
+   * @property operator
+   * @type String
+   */
+  operator: null,
 
   /**
    * Defines whether or not this field is required.
@@ -45,6 +61,33 @@ var Field = NOOT.Object.extend({
    */
   isReferenceArray: false,
 
+  /**
+   * Defines whether of not `value` is a valid one. This property needs to be set when calling `validate()`.
+   *
+   * @property isValid
+   * @type Boolean
+   * @default true
+   */
+  isValid: true,
+
+  /**
+   * Defines whether of not `operator` is a valid one.
+   *
+   * @property isValidOperator
+   * @type Boolean
+   * @default true
+   */
+  isValidOperator: true,
+
+  /**
+   * Defines whether or not `value` comes from a query string. If true, then constructor will call
+   * `parseFromQueryString()` and set `value` accordingly.
+   *
+   * @property isQS
+   * @type Boolean
+   * @default false
+   */
+  isQS: false,
 
   /**
    * Internal path to access the field.
@@ -71,15 +114,27 @@ var Field = NOOT.Object.extend({
    * @type String
    * @default path
    */
-  _publicPath: null,
-  get publicPath() { return this._publicPath || this.path; },
-  set publicPath(value) { this._publicPath = value; },
+  publicPath: null,
+
+  /**
+   * Messages to be used by the API. Useful to store error messages when parsing/validating `value`.
+   * Caution: prefer using `pushMessage()` instead of directly populating this array.
+   *
+   * @property messages
+   * @type Array of String
+   * @default []
+   */
+  messages: null,
 
   /**
    * @constructor
    */
   init: function() {
     NOOT.required(this, 'path');
+    this.publicPath = this.publicPath || this.path;
+    this.messages = [];
+    if (this.isQS) this.value = this.parseFromQueryString();
+    this.isValidOperator = !this.operator || _.contains(this.supportedOperators, this.operator);
   },
 
   /**
@@ -88,8 +143,8 @@ var Field = NOOT.Object.extend({
    * @method toPublic
    * @return {*}
    */
-  toPublic: function(value) {
-    return value;
+  toPublic: function() {
+    return this.value;
   },
 
   /**
@@ -98,8 +153,8 @@ var Field = NOOT.Object.extend({
    * @method toInternal
    * @return {*}
    */
-  toInternal: function(value) {
-    return value;
+  toInternal: function() {
+    return this.value;
   },
 
   /**
@@ -109,8 +164,8 @@ var Field = NOOT.Object.extend({
    * @method parseFromQueryString
    * @return {*}
    */
-  parseFromQueryString: function(value) {
-    return value;
+  parseFromQueryString: function() {
+    return this.value;
   },
 
   /**
@@ -119,7 +174,7 @@ var Field = NOOT.Object.extend({
    * @method getReference
    * @return NOOT.API.Resource
    */
-  reference: null,
+  getReference: function() {},
 
   /**
    * Check if `value` is a valid. You must set `isValue` in order to make the system aware of the field's validity,
@@ -130,17 +185,74 @@ var Field = NOOT.Object.extend({
    * @method validate
    * @return {Boolean} isValid
    */
-  validate: function(value) {
-    if (this.isRequired && NOOT.isNone(value)) return false;
-    return true;
+  validate: function() {
+    if (this.isRequired && NOOT.isNone(this.value)) {
+      return this.setValid(false, this.missingParameterMessage());
+    }
+    return this.isValid;
   },
 
-  validateOperator: function(operator) {
-    if (!operator) return true;
-    return _.contains(this.supportedOperators, operator);
+  /**
+   * Convenient method for setting `isValid`. This method returns the value of `isValid`. An optional message can be
+   * passed as a second argument. This message will be pushed to `messages` if provided.
+   *
+   * @param {Boolean} value
+   * @param {String} [message]
+   * @return {Boolean}
+   */
+  setValid: function(value, message) {
+    value = !!value;
+    this.isValid = value;
+    if (message) this.pushMessage(message);
+    return value;
+  },
+
+  /**
+   * Pushes a new message into the `messages` array. In most cases, you'll use this method in the `validate()` phase.
+   *
+   * @param {String} message
+   */
+  pushMessage: function(message) {
+    if (!NOOT.isArray(this.messages)) this.messages = [];
+    this.messages.push(message);
+  },
+
+  /**
+   * Shortcut for static method `missingParameterMessage()`.
+   *
+   * @method missingParameterMessage
+   * @return {String}
+   */
+  missingParameterMessage: function() {
+    return this.constructor.missingParameterMessage(this.publicPath);
+  },
+
+  /**
+   * Shortcut for static method `notInEnumMessage()`.
+   *
+   * @method notInEnumMessage
+   * @param {Array} enumeration
+   * @param {*} [currentValue=`value`]
+   * @return {String}
+   */
+  notInEnumMessage: function(enumeration, currentValue) {
+    return this.constructor.notInEnumMessage(this.publicPath, enumeration, currentValue || this.value);
+  },
+
+  /**
+   * Shortcut for static method `badTypeMessage()`.
+   *
+   * @method badTypeMessage
+   * @param {String} expectedType
+   * @param {String} [currentType=NOOT.typeOf(`value`)]
+   * @return {String}
+   */
+  badTypeMessage: function(expectedType, currentType) {
+    return this.constructor.badTypeMessage(this.publicPath, expectedType, currentType || NOOT.typeOf(this.value));
   }
 
 }, {
+
   /**
    * Message : parameter is missing.
    *
@@ -179,15 +291,8 @@ var Field = NOOT.Object.extend({
    */
   badTypeMessage: function(property, expectedType, currentType) {
     return [property, 'should be a', expectedType, '- instead go a', currentType + '.'].join(' ');
-  },
-
-  forbiddenOperatorMessage: function(property, operator) {
-    return ['Operator `' + operator + '`', 'is not allowed for property', property + '.'].join(' ');
-  },
-
-  forbiddenFieldMessage: function(property) {
-    return ['Field `' + property + '`', 'is not allowed or does not exist.'].join(' ');
   }
+
 });
 
 /**

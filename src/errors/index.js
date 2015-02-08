@@ -3,6 +3,7 @@
  */
 var NOOT = require('../../')('namespace', 'error', 'http');
 var mongoose = require('mongoose');
+var _ = require('lodash');
 
 var ValidationError = mongoose.Error.ValidationError;
 var CastError = mongoose.Error.CastError;
@@ -71,10 +72,31 @@ var Errors = NOOT.Namespace.create({
   Conflict: NOOT.Error.extend({ name: 'ConflictError', statusCode: NOOT.HTTP.Conflict }),
 
 
-  fromMongoose: function(err) {
+  fromMongooseError: function(err) {
     if (err instanceof ValidationError || err instanceof CastError) return new this.BadRequest(err.toString());
     else if (err.code === 11000) return new this.Conflict(err.message);
     return new this.InternalServerError(err.message);
+  },
+
+  /**
+   * Given a status code, returns an instance of one the defined NOOT.Errors. If no defined NOOT.Errors is found, then
+   * NOOT.Errors.InternalServerError will be used as a default.
+   *
+   * @method fromStatusCode
+   * @param {Number} statusCode
+   * @param {*...} [errorParams] NOOT.Error parameters
+   */
+  fromStatusCode: function() {
+    var args = NOOT.makeArray(arguments);
+    var statusCode = args.shift();
+    var ErrorClass = _.find(this, function(item) { return item.prototype.statusCode === statusCode; }) ||
+      this.InternalServerError;
+
+    return (function() {
+      function Wrapper() { return ErrorClass.apply(this, args); }
+      Wrapper.prototype = ErrorClass.prototype;
+      return new Wrapper();
+    })();
   }
 
 });
