@@ -39,15 +39,8 @@ var MongooseResource = MongoResource.extend({
    * @param {NOOT.API.Stack} stack
    */
   get: function(stack) {
-    var query = stack.query;
-
-    var selectError = stack.filterProperties(query.select, FilterModes.SELECT);
-    var filterError = stack.filterProperties(query.filter, FilterModes.FILTER);
-
-    if (selectError || filterError) return stack.next(selectError || filterError);
-
-    return this.model.findOne(query.filter, query.select, function(err, item) {
-      if (err) return stack.next(NOOT.Errors.fromMongoose(err));
+    return this.model.findOne({ _id: stack.primaryKey }, stack.query.select, function(err, item) {
+      if (err) return stack.next(NOOT.Errors.fromMongooseError(err));
       if (!item) return stack.next(new NOOT.Errors.NotFound());
       return stack.setData(item).setStatus(NOOT.HTTP.OK).next();
     });
@@ -70,7 +63,7 @@ var MongooseResource = MongoResource.extend({
       .exec(function(err, items) {
         if (err) return stack.next(err);
         return self.getCount(query.filter, function(err, count) {
-          if (err) return stack.next(NOOT.Errors.fromMongoose(err));
+          if (err) return stack.next(NOOT.Errors.fromMongooseError(err));
           return stack.createManyMeta(count).setData(items).setStatus(NOOT.HTTP.OK).next();
         });
       });
@@ -90,13 +83,24 @@ var MongooseResource = MongoResource.extend({
       return stack.next(new NOOT.Errors.Forbidden('This resource does not allow multiple `POST` at a time'));
     }
 
-    (isMulti ? stack.body : [stack.body]).forEach(function(item) {
-      return stack.validateProperties(item, FilterModes.WRITE);
-    });
-
     return this.model.create(stack.body, function(err, items) {
-      if (err) return stack.next(NOOT.Errors.fromMongoose(err));
+      if (err) return stack.next(NOOT.Errors.fromMongooseError(err));
       return stack.setData(items).setStatus(NOOT.HTTP.Created).next();
+    });
+  },
+
+
+  update: function(stack) {
+    return this.model.update({ _id: stack.primaryKey }, { $set: stack.body }, function(err, count) {
+      if (err) return stack.next(NOOT.Errors.fromMongooseError(err));
+      return stack.pushMessage('Successfully updated', count, 'item').setStatus(NOOT.HTTP.NoContent).next();
+    });
+  },
+
+  updateMany: function(stack) {
+    return this.model.update(stack.query.filter, { $set: stack.body }, { multi: true }, function(err, count) {
+      if (err) return stack.next(NOOT.Errors.fromMongooseError(err));
+      return stack.pushMessage('Successfully updated', count, 'item(s)').setStatus(NOOT.HTTP.NoContent).next();
     });
   },
 
@@ -147,6 +151,7 @@ var MongooseResource = MongoResource.extend({
       case 'String':
         FieldClass = Fields.String;
         break;
+
       case 'ObjectID':
         FieldClass = Fields.String;
         var isReferenceArray = false;
@@ -159,13 +164,15 @@ var MongooseResource = MongoResource.extend({
           _.extend(options, {
             isReference: !isReferenceArray,
             isReferenceArray: isReferenceArray,
-            getReference: function() { return resource && resource.api.resources[referenceName]; }
+            get reference() { return resource && resource.api.resources[referenceName]; }
           });
         }
         break;
+
       case 'Number':
         FieldClass = Fields.Number;
         break;
+
       case Date:
         FieldClass = Fields.Date;
         break;
@@ -175,7 +182,7 @@ var MongooseResource = MongoResource.extend({
 
     }
 
-    return FieldClass.extend(options);
+    return FieldClass.create(options);
   }
 
 });

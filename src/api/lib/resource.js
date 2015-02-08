@@ -4,7 +4,7 @@
 var _ = require('lodash');
 var NOOT = require('../../../')('object', 'http');
 
-var QueryField = require('./query-field');
+var Field = require('./fields/lib/field');
 var Authable = require('./interfaces/authable');
 var Queryable = require('./interfaces/queryable');
 var DefaultRoutes = require('./default-routes');
@@ -28,6 +28,7 @@ var Resource = NOOT.Object.extend(Authable).extend(Queryable).extend({
   defaultResponseType: null,
 
   fields: null,
+  get fieldsPaths() { return NOOT.isObject(this.fields) ? Object.keys(this.fields) : []; },
 
   /**
    *
@@ -156,7 +157,7 @@ var Resource = NOOT.Object.extend(Authable).extend(Queryable).extend({
    * @returns {*}
    */
   sendResponse: function(stack) {
-    stack.res.status(stack.statusCode);
+    stack.res.status(stack.statusCode || this.defaultStatusCode);
 
     var type = stack.req.accepts(this.allowedResponseTypes) || this.defaultResponseType;
 
@@ -176,7 +177,81 @@ var Resource = NOOT.Object.extend(Authable).extend(Queryable).extend({
    */
   sendJSON: function(stack) {
     return stack.res.json(stack.package);
+  },
+
+  /**
+   *
+   */
+  parseQueryFilter: function(stack, callback) {
+    var ret = {};
+    var map = {};
+    var fields = this.fields;
+
+    var filter = stack.query.filter;
+    callback = callback || stack.next;
+
+    for (var filterName in filter) {
+      var split = filterName.split(this.constructor.OPERATOR_SEPARATOR);
+      var publicPath = split[0];
+      var operator = split[1];
+
+      var field = _.find(fields, function(field) { return publicPath === field.publicPath; });
+
+      if (!field) {
+        stack.pushMessage(Field.forbiddenFieldMessage(publicPath));
+        return callback(new NOOT.Errors.Forbidden());
+      }
+
+      if (!field.validateOperator(operator)) {
+        stack.pushMessage(Field.forbiddenOperatorMessage(publicPath, operator));
+        return callback(new NOOT.Errors.Forbidden());
+      }
+
+      map[field.path] = map[field.path] || {};
+      map[field.path][operator || 'eq'] = field.parseFromQueryString(filter[filterName]);
+    }
+
+    for (var path in map) {
+      var pathFilter = map[path];
+      if (pathFilter.hasOwnProperty('eq')) ret[path] = pathFilter.eq;
+      else ret[path] = pathFilter;
+    }
+
+    stack.query.filter = ret;
+    
+    return callback();
+  },
+
+  parseQuerySelect: function(stack, callback) {
+    var self = this;
+    callback = callback || stack.next;
+    var select = stack.query.select;
+    var selectable = stack.selectable;
+
+    if (select && select.length) {
+      var final = [];
+      select.forEach(function(fieldName) {
+        var shouldExclude =  fieldName[0] === self.constructor.EXCLUSION_CHARACTER;
+        var rawFieldName = fieldName.replace(new RegExp('^' + self.constructor.EXCLUSION_CHARACTER), '');
+        var childs = selectable.filter(function(selectableName) {
+          return selectableName.split('.')[0] === rawFieldName;
+        }).map(function(selectableName) {
+          return shouldExclude ? self.constructor.EXCLUSION_CHARACTER + selectableName : selectableName;
+        });
+        if (childs.length) final = final.concat(childs);
+        else final.push(fieldName);
+      });
+      stack.query.select = final;
+    }
+
+    return callback();
+  },
+
+  parseQuerySort: function(stack, callback) {
+    callback = callback || stack.next;
+    return callback();
   }
+
 }, {
 
   /**
@@ -186,22 +261,20 @@ var Resource = NOOT.Object.extend(Authable).extend(Queryable).extend({
     get methods() { return DefaultRoutes.supportedMethods; },
     get defaultStatusCode() { return NOOT.HTTP.OK; },
     get allowedResponseTypes() { return ['json']; },
-    get defaultResponseType() { return 'json'; },
-    get supportedOperators() { return this.SUPPORTED_OPERATORS; }
+    get defaultResponseType() { return 'json'; }
   },
 
-
-  SUPPORTED_OPERATORS: ['gt', 'gte', 'lt', 'lte', 'eq', 'ne', 'in', 'nin', 'regex'],
-
-  parseFilter: function(filter) {
-    var fields = [];
-    for (var key in filter) {
-      fields.push(QueryField.create({ entry: _.pick(filter, [key]), separator: this.OPERATOR_SEPARATOR }));
-    }
-    return fields;
-  },
-
+  /**
+   *
+   */
   OPERATOR_SEPARATOR: '__',
+
+  /**
+   *
+   */
+  EQUALITY_OPERATOR: 'eq',
+
+  EXCLUSION_CHARACTER: '-',
 
   /**
    *

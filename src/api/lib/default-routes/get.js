@@ -16,7 +16,9 @@ var Get = Route.extend({
   path: '/',
 
   handler: function(stack) {
-    return stack.req.param('id') ? this.resource.get(stack) : this.resource.getMany(stack);
+    var id = stack.req.param('id');
+    if (id) stack.primaryKey = id;
+    return id ? this.resource.get(stack) : this.resource.getMany(stack);
   }
 
 });

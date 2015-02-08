@@ -1,9 +1,11 @@
-var NOOT = require('../../../../')();
+var NOOT = require('../../../../../index')();
 
-var Field = require('./lib/field');
+var Field = require('./../lib/field');
 
 
 var NumberField = Field.extend({
+  supportedOperators: ['gt', 'gte', 'lt', 'lte', 'in', 'nin', 'ne'],
+
   parseFromQueryString: function() {
     return parseFloat(this.value);
   },

@@ -39,7 +39,7 @@ var Stack = NOOT.Object.extend(Queryable).extend({
    */
   package: null,
 
-  hasForbiddenOperators: false,
+  isFilterValid: false,
 
   statusCode: null,
 
@@ -58,8 +58,6 @@ var Stack = NOOT.Object.extend(Queryable).extend({
     NOOT.required(this, 'req', 'res', 'route', '__queryableParent');
     this.resource = this.route.resource;
     this.computeQueryable();
-    this.parseQueryString();
-    if (this.hasForbiddenOperators) return this.next(new NOOT.Errors.Forbidden());
     this.params = this.req.params;
   },
 
@@ -73,9 +71,9 @@ var Stack = NOOT.Object.extend(Queryable).extend({
 
     this.query = {
       raw: query,
-      select: Utils.parseFieldsList(query.select),
-      filter: this.route.resource.constructor.parseFilter(_.omit(query, Stack.QUERY_STRING_RESERVED_WORDS)),
-      sort: Utils.parseFieldsList(query.sort),
+      select: query.select ? Utils.parseFieldsList(query.select) : this.selectable,
+      filter: _.omit(query, Stack.QUERY_STRING_RESERVED_WORDS),
+      sort: query.sort ? Utils.parseFieldsList(query.sort) : this.sortable,
       limit: Math.min(parseInt(query.limit, 10) || this.defaultGetLimit, this.maxGetLimit),
       offset: parseInt(query.offset, 10) || 0
     };
@@ -404,10 +402,9 @@ var Stack = NOOT.Object.extend(Queryable).extend({
    *
    * @param properties
    * @param filterMode
-   * @param shouldThrow
    * @returns {*}
    */
-  validateProperties: function(properties, filterMode, shouldThrow) {
+  getInvalidProperties: function(properties, filterMode) {
     if (!FilterModes.hasValue(filterMode)) throw new Error('Invalid filter mode: ' + filterMode);
     if (properties && properties.toJSON) properties = properties.toJSON();
 
@@ -427,19 +424,7 @@ var Stack = NOOT.Object.extend(Queryable).extend({
         properties :
         [];
 
-    var errors = _.difference(paths, validFields);
-
-    if (shouldThrow && errors.length) {
-      var errorMessage = [
-        'Resource does not allow to',
-        filterMode.toString(),
-        'the following field(s):' +
-        errors.join(', ')
-      ].join(' ');
-      throw new NOOT.Errors.Forbidden(errorMessage);
-    }
-
-    return errors;
+    return _.difference(paths, validFields);
   },
 
 

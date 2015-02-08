@@ -16,7 +16,9 @@ var Patch = Route.extend({
   path: '/',
 
   handler: function(stack) {
-    return this.resource.update(stack);
+    var id = stack.req.param('id');
+    if (id) stack.primaryKey = id;
+    return id ? this.resource.update(stack) : this.resource.updateMany(stack);
   }
 
 });

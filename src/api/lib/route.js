@@ -1,7 +1,7 @@
 /**
  * Dependencies
  */
-var NOOT = require('../../../')('object', 'url', 'http');
+var NOOT = require('../../../')('object', 'url', 'http', 'errors');
 var _ = require('lodash');
 var moment = require('moment');
 
@@ -9,6 +9,7 @@ var Stack = require('./stack');
 var Authable = require('./interfaces/authable');
 var Queryable = require('./interfaces/queryable');
 var Utils = require('./utils');
+var FilterModes = require('./filter-modes');
 
 /***********************************************************************************************************************
  * @class Route
@@ -107,8 +108,14 @@ var Route = NOOT.Object.extend(Authable).extend(Queryable).extend({
       this.resource.authorization && this.resource.authorization.bind(this.resource),
       this.authorization && this.authorization.bind(this),
 
-      this.resource.validateFields && this.resource.validateFields.bind(this.resource),
-      this.resource.validateOperators && this.resource.validateOperators.bind(this.resource),
+      this.setupStack && this.setupStack.bind(this),
+      this._parseQueryString.bind(this),
+
+      this.resource.parseQueryFilter && this.resource.parseQueryFilter.bind(this.resource),
+      this.resource.parseQuerySelect && this.resource.parseQuerySelect.bind(this.resource),
+      this.resource.parseQuerySort && this.resource.parseQuerySort.bind(this.resource),
+      this.validateFields && this.validateFields.bind(this),
+
       this.schema && this._validateSchema.bind(this),
       this.validation && this.validation.bind(this)
     ]);
@@ -121,7 +128,7 @@ var Route = NOOT.Object.extend(Authable).extend(Queryable).extend({
     handlers = handlers.map(function(handler) { return handler.bind(self); });
 
     handlers = pre.concat(handlers).concat(post).map(function(handler) {
-      if (handler.length > 1) return handler;
+      if (handler.length > 2) return handler;
       return function(req, res, next) {
         var stack = req.nootApiStack;
         stack.next = next;
@@ -130,6 +137,58 @@ var Route = NOOT.Object.extend(Authable).extend(Queryable).extend({
     });
 
     Utils.makeReadOnly(this, 'handlers', handlers);
+  },
+
+
+  validateFields: function(stack) {
+    var query = stack.query;
+
+    var invalid;
+
+    if (query.select) {
+      invalid = stack.getInvalidProperties(query.select, FilterModes.SELECT);
+      if (invalid.length) {
+        invalid.forEach(function(field) {
+          stack.pushMessage('You cannot ' + FilterModes.SELECT + ' field ' + field + ' for this resource');
+        });
+        console.log('IVALID SELECT', invalid, stack.selectable);
+        return stack.next(new NOOT.Errors.Forbidden());
+      }
+    }
+
+    if (query.filter) {
+      invalid = stack.getInvalidProperties(query.filter, FilterModes.FILTER);
+      if (invalid.length) {
+        invalid.forEach(function(field) {
+          stack.pushMessage('You cannot ' + FilterModes.FILTER + ' field ' + field + ' for this resource');
+        });
+        console.log('IVALID FILTER', invalid, stack.filterable);
+        return stack.next(new NOOT.Errors.Forbidden());
+      }
+    }
+
+    if (query.sort) {
+      invalid = stack.getInvalidProperties(query.sort, FilterModes.SORT);
+      if (invalid.length) {
+        invalid.forEach(function(field) {
+          stack.pushMessage('You cannot ' + FilterModes.SORT + ' field ' + field + ' for this resource');
+        });
+        console.log('IVALID SORT', invalid);
+        return stack.next(new NOOT.Errors.Forbidden());
+      }
+    }
+
+    //if (stack.body) {
+    //  invalid = stack.getInvalidProperties(stack.body, FilterModes.WRITE);
+    //  if (invalid.length) {
+    //    invalid.forEach(function(field) {
+    //      stack.pushMessage('You cannot ' + FilterModes.WRITE + ' field ' + field + ' for this resource');
+    //    });
+    //    return stack.next(new NOOT.Errors.Forbidden());
+    //  }
+    //}
+
+    return stack.next();
   },
 
   /**
@@ -169,6 +228,11 @@ var Route = NOOT.Object.extend(Authable).extend(Queryable).extend({
     });
 
     return next();
+  },
+
+  _parseQueryString: function(stack) {
+    stack.parseQueryString();
+    return stack.next();
   },
 
   /**
