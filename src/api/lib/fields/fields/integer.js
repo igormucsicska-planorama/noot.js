@@ -3,8 +3,8 @@ var NumberField = require('./number');
 
 var IntegerField = NumberField.extend({
 
-  parseFromQueryString: function() {
-    return parseInt(this.value, 10);
+  parseFromQueryString: function(value) {
+    return parseInt(value, 10);
   }
 
 });

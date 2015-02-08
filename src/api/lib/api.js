@@ -1,13 +1,14 @@
 /**
  * Dependencies
  */
-var NOOT = require('../../../')('object');
+var NOOT = require('../../../')('object', 'http');
 var _ = require('lodash');
 
 var Resource = require('./resource');
 var RoutesSorter = require('./routes-sorter');
 var Authable = require('./interfaces/authable');
 var Utils = require('./utils');
+var MessagesProvider = require('./messages-provider');
 
 
 /***********************************************************************************************************************
@@ -47,10 +48,14 @@ var API = NOOT.Object.extend(Authable).extend({
    */
   routes: null,
 
+  messagesProvider: null,
+
   /**
    *
    */
   requestsLogger: false,
+
+  shouldOverrideInternalServerErrorsMessages: false,
 
   /**
    *
@@ -58,10 +63,15 @@ var API = NOOT.Object.extend(Authable).extend({
   errorHandler: function(err, req, res, next) {
     var stack = req.nootApiStack;
     stack.append({ error: true });
-    if (err.message) stack.pushMessage(err.message);
     if (err.statusCode) stack.setStatus(err.statusCode);
     if (err.code) stack.append({ code: err.code });
-    if (stack.statusCode === 500) console.log(err.stack); // TODO remove this line
+    if (stack.statusCode === NOOT.HTTP.InternalServerError) {
+      if (this.shouldOverrideInternalServerErrorsMessages) {
+        err.message = this.messagesProvider.defaultInternalServerError();
+      }
+      console.log(err.stack); // TODO remove this line
+    }
+    if (err.message) stack.pushMessage(err.message);
     return stack.resource.sendResponse(stack);
   },
 
@@ -80,6 +90,7 @@ var API = NOOT.Object.extend(Authable).extend({
     NOOT.required(this, 'server');
     this.resources = {};
     this.routes = [];
+    if (!(this.messagesProvider instanceof MessagesProvider)) this.messagesProvider = MessagesProvider.create();
   },
 
   /**

@@ -4,7 +4,7 @@
 var _ = require('lodash');
 var NOOT = require('../../../')('object', 'http');
 
-var Field = require('./fields/lib/field');
+var Operators = require('./operators');
 var Authable = require('./interfaces/authable');
 var Queryable = require('./interfaces/queryable');
 var DefaultRoutes = require('./default-routes');
@@ -193,22 +193,24 @@ var Resource = NOOT.Object.extend(Authable).extend(Queryable).extend({
     for (var filterName in filter) {
       var split = filterName.split(this.constructor.OPERATOR_SEPARATOR);
       var publicPath = split[0];
-      var operator = split[1];
+      var operatorName = split[1] || 'eq';
 
       var field = _.find(fields, function(field) { return publicPath === field.publicPath; });
 
       if (!field) {
-        stack.pushMessage(Field.forbiddenFieldMessage(publicPath));
+        stack.pushMessage(this.api.messagesProvider.forbiddenField(publicPath));
         return callback(new NOOT.Errors.Forbidden());
       }
 
-      if (!field.validateOperator(operator)) {
-        stack.pushMessage(Field.forbiddenOperatorMessage(publicPath, operator));
+      if (!field.validateOperator(operatorName)) {
+        stack.pushMessage(this.api.messagesProvider.forbiddenOperator(publicPath, operatorName));
         return callback(new NOOT.Errors.Forbidden());
       }
+
+      var operator = Operators[operatorName];
 
       map[field.path] = map[field.path] || {};
-      map[field.path][operator || 'eq'] = field.parseFromQueryString(filter[filterName]);
+      map[field.path][operatorName] = operator.parseFromQueryString(filter[filterName], field.parseFromQueryString);
     }
 
     for (var path in map) {
@@ -250,6 +252,19 @@ var Resource = NOOT.Object.extend(Authable).extend(Queryable).extend({
   parseQuerySort: function(stack, callback) {
     callback = callback || stack.next;
     return callback();
+  },
+
+  parseBody: function(stack, callback) {
+    callback = callback || stack.next;
+    var body = NOOT.isArray(stack.body) ? stack.body : [stack.body];
+
+    if (!body.length) return callback();
+
+    var fields = this.fields;
+
+    for (var i = 0, len = body.length; i < len; i++) {
+
+    }
   }
 
 }, {

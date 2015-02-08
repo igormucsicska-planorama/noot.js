@@ -140,54 +140,6 @@ var Field = NOOT.Object.extend({
     return _.contains(this.supportedOperators, operator);
   }
 
-}, {
-  /**
-   * Message : parameter is missing.
-   *
-   * @method missingParameterMessage
-   * @static
-   * @param {String} property
-   * @return {String}
-   */
-  missingParameterMessage: function(property) {
-    return [property, 'is required.'].join(' ');
-  },
-
-  /**
-   * Message : value is not in provided list of allowed values.
-   *
-   * @method notInEnumMessage
-   * @static
-   * @param {String} property
-   * @param {Array} enumeration
-   * @param {*} currentValue
-   * @return {String}
-   */
-  notInEnumMessage: function(property, enumeration, currentValue) {
-    return [property, 'should be in:', enumeration.join(', '), '- instead got', currentValue + '.'].join(' ');
-  },
-
-  /**
-   * Message : value's type is incorrect.
-   *
-   * @method badTypeMessage
-   * @static
-   * @param {String} property
-   * @param {String} expectedType
-   * @param {String} currentType
-   * @return {String}
-   */
-  badTypeMessage: function(property, expectedType, currentType) {
-    return [property, 'should be a', expectedType, '- instead go a', currentType + '.'].join(' ');
-  },
-
-  forbiddenOperatorMessage: function(property, operator) {
-    return ['Operator `' + operator + '`', 'is not allowed for property', property + '.'].join(' ');
-  },
-
-  forbiddenFieldMessage: function(property) {
-    return ['Field `' + property + '`', 'is not allowed or does not exist.'].join(' ');
-  }
 });
 
 /**
