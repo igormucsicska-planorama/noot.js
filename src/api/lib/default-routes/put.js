@@ -18,7 +18,7 @@ var Put = Route.extend({
   allowMany: true,
 
   handler: function(stack) {
-    return stack.update(stack);
+    return this.resource.upsert(stack);
   }
 
 });

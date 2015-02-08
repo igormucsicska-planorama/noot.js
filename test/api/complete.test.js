@@ -105,7 +105,7 @@ describe('NOOT.API - Complete test', function() {
 
       UserResource = MongooseResource.extend({
         model: User,
-        methods: ['get', 'patch', 'delete', 'post'],
+        methods: ['get', 'patch', 'delete', 'post', 'put'],
         nonSelectable: ['password'],
         routes: [UserRegisterRoute, UserInfoRoute]
       });
@@ -238,7 +238,7 @@ describe('NOOT.API - Complete test', function() {
     });
   });
 
-  it('should update user', function(done) {
+  it('should update user by id', function(done) {
     return User.findOne({ email: 'janedoe@nootjs.com' }, '_id', function(err, user) {
       if (err) return done(err);
       return supertest(app)
@@ -255,22 +255,7 @@ describe('NOOT.API - Complete test', function() {
     });
   });
 
-  it('should update user', function(done) {
-    return supertest(app)
-      .patch('/private/users?' + qs.stringify({ email: 'johndoe@nootjs.com' }))
-      .send({ age: 23 })
-      .expect(204, function(err, res) {
-        if (err) return done(err);
-        console.log(res.body);
-        return User.findOne({ email: 'johndoe@nootjs.com' }, 'age', function(err, user) {
-          if (err) done(err);
-          user.age.should.eql(23);
-          return done();
-        });
-      });
-  });
-
-  it('should update user', function(done) {
+  it('should update user by filter', function(done) {
     return supertest(app)
       .patch('/private/users?' + qs.stringify({ email: 'johndoe@nootjs.com' }))
       .send({ age: 23 })
@@ -279,6 +264,63 @@ describe('NOOT.API - Complete test', function() {
         return User.findOne({ email: 'johndoe@nootjs.com' }, 'age', function(err, user) {
           if (err) done(err);
           user.age.should.eql(23);
+          return done();
+        });
+      });
+  });
+
+  it('should delete user by id', function(done) {
+    return User.findOne({ email: 'janedoe@nootjs.com' }, '_id', function(err, user) {
+      if (err) return done(err);
+      return supertest(app)
+        .delete('/private/users/' + user._id)
+        .expect(204, function(err) {
+          if (err) return done(err);
+          return User.findById(user._id, function(err, user) {
+            if (err) done(err);
+            (user === null).should.eql(true);
+            return done();
+          });
+        });
+    });
+  });
+
+  it('should delete user by filter', function(done) {
+    return supertest(app)
+      .delete('/private/users?' + qs.stringify({ email: 'johndoe@nootjs.com' }))
+      .expect(204, function(err) {
+        if (err) return done(err);
+        return User.findOne({ email: 'johndoe@nootjs.com' }, function(err, user) {
+          if (err) done(err);
+          (user === null).should.eql(true);
+          return done();
+        });
+      });
+  });
+
+  it('should put user (update)', function(done) {
+    return supertest(app)
+      .put('/private/users?' + qs.stringify({ email: 'se@nootjs.com' }))
+      .send({ age: 29 })
+      .expect(204, function(err) {
+        if (err) return done(err);
+        return User.findOne({ email: 'se@nootjs.com' }, 'age', function(err, user) {
+          if (err) done(err);
+          user.age.should.eql(29);
+          return done();
+        });
+      });
+  });
+
+  it('should put user (create)', function(done) {
+    return supertest(app)
+      .put('/private/users?' + qs.stringify({ email: 'new-user@nootjs.com' }))
+      .send({ age: 28, password: 'youllnotfind', email: 'new-user@nootjs.com' })
+      .expect(201, function(err) {
+        if (err) return done(err);
+        return User.findOne({ email: 'new-user@nootjs.com' }, function(err, user) {
+          if (err) done(err);
+          user.age.should.eql(28);
           return done();
         });
       });

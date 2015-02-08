@@ -233,9 +233,9 @@ var Stack = NOOT.Object.extend(Queryable).extend({
    * @param message
    * @chainable
    */
-  pushMessage: function(message) {
+  pushMessage: function() {
     this.package.messages = this.package.messages || [];
-    this.package.messages.push(message);
+    this.package.messages.push(NOOT.makeArray(arguments).join(' '));
     return this;
   },
 

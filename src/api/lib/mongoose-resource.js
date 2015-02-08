@@ -112,6 +112,7 @@ var MongooseResource = MongoResource.extend({
     if (!_.contains(this.manyMethods, 'patch')) {
       return stack.next(new NOOT.Errors.Forbidden('This resource does not allow multiple `PATCH` at a time'));
     }
+
     return this.model.update(stack.query.filter, { $set: stack.body }, { multi: true }, function(err, count) {
       if (err) return stack.next(NOOT.Errors.fromMongooseError(err));
       return stack.pushMessage('Successfully updated', count, 'item(s)').setStatus(NOOT.HTTP.NoContent).next();
@@ -140,9 +141,18 @@ var MongooseResource = MongoResource.extend({
     if (!_.contains(this.manyMethods, 'delete')) {
       return stack.next(new NOOT.Errors.Forbidden('This resource does not allow multiple `DELETE` at a time'));
     }
-    return this.model.remove(stack.query.filter, { multi: true }, function(err, count) {
+    return this.model.remove(stack.query.filter, function(err, count) {
       if (err) return stack.next(NOOT.Errors.fromMongooseError(err));
       return stack.pushMessage('Successfully removed', count, 'item(s)').setStatus(NOOT.HTTP.NoContent).next();
+    });
+  },
+
+  upsert: function(stack) {
+    var self = this;
+    return this.model.findOne(stack.query.filter, function(err, existing) {
+      if (err) return stack.next(NOOT.Errors.fromMongooseError(err));
+      if (existing) return self.updateMany(stack);
+      return self.create(stack);
     });
   },
 
