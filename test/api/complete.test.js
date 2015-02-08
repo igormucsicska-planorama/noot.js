@@ -259,6 +259,21 @@ describe('NOOT.API - Complete test', function() {
     return supertest(app)
       .patch('/private/users?' + qs.stringify({ email: 'johndoe@nootjs.com' }))
       .send({ age: 23 })
+      .expect(204, function(err, res) {
+        if (err) return done(err);
+        console.log(res.body);
+        return User.findOne({ email: 'johndoe@nootjs.com' }, 'age', function(err, user) {
+          if (err) done(err);
+          user.age.should.eql(23);
+          return done();
+        });
+      });
+  });
+
+  it('should update user', function(done) {
+    return supertest(app)
+      .patch('/private/users?' + qs.stringify({ email: 'johndoe@nootjs.com' }))
+      .send({ age: 23 })
       .expect(204, function(err) {
         if (err) return done(err);
         return User.findOne({ email: 'johndoe@nootjs.com' }, 'age', function(err, user) {

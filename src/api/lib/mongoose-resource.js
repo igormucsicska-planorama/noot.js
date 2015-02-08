@@ -89,7 +89,12 @@ var MongooseResource = MongoResource.extend({
     });
   },
 
-
+  /**
+   *
+   *
+   * @param stack
+   * @returns {*}
+   */
   update: function(stack) {
     return this.model.update({ _id: stack.primaryKey }, { $set: stack.body }, function(err, count) {
       if (err) return stack.next(NOOT.Errors.fromMongooseError(err));
@@ -97,10 +102,47 @@ var MongooseResource = MongoResource.extend({
     });
   },
 
+  /**
+   *
+   *
+   * @param stack
+   * @returns {*}
+   */
   updateMany: function(stack) {
+    if (!_.contains(this.manyMethods, 'patch')) {
+      return stack.next(new NOOT.Errors.Forbidden('This resource does not allow multiple `PATCH` at a time'));
+    }
     return this.model.update(stack.query.filter, { $set: stack.body }, { multi: true }, function(err, count) {
       if (err) return stack.next(NOOT.Errors.fromMongooseError(err));
       return stack.pushMessage('Successfully updated', count, 'item(s)').setStatus(NOOT.HTTP.NoContent).next();
+    });
+  },
+
+  /**
+   *
+   *
+   * @param stack
+   * @returns {*}
+   */
+  delete: function(stack) {
+    return this.model.remove({ _id: stack.primaryKey }, function(err, count) {
+      if (err) return stack.next(NOOT.Errors.fromMongooseError(err));
+      return stack.pushMessage('Successfully removed', count, 'item').setStatus(NOOT.HTTP.NoContent).next();
+    });
+  },
+
+  /**
+   *
+   *
+   * @param {NOOT.API.Stack} stack
+   */
+  deleteMany: function(stack) {
+    if (!_.contains(this.manyMethods, 'delete')) {
+      return stack.next(new NOOT.Errors.Forbidden('This resource does not allow multiple `DELETE` at a time'));
+    }
+    return this.model.remove(stack.query.filter, { multi: true }, function(err, count) {
+      if (err) return stack.next(NOOT.Errors.fromMongooseError(err));
+      return stack.pushMessage('Successfully removed', count, 'item(s)').setStatus(NOOT.HTTP.NoContent).next();
     });
   },
 
