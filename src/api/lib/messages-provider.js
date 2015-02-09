@@ -42,6 +42,14 @@ var MessagesProvider = NOOT.Object.extend({
     ].join(' ');
   },
 
+  unsupportedOperator: function(operator) {
+    return [
+      'Operator',
+      operator,
+      'is not supported.'
+    ].join(' ');
+  },
+
   forbiddenField: function(property) {
     return [
       'Field',

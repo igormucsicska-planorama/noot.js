@@ -229,6 +229,10 @@ var MongooseResource = MongoResource.extend({
         FieldClass = Fields.Date;
         break;
 
+      case Boolean:
+        FieldClass = Fields.Boolean;
+        break;
+
       default:
         throw new Error('Unsupported `instance`: ' + instance);
 

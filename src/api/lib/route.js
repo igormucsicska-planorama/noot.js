@@ -157,7 +157,8 @@ var Route = NOOT.Object.extend(Authable).extend(Queryable).extend({
     }
 
     if (query.filter) {
-      invalid = stack.getInvalidProperties(query.filter, FilterModes.FILTER);
+      console.log(query.filter);
+      invalid = stack.getInvalidProperties(Object.keys(query.filter), FilterModes.FILTER);
       if (invalid.length) {
         invalid.forEach(function(field) {
           stack.pushMessage('You cannot ' + FilterModes.FILTER + ' field ' + field + ' for this resource');

@@ -16,7 +16,8 @@ var Fields = NOOT.Namespace.create({
   Integer: require('./fields/integer'),
   Float: require('./fields/float'),
   String: require('./fields/string'),
-  Date: require('./fields/date')
+  Date: require('./fields/date'),
+  Boolean: require('./fields/boolean')
 });
 
 /**

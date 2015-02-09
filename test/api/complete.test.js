@@ -47,7 +47,8 @@ UserSchema = Schema.extend({
     age: Number,
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
-    blogs: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Blog' }]
+    blogs: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Blog' }],
+    oldEnough: { type: Boolean, default: false }
   }
 });
 
@@ -264,6 +265,21 @@ describe('NOOT.API - Complete test', function() {
         return User.findOne({ email: 'johndoe@nootjs.com' }, 'age', function(err, user) {
           if (err) done(err);
           user.age.should.eql(23);
+          return done();
+        });
+      });
+  });
+
+  it('should update users by filter', function(done) {
+    return supertest(app)
+      .patch('/private/users?' + qs.stringify({ 'age__gt': 18 }))
+      .send({ oldEnough: true })
+      .expect(204, function(err) {
+        if (err) return done(err);
+        return User.find({}, 'oldEnough', function(err, users) {
+          if (err) done(err);
+          console.log(users);
+          users.forEach(function(user) { user.oldEnough.should.eql(true); });
           return done();
         });
       });
