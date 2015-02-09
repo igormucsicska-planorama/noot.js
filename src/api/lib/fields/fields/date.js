@@ -4,7 +4,7 @@ var Field = require('./../lib/field');
 
 
 var DateField = Field.extend({
-  supportedOperators: ['gt', 'gte', 'lt', 'lte'],
+  supportedOperators: ['eq', 'gt', 'gte', 'lt', 'lte'],
 
   parseFromQueryString: function(value) {
     return this.isTimestamp(value) ? new Date(value) : Date.parse(value);

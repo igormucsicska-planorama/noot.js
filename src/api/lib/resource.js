@@ -2,7 +2,7 @@
  * Dependencies
  */
 var _ = require('lodash');
-var NOOT = require('../../../')('object', 'http');
+var NOOT = require('../../../')('object', 'http', 'errors');
 
 var Operators = require('./operators');
 var Authable = require('./interfaces/authable');
@@ -186,7 +186,6 @@ var Resource = NOOT.Object.extend(Authable).extend(Queryable).extend({
     var ret = {};
     var map = {};
     var fields = this.fields;
-
     var filter = stack.query.filter;
     callback = callback || stack.next;
 
@@ -208,6 +207,11 @@ var Resource = NOOT.Object.extend(Authable).extend(Queryable).extend({
       }
 
       var operator = Operators[operatorName];
+
+      if (!operator) {
+        stack.pushMessage(this.api.messagesProvider.unsupportedOperator(publicPath, operatorName));
+        return callback(new NOOT.Errors.BadRequest());
+      }
 
       map[field.path] = map[field.path] || {};
       map[field.path][operatorName] = operator.parseFromQueryString(filter[filterName], field.parseFromQueryString);
@@ -250,21 +254,7 @@ var Resource = NOOT.Object.extend(Authable).extend(Queryable).extend({
   },
 
   parseQuerySort: function(stack, callback) {
-    callback = callback || stack.next;
-    return callback();
-  },
-
-  parseBody: function(stack, callback) {
-    callback = callback || stack.next;
-    var body = NOOT.isArray(stack.body) ? stack.body : [stack.body];
-
-    if (!body.length) return callback();
-
-    var fields = this.fields;
-
-    for (var i = 0, len = body.length; i < len; i++) {
-
-    }
+    return (callback || stack.next)();
   }
 
 }, {

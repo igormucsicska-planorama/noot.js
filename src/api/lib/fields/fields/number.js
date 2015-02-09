@@ -4,7 +4,7 @@ var Field = require('./../lib/field');
 
 
 var NumberField = Field.extend({
-  supportedOperators: ['gt', 'gte', 'lt', 'lte', 'in', 'nin', 'ne'],
+  supportedOperators: ['eq', 'gt', 'gte', 'lt', 'lte', 'in', 'nin', 'ne'],
 
   parseFromQueryString: function(value) {
     return parseFloat(value);
