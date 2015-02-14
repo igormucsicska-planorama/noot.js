@@ -87,7 +87,7 @@ describe('NOOT.API - Complete test', function() {
           return stack.setSelectable(['name.first', 'name.last', 'email']).next();
         },
         handler: function(stack) {
-          stack.primaryKey = stack.req.param('id');
+          stack.primaryKey = stack.params.id;
           return this.resource.get(stack);
         }
       });
@@ -278,7 +278,6 @@ describe('NOOT.API - Complete test', function() {
         if (err) return done(err);
         return User.find({}, 'oldEnough', function(err, users) {
           if (err) done(err);
-          console.log(users);
           users.forEach(function(user) { user.oldEnough.should.eql(true); });
           return done();
         });
@@ -341,4 +340,5 @@ describe('NOOT.API - Complete test', function() {
         });
       });
   });
+
 });

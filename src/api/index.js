@@ -1,22 +1,28 @@
+/**
+ * Dependencies
+ */
 var _ = require('lodash');
 
 module.exports = _.extend(require('./lib/api'), {
+  Resource: require('./lib/resources/lib/resource'),
+  MongoResource: require('./lib/resources/lib/mongo-resource'),
+  MongooseResource: require('./lib/resources/classes/mongoose-resource'),
+
   Route: require('./lib/route'),
+  DefaultRoutes: require('./lib/default-routes'),
 
-  Resource: require('./lib/resource'),
+  Stack: require('./lib/stack'),
 
-  MongooseResource: require('./lib/mongoose-resource'),
-  MongoNativeResource: require('./lib/mongo-native-resource'),
-  StaticResource: require('./lib/static-resource'),
-  S3Resource: require('./lib/s3-resource'),
+  Authable: require('./lib/interfaces/authable'),
+  Queryable: require('./lib/interfaces/queryable'),
 
   RoutesSorter: require('./lib/routes-sorter'),
   FilterModes: require('./lib/filter-modes'),
-  Authable: require('./lib/interfaces/authable'),
-  Stack: require('./lib/stack'),
-  DefaultRoutes: require('./lib/default-routes'),
-  ConditionsParser: require('./lib/conditions-parser'),
 
   Field: require('./lib/fields/lib/field'),
-  Fields: require('./lib/fields')
+  Fields: require('./lib/fields'),
+
+  Operator: require('./lib/operators/lib/operator'),
+  ListOperator: require('./lib/operators/lib/list-operator'),
+  Operators: require('./lib/operators')
 });

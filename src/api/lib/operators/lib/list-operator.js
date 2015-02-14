@@ -1,7 +1,7 @@
 var Operator = require('./operator');
 
 
-var ArrayOperator = Operator.extend({
+var ListOperator = Operator.extend({
 
   parseFromQueryString: function(value, parser) {
     return value.split(this.constructor.SPLIT_LIST_REGEXP).map(parser);
@@ -13,4 +13,4 @@ var ArrayOperator = Operator.extend({
 
 });
 
-module.exports = ArrayOperator;
+module.exports = ListOperator;

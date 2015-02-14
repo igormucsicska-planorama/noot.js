@@ -14,6 +14,10 @@ var RoutesSorter = NOOT.Namespace.create({
 
   /**
    * Path part weights enumeration
+   *
+   * @property _PATH_WEIGHTS
+   * @private
+   * @type Object
    */
   _PATH_WEIGHTS: { FIXED: 3, PARAM: 2, OPTIONAL: 1, BLANK: 0 },
 

@@ -1,36 +1,23 @@
-var NOOT = require('../../../../')('namespace');
+/**
+ * Dependencies
+ */
+var NOOT = require('../../../../')('namespace', 'mixins');
+var fs = require('fs');
+var path = require('path');
 
-var Operator = require('./lib/operator');
-var ArrayOperator = require('./lib/array-operator');
-
-var Operators = NOOT.Namespace.create({
-  eq: Operator.create(),
-  ne: Operator.create(),
-  in: ArrayOperator.create(),
-  nin: ArrayOperator.create(),
-  regex: Operator.create({
-
-    /*
-
-    /\d+/gi
-    //toto
-
-     */
-
-
-    parseFromQueryString: function(value) {
-      var isRegExpFormatted = value[0] === '/';
-      if (isRegExpFormatted) {
-        value = value.replace()
-      }
-      return new RegExp(value);
-    }
-  }),
-  gt: Operator.create(),
-  gte: Operator.create(),
-  lt: Operator.create(),
-  lte: Operator.create()
+/**
+ * Dynamically create the namespace
+ */
+var classes = {};
+var classesDirectory = path.resolve(__dirname, './classes');
+fs.readdirSync(classesDirectory).forEach(function(fileName) {
+  classes[fileName.split('.')[0]] = require(path.join(classesDirectory, fileName));
 });
 
-
-module.exports = Operators;
+/***********************************************************************************************************************
+ * @class Operators
+ * @static
+ * @namespace NOOT.API
+ * @uses NOOT.Mixins.Registerable
+ **********************************************************************************************************************/
+module.exports = NOOT.Namespace.extend(NOOT.Mixins.Registerable).create(classes);

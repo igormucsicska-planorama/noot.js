@@ -4,7 +4,7 @@
 var NOOT = require('../../../')('object', 'http');
 var _ = require('lodash');
 
-var Resource = require('./resource');
+var Resource = require('./resources/lib/resource');
 var RoutesSorter = require('./routes-sorter');
 var Authable = require('./interfaces/authable');
 var Utils = require('./utils');

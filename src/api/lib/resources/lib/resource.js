@@ -2,14 +2,14 @@
  * Dependencies
  */
 var _ = require('lodash');
-var NOOT = require('../../../')('object', 'http', 'errors');
+var NOOT = require('../../../../../index')('object', 'http', 'errors');
 
-var Operators = require('./operators');
-var Authable = require('./interfaces/authable');
-var Queryable = require('./interfaces/queryable');
-var DefaultRoutes = require('./default-routes');
-var Route = require('./route');
-var Utils = require('./utils');
+var Operators = require('./../../operators/index');
+var Authable = require('./../../interfaces/authable');
+var Queryable = require('./../../interfaces/queryable');
+var DefaultRoutes = require('./../../default-routes/index');
+var Route = require('./../../route');
+var Utils = require('./../../utils');
 
 /***********************************************************************************************************************
  *
@@ -38,7 +38,7 @@ var Resource = NOOT.Object.extend(Authable).extend(Queryable).extend({
   init: function() {
     NOOT.defaults(this, Resource.DEFAULTS);
     NOOT.required(this, 'api');
-    if (!(this.api instanceof require('./api'))) throw new Error('Not a NOOT.API');
+    if (!(this.api instanceof require('./../../api'))) throw new Error('Not a NOOT.API');
     this.fields = this.fields || this.getFields() || {};
     this.computeQueryable();
     this._buildMethods();
@@ -163,7 +163,9 @@ var Resource = NOOT.Object.extend(Authable).extend(Queryable).extend({
 
     switch (type) {
       case 'json': return this.sendJSON(stack);
-      default: return this.sendJSON(stack);
+      default:
+        stack.pushMessage(this.api.messagesProvider.unsupportedResponseType(type));
+        return stack.next(new NOOT.Errors.NotImplemented());
     }
   },
 
