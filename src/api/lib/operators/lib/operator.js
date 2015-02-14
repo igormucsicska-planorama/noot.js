@@ -12,8 +12,8 @@ var NOOT = require('../../../../../')('object');
 var Operator = NOOT.Object.extend({
 
 
-  parseFromQueryString: function(value, parser) {
-    return parser(value);
+  parseFromQueryString: function(value, parser, callback) {
+    return callback(null, parser(value));
   }
 
 });

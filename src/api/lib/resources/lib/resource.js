@@ -3,6 +3,7 @@
  */
 var _ = require('lodash');
 var NOOT = require('../../../../../index')('object', 'http', 'errors');
+var async = require('async');
 
 var Operators = require('./../../operators/index');
 var Authable = require('./../../interfaces/authable');
@@ -185,49 +186,57 @@ var Resource = NOOT.Object.extend(Authable).extend(Queryable).extend({
    *
    */
   parseQueryFilter: function(stack, callback) {
+    var self = this;
     var ret = {};
     var map = {};
     var fields = this.fields;
     var filter = stack.query.filter;
     callback = callback || stack.next;
 
-    for (var filterName in filter) {
-      var split = filterName.split(this.constructor.OPERATOR_SEPARATOR);
+    return async.each(Object.keys(filter), function(filterName, cb) {
+      var split = filterName.split(self.constructor.OPERATOR_SEPARATOR);
       var publicPath = split[0];
       var operatorName = split[1] || 'eq';
 
       var field = _.find(fields, function(field) { return publicPath === field.publicPath; });
 
       if (!field) {
-        stack.pushMessage(this.api.messagesProvider.forbiddenField(publicPath));
+        stack.pushMessage(self.api.messagesProvider.forbiddenField(publicPath));
         return callback(new NOOT.Errors.Forbidden());
       }
 
       if (!field.validateOperator(operatorName)) {
-        stack.pushMessage(this.api.messagesProvider.forbiddenOperator(publicPath, operatorName));
+        stack.pushMessage(self.api.messagesProvider.forbiddenOperator(publicPath, operatorName));
         return callback(new NOOT.Errors.Forbidden());
       }
 
       var operator = Operators[operatorName];
 
       if (!operator) {
-        stack.pushMessage(this.api.messagesProvider.unsupportedOperator(publicPath, operatorName));
+        stack.pushMessage(self.api.messagesProvider.unsupportedOperator(publicPath, operatorName));
         return callback(new NOOT.Errors.BadRequest());
       }
 
       map[field.path] = map[field.path] || {};
-      map[field.path][operatorName] = operator.parseFromQueryString(filter[filterName], field.parseFromQueryString);
-    }
+      operator.parseFromQueryString(filter[filterName], field.parseFromQueryString, function(err, value) {
+        if (err) return cb(err);
+        map[field.path][operatorName] = value;
+        return cb();
+      });
 
-    for (var path in map) {
-      var pathFilter = map[path];
-      if (pathFilter.hasOwnProperty('eq')) ret[path] = pathFilter.eq;
-      else ret[path] = pathFilter;
-    }
+    }, function(err) {
+      if (err) return callback(err);
 
-    stack.query.filter = ret;
-    
-    return callback();
+      for (var path in map) {
+        var pathFilter = map[path];
+        if (pathFilter.hasOwnProperty('eq')) ret[path] = pathFilter.eq;
+        else ret[path] = pathFilter;
+      }
+
+      stack.query.filter = ret;
+
+      return callback();
+    });
   },
 
   parseQuerySelect: function(stack, callback) {

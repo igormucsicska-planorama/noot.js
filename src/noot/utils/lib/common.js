@@ -84,6 +84,11 @@ var Utils = {
    */
   noop: function() { return this; },
 
+
+  throwableCallback: function(err) {
+    if (err) throw err;
+  },
+
   /**
    * Escape a string to be RegExp compliant.
    *
