@@ -1,11 +1,31 @@
+/**
+ * Dependencies
+ */
 var NOOT = require('../../../')('object');
 
+/***********************************************************************************************************************
+ * @class MessagesProvider
+ * @extends NOOT.Object
+ * @namespace NOOT.API
+ **********************************************************************************************************************/
 var MessagesProvider = NOOT.Object.extend({
 
+  /**
+   *
+   *
+   * @method defaultInternalServerError
+   * @return {String}
+   */
   defaultInternalServerError: function() {
     return 'An unexpected error has occurred, please try again later.';
   },
 
+  /**
+   *
+   *
+   * @method missingParameter
+   * @return {String}
+   */
   missingParameter: function(property) {
     return [
       this.highlight(property),
@@ -13,6 +33,12 @@ var MessagesProvider = NOOT.Object.extend({
     ].join(' ');
   },
 
+  /**
+   *
+   *
+   * @method notInEnum
+   * @return {String}
+   */
   notInEnum: function(property, enumeration, currentValue) {
     return [
       this.highlight(property),
@@ -23,6 +49,12 @@ var MessagesProvider = NOOT.Object.extend({
     ].join(' ');
   },
 
+  /**
+   *
+   *
+   * @method badType
+   * @return {String}
+   */
   badType: function(property, expectedType, currentType) {
     return [
       this.highlight(property),
@@ -33,6 +65,12 @@ var MessagesProvider = NOOT.Object.extend({
     ].join(' ');
   },
 
+  /**
+   *
+   *
+   * @method forbiddenOperator
+   * @return {String}
+   */
   forbiddenOperator: function(property, operator) {
     return [
       'Operator',
@@ -42,6 +80,12 @@ var MessagesProvider = NOOT.Object.extend({
     ].join(' ');
   },
 
+  /**
+   *
+   *
+   * @method unsupportedOperator
+   * @return {String}
+   */
   unsupportedOperator: function(operator) {
     return [
       'Operator',
@@ -50,6 +94,12 @@ var MessagesProvider = NOOT.Object.extend({
     ].join(' ');
   },
 
+  /**
+   *
+   *
+   * @method forbiddenField
+   * @return {String}
+   */
   forbiddenField: function(property) {
     return [
       'Field',
@@ -58,11 +108,33 @@ var MessagesProvider = NOOT.Object.extend({
     ].join(' ');
   },
 
+  /**
+   *
+   *
+   * @method unsupportedResponseType
+   * @return {String}
+   */
+  unsupportedResponseType: function(type) {
+    return [
+      'Response type',
+      this.highlight(type),
+      'is not supported.'
+    ].join(' ');
+  },
+
+  /**
+   *
+   *
+   * @method
+   * @return {String}
+   */
   highlight: function(str) {
     return '`' + str + '`';
   }
 
 });
 
-
+/**
+ * @exports
+ */
 module.exports = MessagesProvider;

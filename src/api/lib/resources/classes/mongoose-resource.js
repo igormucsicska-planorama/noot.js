@@ -1,13 +1,13 @@
 /**
  * Dependencies
  */
-var NOOT = require('../../../index')('http', 'errors');
+var NOOT = require('../../../../../index')('http', 'errors');
 var _ = require('lodash');
 var Inflector = require('inflected');
 
-var MongoResource = require('./mongo-resource');
-var FilterModes = require('./filter-modes');
-var Fields = require('./fields');
+var MongoResource = require('./../lib/mongo-resource');
+var FilterModes = require('./../../filter-modes');
+var Fields = require('./../../fields/index');
 
 
 /***********************************************************************************************************************

@@ -1,7 +1,19 @@
 /**
  * Dependencies
  */
-var NOOT = require('../../../../index')('namespace');
+var NOOT = require('../../../../')('namespace', 'mixins');
+var fs = require('fs');
+var path = require('path');
+var Inflector = require('inflected');
+
+/**
+ * Dynamically create the namespace
+ */
+var classes = {};
+var classesDirectory = path.resolve(__dirname, './classes');
+fs.readdirSync(classesDirectory).forEach(function(fileName) {
+  classes[Inflector.classify(fileName.split('.')[0])] = require(path.join(classesDirectory, fileName));
+});
 
 /***********************************************************************************************************************
  * Namespace for exposing NOOT.API.Field's.
@@ -11,16 +23,4 @@ var NOOT = require('../../../../index')('namespace');
  * @static
  * @extends NOOT.Namespace
  **********************************************************************************************************************/
-var Fields = NOOT.Namespace.create({
-  Number: require('./fields/number'),
-  Integer: require('./fields/integer'),
-  Float: require('./fields/float'),
-  String: require('./fields/string'),
-  Date: require('./fields/date'),
-  Boolean: require('./fields/boolean')
-});
-
-/**
- * @exports
- */
-module.exports = Fields;
+module.exports = NOOT.Namespace.extend(NOOT.Mixins.Registerable).create(classes);

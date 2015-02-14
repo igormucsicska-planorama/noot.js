@@ -1,6 +1,6 @@
-var NOOT = require('../../../index')();
+var NOOT = require('../../../../../index')();
 
-var MongoResource = require('./mongo-resource');
+var MongoResource = require('./../lib/mongo-resource');
 
 
 var MongoNativeResource = MongoResource.extend({

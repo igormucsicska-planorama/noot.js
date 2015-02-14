@@ -1,4 +1,4 @@
-var NOOT = require('../../../index')();
+var NOOT = require('../../../../../index')();
 
 
 var Resource = require('./resource');
