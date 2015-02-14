@@ -1,6 +1,5 @@
 var NOOT = nootrequire('api', 'mongoose');
 var mongoose = require('mongoose');
-var Fields = NOOT.API.Fields;
 
 describe('NOOT.API.MongooseResource', function() {
 
@@ -24,10 +23,7 @@ describe('NOOT.API.MongooseResource', function() {
 
       });
 
-      for (var path in schema.paths) {
-        console.log('------------------------------- ' + path + ' ---------------------------------');
-        console.log(NOOT.API.MongooseResource.toAPIField(schema.paths[path]).prototype);
-      }
+      console.log(schema);
 
     });
 

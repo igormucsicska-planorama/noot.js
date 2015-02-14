@@ -60,6 +60,7 @@ var API = NOOT.Object.extend(Authable).extend({
   /**
    *
    */
+  /* jshint unused: false */
   errorHandler: function(err, req, res, next) {
     var stack = req.nootApiStack;
     stack.append({ error: true });
@@ -74,6 +75,7 @@ var API = NOOT.Object.extend(Authable).extend({
     if (err.message) stack.pushMessage(err.message);
     return stack.resource.sendResponse(stack);
   },
+  /* jshint unused: true */
 
   /**
    *

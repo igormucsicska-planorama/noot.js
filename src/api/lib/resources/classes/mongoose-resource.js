@@ -6,7 +6,6 @@ var _ = require('lodash');
 var Inflector = require('inflected');
 
 var MongoResource = require('./../lib/mongo-resource');
-var FilterModes = require('./../../filter-modes');
 var Fields = require('./../../fields/index');
 
 
