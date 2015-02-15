@@ -100,8 +100,13 @@ var MessagesProvider = NOOT.Object.extend({
    * @method forbiddenField
    * @return {String}
    */
-  forbiddenField: function(property) {
-    return [
+  forbiddenField: function(property, verb) {
+    return verb ? [
+      'Cannot',
+      verb,
+      'field',
+      this.highlight(property) + '.'
+    ].join(' ') : [
       'Field',
       this.highlight(property),
       'is not allowed or does not exist.'

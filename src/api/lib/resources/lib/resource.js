@@ -4,37 +4,75 @@
 var _ = require('lodash');
 var NOOT = require('../../../../../index')('object', 'http', 'errors');
 var async = require('async');
+var flatten = require('flat');
 
 var Operators = require('./../../operators/index');
 var Authable = require('./../../interfaces/authable');
 var Queryable = require('./../../interfaces/queryable');
 var DefaultRoutes = require('./../../default-routes/index');
 var Route = require('./../../route');
-var Utils = require('./../../utils');
 
 /***********************************************************************************************************************
- *
- *
- *
- *
+ * @class Resource
+ * @namespace NOOT.API
+ * @constructor
+ * @extends NOOT.Object
+ * @uses NOOT.API.Queryable
+ * @uses NOOT.API.Authable
  **********************************************************************************************************************/
 var Resource = NOOT.Object.extend(Authable).extend(Queryable).extend({
 
+  /**
+   * @property methods
+   * @type Array
+   */
   methods: null,
+
+  /**
+   * @property detailMethods
+   * @type Array
+   */
   detailMethods: null,
+
+  /**
+   * @property manyMethods
+   * @type Array
+   */
   manyMethods: null,
+
+  /**
+   * @property defaultStatusCode
+   * @type Number
+   */
   defaultStatusCode: null,
-  supportedOperators: null,
+
+  /**
+   * @property allowedResponseTypes
+   * @type Array
+   */
   allowedResponseTypes: null,
+
+  /**
+   * @property defaultResponseType
+   * @type String
+   */
   defaultResponseType: null,
 
+  /**
+   * @property fields
+   * @type Object
+   */
   fields: null,
+
+  /**
+   * @property fieldsPath
+   * @type Array
+   * @readOnly
+   */
   get fieldsPaths() { return NOOT.isObject(this.fields) ? Object.keys(this.fields) : []; },
 
   /**
-   *
-   *
-   *
+   * Constructor
    */
   init: function() {
     NOOT.defaults(this, Resource.DEFAULTS);
@@ -47,16 +85,16 @@ var Resource = NOOT.Object.extend(Authable).extend(Queryable).extend({
   },
 
   /**
+   * Will be called b the constructor in case `fields` is not defined. This method allows you to process
    *
-   *
-   *
+   * @method getFields
    */
   getFields: function() {},
 
   /**
+   * In charge of parsing and validating default routes methods defined in `methods`, `detailMethods` and `manyMethods`.
    *
-   *
-   *
+   * @method _buildMethods
    * @private
    */
   _buildMethods: function() {
@@ -78,19 +116,20 @@ var Resource = NOOT.Object.extend(Authable).extend(Queryable).extend({
       all.forEach(Resource.validateDefaultRouteMethod.bind(Resource));
       all = all.map(function(method) { return method.toLowerCase(); });
     } else {
-      all = Resource.DEFAULT_ROUTES_METHODS;
+      all = this.constructor.DEFAULT_ROUTES_METHODS;
     }
 
     // Assign final values and make them readOnly
-    Utils.makeReadOnly(this, 'detailMethods', detail || all);
-    Utils.makeReadOnly(this, 'manyMethods', many || all);
-    Utils.makeReadOnly(this, 'methods', all);
+    NOOT.makeReadOnly(this, 'detailMethods', detail || all);
+    NOOT.makeReadOnly(this, 'manyMethods', many || all);
+    NOOT.makeReadOnly(this, 'methods', all);
   },
 
   /**
+   * In charge of creating the final `routes` property. This method will create an array of NOOT.API.Route instances
+   * to be used by the resource. The final array will contain both default and user defined routes.
    *
-   *
-   *
+   * @method _buildRoutes
    * @private
    */
   _buildRoutes: function() {
@@ -112,50 +151,28 @@ var Resource = NOOT.Object.extend(Authable).extend(Queryable).extend({
   },
 
   /**
+   * In charge of formatting the response that will be sent. Here you can format the stack's package and define how
+   * the response will look like.
    *
-   *
-   *
-   *
-   * @param stack
-   * @returns {*}
+   * @method formatResponsePackage
+   * @param {NOOT.API.Stack} stack
+   * @param {Function} [callback]
    */
-  validateFields: function(stack) {
-    return stack.next();
-  },
-
-  /**
-   *
-   *
-   *
-   *
-   * @param stack
-   * @returns {*}
-   */
-  validateOperators: function(stack) {
-    return stack.next();
-  },
-
-  /**
-   *
-   *
-   *
-   * @param stack
-   * @returns {*}
-   */
-  formatResponsePackage: function(stack) {
+  formatResponsePackage: function(stack, callback) {
+    callback = callback || stack.next;
     var pack = stack.package;
     if (!pack.messages.length) delete pack.messages;
-    pack.statusCode = pack.statusCode || this.defaultStatusCode;
     stack.package = _.pick(pack, ['data', 'error', 'message', 'messages', 'meta']);
-    return stack.next();
+    return callback();
   },
 
   /**
+   * In charge of calling the right handler in order to respond to the request. If no `accept` header is provided by
+   * the request, the `defaultResponseType` is used. If the provided `accept` is not supported, a
+   * NOOT.Errors.NotImplemented error is sent as a response.
    *
-   *
-   *
-   * @param stack
-   * @returns {*}
+   * @method sendResponse
+   * @param {NOOT.API.Stack} stack
    */
   sendResponse: function(stack) {
     stack.res.status(stack.statusCode || this.defaultStatusCode);
@@ -171,19 +188,22 @@ var Resource = NOOT.Object.extend(Authable).extend(Queryable).extend({
   },
 
   /**
-   *
-   *
+   * Sends stack's package as a JSON response.
    *
    * @method sendJSON
-   * @param stack
-   * @returns {*}
+   * @param {NOOT.API.Stack} stack
    */
   sendJSON: function(stack) {
     return stack.res.json(stack.package);
   },
 
   /**
+   * Middleware to parse and validate stack's filter. If `query.filter` contains a field that is not `filterable`, a
+   * NOOT.Errors.Forbidden error is passed to the callback.
    *
+   * @method parseQueryFilter
+   * @param {NOOT.API.Stack} stack
+   * @param {Function} [callback]
    */
   parseQueryFilter: function(stack, callback) {
     var self = this;
@@ -196,7 +216,7 @@ var Resource = NOOT.Object.extend(Authable).extend(Queryable).extend({
     return async.each(Object.keys(filter), function(filterName, cb) {
       var split = filterName.split(self.constructor.OPERATOR_SEPARATOR);
       var publicPath = split[0];
-      var operatorName = split[1] || 'eq';
+      var operatorName = split[1] || self.constructor.EQUALITY_OPERATOR;
 
       var field = _.find(fields, function(field) { return publicPath === field.publicPath; });
 
@@ -229,7 +249,7 @@ var Resource = NOOT.Object.extend(Authable).extend(Queryable).extend({
 
       for (var path in map) {
         var pathFilter = map[path];
-        if (pathFilter.hasOwnProperty('eq')) ret[path] = pathFilter.eq;
+        if (pathFilter.hasOwnProperty(self.constructor.EQUALITY_OPERATOR)) ret[path] = pathFilter.eq;
         else ret[path] = pathFilter;
       }
 
@@ -239,11 +259,20 @@ var Resource = NOOT.Object.extend(Authable).extend(Queryable).extend({
     });
   },
 
+  /**
+   * Middleware to parse and validate stack's select. If `query.select` contains a field that is not `selectable`, a
+   * NOOT.Errors.Forbidden error is passed to the callback.
+   *
+   * @method parseQuerySelect
+   * @param {NOOT.API.Stack} stack
+   * @param {Function} [callback]
+   */
   parseQuerySelect: function(stack, callback) {
     var self = this;
     callback = callback || stack.next;
     var select = stack.query.select;
     var selectable = stack.selectable;
+    var isValid = true;
 
     if (select && select.length) {
       var final = [];
@@ -255,23 +284,81 @@ var Resource = NOOT.Object.extend(Authable).extend(Queryable).extend({
         }).map(function(selectableName) {
           return shouldExclude ? self.constructor.EXCLUSION_CHARACTER + selectableName : selectableName;
         });
-        if (childs.length) final = final.concat(childs);
-        else final.push(fieldName);
+        if (childs.length) {
+          final = final.concat(childs);
+        } else {
+          if (_.contains(selectable, rawFieldName)) {
+            final.push(fieldName);
+          } else {
+            isValid = false;
+            stack.pushMessage(self.api.messagesProvider.forbiddenField(rawFieldName, 'select'));
+          }
+        }
       });
       stack.query.select = final;
     }
 
-    return callback();
+    return callback(isValid ? null : new NOOT.Errors.Forbidden());
   },
 
+  /**
+   * Middleware to parse and validate stack's sort. If `query.sort` contains a field that is not `sortable`, a
+   * NOOT.Errors.Forbidden error is passed to the callback.
+   *
+   * @method parseQuerySort
+   * @param {NOOT.API.Stack} stack
+   * @param {Function} [callback]
+   */
   parseQuerySort: function(stack, callback) {
-    return (callback || stack.next)();
+    var self = this;
+    callback = callback || stack.next;
+    var sort = stack.query.sort;
+    var sortable = stack.sortable;
+    var isValid = true;
+
+    if (sort && sort.length) {
+      sort.forEach(function(fieldName) {
+        fieldName = fieldName.replace(new RegExp('^' + self.constructor.EXCLUSION_CHARACTER), '');
+        if (!_.contains(sortable, fieldName)) {
+          isValid = false;
+          stack.pushMessage(self.api.messagesProvider.forbiddenField(fieldName, 'sort'));
+        }
+      });
+    }
+
+    return callback(isValid ? null : new NOOT.Errors.Forbidden());
+  },
+
+  /**
+   * Middleware to parse and validate stack's body. If `body` contains a field that is not `writable`, a
+   * NOOT.Errors.Forbidden error is passed to the callback.
+   *
+   * @method parseQueryBody
+   * @param {NOOT.API.Stack} stack
+   * @param {Function} [callback]
+   */
+  parseQueryBody: function(stack, callback) {
+    var self = this;
+    var writable = stack.writable;
+    callback = callback || stack.next;
+    var isValid = true;
+
+    Object.keys(flatten(stack.body, { safe: true })).forEach(function(key) {
+      if (!_.contains(writable, key)) {
+        isValid = false;
+        stack.pushMessage(self.api.messagesProvider.forbiddenField(key, 'write'));
+      }
+    });
+
+    return callback(isValid ? null : new NOOT.Errors.Forbidden());
   }
 
 }, {
 
   /**
-   *
+   * @property DEFAULTS
+   * @type Object
+   * @static
    */
   DEFAULTS: {
     get methods() { return DefaultRoutes.supportedMethods; },
@@ -281,22 +368,33 @@ var Resource = NOOT.Object.extend(Authable).extend(Queryable).extend({
   },
 
   /**
-   *
+   * @property OPERATOR_SEPARATOR
+   * @type String
+   * @static
    */
   OPERATOR_SEPARATOR: '__',
 
   /**
-   *
+   * @property EQUALITY_OPERATOR
+   * @type String
+   * @static
    */
   EQUALITY_OPERATOR: 'eq',
 
+  /**
+   * @property EXCLUSION_CHARACTER
+   * @type String
+   * @static
+   */
   EXCLUSION_CHARACTER: '-',
 
   /**
+   * Validates an HTTP method against those that are supported by NOOT.API.DefaultRoutes. If the parameter method is not
+   * supported, an error will be thrown.
    *
-   *
-   *
-   * @param method
+   * @method validateDefaultRouteMethod
+   * @param {String} method
+   * @static
    */
   validateDefaultRouteMethod: function(method) {
     if (!_.contains(DefaultRoutes.supportedMethods, method.toLowerCase())) {
@@ -307,5 +405,7 @@ var Resource = NOOT.Object.extend(Authable).extend(Queryable).extend({
 });
 
 
-
+/**
+ * @exports
+ */
 module.exports = Resource;

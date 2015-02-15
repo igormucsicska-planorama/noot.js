@@ -48,7 +48,8 @@ UserSchema = Schema.extend({
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     blogs: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Blog' }],
-    oldEnough: { type: Boolean, default: false }
+    oldEnough: { type: Boolean, default: false },
+    hobbies: [{ type: String, default: function() { return []; } }]
   }
 });
 
@@ -108,6 +109,7 @@ describe('NOOT.API - Complete test', function() {
         model: User,
         methods: ['get', 'patch', 'delete', 'post', 'put'],
         nonSelectable: ['password'],
+        nonSortable: ['hobbies'],
         routes: [UserRegisterRoute, UserInfoRoute]
       });
 
@@ -143,7 +145,12 @@ describe('NOOT.API - Complete test', function() {
 
   it('should create 3 users', function(done) {
     me = { name: { first: 'Sylvain', last: 'Estevez' }, age: 28, password: 'youllnotfind', email: 'se@nootjs.com' };
-    her = { name: { first: 'Jane', last: 'Doe' }, password: 'youllnotfind', email: 'janedoe@nootjs.com' };
+    her = {
+      name: { first: 'Jane', last: 'Doe' },
+      password: 'youllnotfind',
+      email: 'janedoe@nootjs.com',
+      hobbies: ['ping-pong']
+    };
     him = { name: { first: 'John', last: 'Estevez' }, password: 'youllnotfind', email: 'johndoe@nootjs.com' };
 
     return async.eachSeries([me, her, him], function(item, cb) {
@@ -322,20 +329,6 @@ describe('NOOT.API - Complete test', function() {
         return User.findOne({ email: 'se@nootjs.com' }, 'age', function(err, user) {
           if (err) done(err);
           user.age.should.eql(29);
-          return done();
-        });
-      });
-  });
-
-  it('should put user (create)', function(done) {
-    return supertest(app)
-      .put('/private/users?' + qs.stringify({ email: 'new-user@nootjs.com' }))
-      .send({ age: 28, password: 'youllnotfind', email: 'new-user@nootjs.com' })
-      .expect(201, function(err) {
-        if (err) return done(err);
-        return User.findOne({ email: 'new-user@nootjs.com' }, function(err, user) {
-          if (err) done(err);
-          user.age.should.eql(28);
           return done();
         });
       });

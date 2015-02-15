@@ -6,10 +6,6 @@ var Utils = NOOT.Namespace.create({
     return (str || '').split(/\s*,\s*/);
   },
 
-  makeReadOnly: function(obj, prop, value) {
-    return Object.defineProperty(obj, prop, { get: function() { return value; } });
-  },
-
   bubbleProperty: function(context, parentKey, key, options) {
     options = options || {};
     var value = context[key];

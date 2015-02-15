@@ -7,7 +7,6 @@ var _ = require('lodash');
 var Resource = require('./resources/lib/resource');
 var RoutesSorter = require('./routes-sorter');
 var Authable = require('./interfaces/authable');
-var Utils = require('./utils');
 var MessagesProvider = require('./messages-provider');
 
 
@@ -119,8 +118,8 @@ var API = NOOT.Object.extend(Authable).extend({
 
     if (this.errorHandler) server.use(this.errorHandler);
 
-    Utils.makeReadOnly(this, 'resources', resources);
-    Utils.makeReadOnly(this, 'routes', routes);
+    NOOT.makeReadOnly(this, 'resources', resources);
+    NOOT.makeReadOnly(this, 'routes', routes);
   },
 
   /**

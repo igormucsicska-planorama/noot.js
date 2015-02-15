@@ -39,8 +39,6 @@ var Stack = NOOT.Object.extend(Queryable).extend({
    */
   package: null,
 
-  isFilterValid: false,
-
   statusCode: null,
 
   createdOn: null,
@@ -73,7 +71,7 @@ var Stack = NOOT.Object.extend(Queryable).extend({
       raw: query,
       select: query.select ? Utils.parseFieldsList(query.select) : this.selectable,
       filter: _.omit(query, Stack.QUERY_STRING_RESERVED_WORDS),
-      sort: query.sort ? Utils.parseFieldsList(query.sort) : this.sortable,
+      sort: query.sort ? Utils.parseFieldsList(query.sort) : '',
       limit: Math.min(parseInt(query.limit, 10) || this.defaultGetLimit, this.maxGetLimit),
       offset: parseInt(query.offset, 10) || 0
     };
