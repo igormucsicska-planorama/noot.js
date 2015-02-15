@@ -8,8 +8,6 @@ var moment = require('moment');
 var Stack = require('./stack');
 var Authable = require('./interfaces/authable');
 var Queryable = require('./interfaces/queryable');
-var Utils = require('./utils');
-var FilterModes = require('./filter-modes');
 
 /***********************************************************************************************************************
  * @class Route
@@ -66,6 +64,9 @@ var Route = NOOT.Object.extend(Authable).extend(Queryable).extend({
    */
   isDetail: false,
 
+
+  get isWritable() { return _.contains(['put', 'patch', 'post'], this.method); },
+
   /**
    * Constructor
    */
@@ -114,7 +115,7 @@ var Route = NOOT.Object.extend(Authable).extend(Queryable).extend({
       this.resource.parseQueryFilter && this.resource.parseQueryFilter.bind(this.resource),
       this.resource.parseQuerySelect && this.resource.parseQuerySelect.bind(this.resource),
       this.resource.parseQuerySort && this.resource.parseQuerySort.bind(this.resource),
-      this.validateFields && this.validateFields.bind(this),
+      this.isWritable && this.resource.parseQueryBody && this.resource.parseQueryBody.bind(this.resource),
 
       this.schema && this._validateSchema.bind(this),
       this.validation && this.validation.bind(this)
@@ -136,59 +137,7 @@ var Route = NOOT.Object.extend(Authable).extend(Queryable).extend({
       };
     });
 
-    Utils.makeReadOnly(this, 'handlers', handlers);
-  },
-
-
-  validateFields: function(stack) {
-    var query = stack.query;
-
-    var invalid;
-
-    if (query.select) {
-      invalid = stack.getInvalidProperties(query.select, FilterModes.SELECT);
-      if (invalid.length) {
-        invalid.forEach(function(field) {
-          stack.pushMessage('You cannot ' + FilterModes.SELECT + ' field ' + field + ' for this resource');
-        });
-        console.log('IVALID SELECT', invalid, stack.selectable);
-        return stack.next(new NOOT.Errors.Forbidden());
-      }
-    }
-
-    if (query.filter) {
-      invalid = stack.getInvalidProperties(Object.keys(query.filter), FilterModes.FILTER);
-      if (invalid.length) {
-        invalid.forEach(function(field) {
-          stack.pushMessage('You cannot ' + FilterModes.FILTER + ' field ' + field + ' for this resource');
-        });
-        console.log('IVALID FILTER', invalid, stack.filterable);
-        return stack.next(new NOOT.Errors.Forbidden());
-      }
-    }
-
-    if (query.sort) {
-      invalid = stack.getInvalidProperties(query.sort, FilterModes.SORT);
-      if (invalid.length) {
-        invalid.forEach(function(field) {
-          stack.pushMessage('You cannot ' + FilterModes.SORT + ' field ' + field + ' for this resource');
-        });
-        console.log('IVALID SORT', invalid);
-        return stack.next(new NOOT.Errors.Forbidden());
-      }
-    }
-
-    //if (stack.body) {
-    //  invalid = stack.getInvalidProperties(stack.body, FilterModes.WRITE);
-    //  if (invalid.length) {
-    //    invalid.forEach(function(field) {
-    //      stack.pushMessage('You cannot ' + FilterModes.WRITE + ' field ' + field + ' for this resource');
-    //    });
-    //    return stack.next(new NOOT.Errors.Forbidden());
-    //  }
-    //}
-
-    return stack.next();
+    NOOT.makeReadOnly(this, 'handlers', handlers);
   },
 
   /**
@@ -206,7 +155,7 @@ var Route = NOOT.Object.extend(Authable).extend(Queryable).extend({
       this.path
     ];
 
-    Utils.makeReadOnly(this, 'path', NOOT.Url.join.apply(NOOT.Url, args).replace(/\/$/, ''));
+    NOOT.makeReadOnly(this, 'path', NOOT.Url.join.apply(NOOT.Url, args).replace(/\/$/, ''));
   },
 
   /**

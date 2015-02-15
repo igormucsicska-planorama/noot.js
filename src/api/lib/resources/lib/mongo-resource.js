@@ -1,12 +1,25 @@
-var NOOT = require('../../../../../index')();
-
+/**
+ * Dependencies
+ */
+var NOOT = require('../../../../../')();
 
 var Resource = require('./resource');
 
-
-
+/***********************************************************************************************************************
+ * @class MongoResource
+ * @namespace NOOT.API
+ * @constructor
+ * @extends NOOT.API.Resource
+ **********************************************************************************************************************/
 var MongoResource = Resource.extend({
 
+  /**
+   * Parses stack's filter to a MongoDB compatible one.
+   *
+   * @method parseQueryFilter
+   * @param {NOOT.API.Stack} stack
+   * @param {Function} [callback]
+   */
   parseQueryFilter: function(stack, callback) {
     callback = callback || stack.next;
 
@@ -28,6 +41,13 @@ var MongoResource = Resource.extend({
     });
   },
 
+  /**
+   * Parses stack's select to a MongoDB compatible one.
+   *
+   * @method parseQuerySelect
+   * @param {NOOT.API.Stack} stack
+   * @param {Function} [callback]
+   */
   parseQuerySelect: function(stack, callback) {
     var self = this;
     callback = callback || stack.next;
@@ -38,6 +58,13 @@ var MongoResource = Resource.extend({
     });
   },
 
+  /**
+   * Parses stack's sort to a MongoDB compatible one.
+   *
+   * @method parseQuerySort
+   * @param {NOOT.API.Stack} stack
+   * @param {Function} [callback]
+   */
   parseQuerySort: function(stack, callback) {
     var self = this;
     callback = callback || stack.next;
@@ -50,23 +77,43 @@ var MongoResource = Resource.extend({
 
 }, {
 
+  /**
+   * Transforms an array of property to a MongoDB compatible one.
+   *
+   * @method toMongoSelectOrSort
+   * @param {Array} arr
+   * @return {Object}
+   * @static
+   */
   toMongoSelectOrSort: function(arr) {
     var self = this;
     var ret = {};
     if (!arr) return ret;
+
     arr.forEach(function(fieldName) {
       var shouldExclude = fieldName[0] === self.EXCLUSION_CHARACTER;
       fieldName = fieldName.replace(new RegExp('^' + self.EXCLUSION_CHARACTER), '');
       ret[fieldName] = shouldExclude ? -1 : 1;
     });
+
     return ret;
   },
 
+  /**
+   * Transforms an operator to a MongoDB compatible one.
+   *
+   * @method toMongoOperator
+   * @param {String} operator
+   * @return {String}
+   * @static
+   */
   toMongoOperator: function(operator) {
     return '$' + operator;
   }
 
 });
 
-
+/**
+ * @exports
+ */
 module.exports = MongoResource;

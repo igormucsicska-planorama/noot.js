@@ -21,6 +21,7 @@ fs.readdirSync(classesDirectory).forEach(function(fileName) {
  * @class Resources
  * @namespace NOOT.API
  * @static
+ * @uses NOOT.Mixins.Registerable
  * @extends NOOT.Namespace
  **********************************************************************************************************************/
 module.exports = NOOT.Namespace.extend(NOOT.Mixins.Registerable).create(classes);

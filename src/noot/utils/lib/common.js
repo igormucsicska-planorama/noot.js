@@ -195,6 +195,10 @@ var Utils = {
     });
 
     return ret;
+  },
+
+  makeReadOnly: function(obj, prop, value) {
+    return Object.defineProperty(obj, prop, { get: function() { return value; } });
   }
 
 };

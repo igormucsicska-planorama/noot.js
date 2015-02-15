@@ -169,13 +169,6 @@ describe('NOOT.Mongoose.Schema', function() {
       Artist = dbs.main.model('Artiste', ArtistSchema);
       Singer = dbs.main.model('Singer', SingerSchema);
 
-      var s = Artist.schema;
-
-      for (var pathName in s.paths) {
-        console.log(pathName, s.paths[pathName]);
-      }
-
-
       /**
        * @type {Person}
        */

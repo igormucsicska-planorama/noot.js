@@ -18,12 +18,13 @@ var Fields = require('./../../fields/index');
 var MongooseResource = MongoResource.extend({
 
   /**
-   *
+   * @property model
+   * @type mongoose.model
    */
   model: null,
 
   /**
-   *
+   * Constructor
    */
   init: function() {
     NOOT.required(this, 'model');
@@ -32,142 +33,164 @@ var MongooseResource = MongoResource.extend({
   },
 
   /**
+   * Get a single item from MongoDB.
    *
-   *
-   *
+   * @method get
    * @param {NOOT.API.Stack} stack
+   * @param {Function} callback
    */
-  get: function(stack) {
+  get: function(stack, callback) {
+    callback = callback || stack.next;
     return this.model.findOne({ _id: stack.primaryKey }, stack.query.select, function(err, item) {
-      if (err) return stack.next(NOOT.Errors.fromMongooseError(err));
-      if (!item) return stack.next(new NOOT.Errors.NotFound());
-      return stack.setData(item).setStatus(NOOT.HTTP.OK).next();
+      if (err) return callback(NOOT.Errors.fromMongooseError(err));
+      if (!item) return callback(new NOOT.Errors.NotFound());
+      stack.setData(item).setStatus(NOOT.HTTP.OK);
+      return callback();
     });
   },
 
   /**
+   * Get multiple items from MongoDB.
    *
-   *
-   *
+   * @method getMany
    * @param {NOOT.API.Stack} stack
+   * @param {Function} callback
    */
-  getMany: function(stack) {
+  getMany: function(stack, callback) {
     var self = this;
     var query = stack.query;
+    callback = callback || stack.next;
+
     return this.model
       .find(query.filter, query.select)
       .sort(query.sort)
       .skip(query.offset)
       .limit(query.limit)
       .exec(function(err, items) {
-        if (err) return stack.next(err);
+        if (err) return callback(err);
         return self.getCount(query.filter, function(err, count) {
-          if (err) return stack.next(NOOT.Errors.fromMongooseError(err));
-          return stack.createManyMeta(count).setData(items).setStatus(NOOT.HTTP.OK).next();
+          if (err) return callback(NOOT.Errors.fromMongooseError(err));
+          stack.createManyMeta(count).setData(items).setStatus(NOOT.HTTP.OK);
+          return callback();
         });
       });
   },
 
   /**
+   * Write item(s) to MongoDB.
    *
-   *
-   *
-   * @param stack
-   * @returns {*}
-   */
-  create: function(stack) {
-    var isMulti = NOOT.isArray(stack.body);
-
-    if (isMulti && !_.contains(this.manyMethods, 'post')) {
-      return stack.next(new NOOT.Errors.Forbidden('This resource does not allow multiple `POST` at a time'));
-    }
-
-    return this.model.create(stack.body, function(err, items) {
-      if (err) return stack.next(NOOT.Errors.fromMongooseError(err));
-      return stack.setData(items).setStatus(NOOT.HTTP.Created).next();
-    });
-  },
-
-  /**
-   *
-   *
-   * @param stack
-   * @returns {*}
-   */
-  update: function(stack) {
-    return this.model.update({ _id: stack.primaryKey }, { $set: stack.body }, function(err, count) {
-      if (err) return stack.next(NOOT.Errors.fromMongooseError(err));
-      return stack.pushMessage('Successfully updated', count, 'item').setStatus(NOOT.HTTP.NoContent).next();
-    });
-  },
-
-  /**
-   *
-   *
-   * @param stack
-   * @returns {*}
-   */
-  updateMany: function(stack) {
-    if (!_.contains(this.manyMethods, 'patch')) {
-      return stack.next(new NOOT.Errors.Forbidden('This resource does not allow multiple `PATCH` at a time'));
-    }
-
-    return this.model.update(stack.query.filter, { $set: stack.body }, { multi: true }, function(err, count) {
-      if (err) return stack.next(NOOT.Errors.fromMongooseError(err));
-      return stack.pushMessage('Successfully updated', count, 'item(s)').setStatus(NOOT.HTTP.NoContent).next();
-    });
-  },
-
-  /**
-   *
-   *
-   * @param stack
-   * @returns {*}
-   */
-  delete: function(stack) {
-    return this.model.remove({ _id: stack.primaryKey }, function(err, count) {
-      if (err) return stack.next(NOOT.Errors.fromMongooseError(err));
-      return stack.pushMessage('Successfully removed', count, 'item').setStatus(NOOT.HTTP.NoContent).next();
-    });
-  },
-
-  /**
-   *
-   *
+   * @method create
    * @param {NOOT.API.Stack} stack
+   * @param {Function} callback
    */
-  deleteMany: function(stack) {
-    if (!_.contains(this.manyMethods, 'delete')) {
-      return stack.next(new NOOT.Errors.Forbidden('This resource does not allow multiple `DELETE` at a time'));
-    }
-    return this.model.remove(stack.query.filter, function(err, count) {
-      if (err) return stack.next(NOOT.Errors.fromMongooseError(err));
-      return stack.pushMessage('Successfully removed', count, 'item(s)').setStatus(NOOT.HTTP.NoContent).next();
+  create: function(stack, callback) {
+    callback = callback || stack.next;
+    return this.model.create(stack.body, function(err, items) {
+      if (err) return callback(NOOT.Errors.fromMongooseError(err));
+      stack.setData(items).setStatus(NOOT.HTTP.Created);
+      return callback();
     });
   },
 
-  upsert: function(stack) {
+  /**
+   * Update a single item in MongoDB.
+   *
+   * @method update
+   * @param {NOOT.API.Stack} stack
+   * @param {Function} callback
+   *
+   *
+   */
+  update: function(stack, callback) {
+    // TODO use messages provider
+    callback = callback || stack.next;
+    return this.model.update({ _id: stack.primaryKey }, { $set: stack.body }, function(err, count) {
+      if (err) return callback(NOOT.Errors.fromMongooseError(err));
+      stack.pushMessage('Successfully updated', count, 'item').setStatus(NOOT.HTTP.NoContent);
+      return callback();
+    });
+  },
+
+  /**
+   * Update multiple items in MongoDB.
+   *
+   * @method updateMany
+   * @param {NOOT.API.Stack} stack
+   * @param {Function} callback
+   */
+  updateMany: function(stack, callback) {
+    // TODO use messages provider
+    callback = callback || stack.next;
+    return this.model.update(stack.query.filter, { $set: stack.body }, { multi: true }, function(err, count) {
+      if (err) return callback(NOOT.Errors.fromMongooseError(err));
+      stack.pushMessage('Successfully updated', count, 'item(s)').setStatus(NOOT.HTTP.NoContent);
+      return callback();
+    });
+  },
+
+  /**
+   * Delete a single item in MongoDB.
+   *
+   * @method delete
+   * @param {NOOT.API.Stack} stack
+   * @param {Function} callback
+   */
+  delete: function(stack, callback) {
+    // TODO use messages provider
+    callback = callback || stack.next;
+    return this.model.remove({ _id: stack.primaryKey }, function(err, count) {
+      if (err) return callback(NOOT.Errors.fromMongooseError(err));
+      stack.pushMessage('Successfully removed', count, 'item').setStatus(NOOT.HTTP.NoContent);
+      return callback();
+    });
+  },
+
+  /**
+   * Delete multiple items in MongoDB.
+   *
+   * @method deleteMany
+   * @param {NOOT.API.Stack} stack
+   * @param {Function} callback
+   */
+  deleteMany: function(stack, callback) {
+    // TODO use messages provider
+    callback = callback || stack.next;
+    return this.model.remove(stack.query.filter, function(err, count) {
+      if (err) return callback(NOOT.Errors.fromMongooseError(err));
+      stack.pushMessage('Successfully removed', count, 'item(s)').setStatus(NOOT.HTTP.NoContent);
+      return callback();
+    });
+  },
+
+  /**
+   * Upsert an item in MongoDB.
+   *
+   * @method upsert
+   * @param {NOOT.API.Stack} stack
+   * @param {Function} callback
+   */
+  upsert: function(stack, callback) {
     var self = this;
+    callback = callback || stack.next;
     return this.model.findOne(stack.query.filter, function(err, existing) {
-      if (err) return stack.next(NOOT.Errors.fromMongooseError(err));
-      if (existing) return self.updateMany(stack);
-      return self.create(stack);
+      if (err) return callback(NOOT.Errors.fromMongooseError(err));
+      if (existing) return self.updateMany(stack, callback);
+      return self.create(stack, callback);
     });
   },
 
   /**
    *
-   *
-   * @param filter
-   * @param callback
-   * @returns {*}
+   * @method getCount
+   * @param {Object} filter
+   * @param {Function} callback
    */
   getCount: function(filter, callback) {
     return this.model.count(filter, callback);
   },
 
   /**
-   * Unlike for base NOOT.API.Resource class, this method will build the resource's fields based on
+   * Builds a list of fields based on the `model`'s mongoose schema.
    *
    * @method getFields
    * @return {Object}
@@ -186,6 +209,15 @@ var MongooseResource = MongoResource.extend({
 
 }, {
 
+  /**
+   * Transforms a mongoose schema property to a NOOT compatible one.
+   *
+   * @method toAPIField
+   * @static
+   * @param {Object} mongoosePath
+   * @param {NOOT.API.Resource} resource
+   * @return {NOOT.API.Field}
+   */
   toAPIField: function(mongoosePath, resource) {
     var options = {
       path: mongoosePath.path,
