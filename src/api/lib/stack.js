@@ -14,48 +14,71 @@ var FilterModes = require('./filter-modes');
  * @class Stack
  * @namespace NOOT.API
  * @extends NOOT.Object
+ * @uses NOOT.API.Queryable
  * @constructor
  **********************************************************************************************************************/
 var Stack = NOOT.Object.extend(Queryable).extend({
 
   /**
-   *
+   * @property req
+   * @type IncomingMessage
    */
   req: null,
 
   /**
-   *
+   * @property res
+   * @type Response
    */
   res: null,
 
   /**
-   *
+   * @property next
+   * @type Function
    */
   next: null,
 
   /**
    *
    *
+   * @property package
+   * @type Object
    */
   package: null,
 
+  /**
+   * @property statusCode
+   * @type Number
+   */
   statusCode: null,
 
+  /**
+   * @property createdOn
+   * @type Date
+   */
   createdOn: null,
 
+  /**
+   *
+   */
   query: null,
 
   params: null,
+
+  body: null,
+
+  route: null,
+
+  resource: null,
 
   /**
    * Constructor
    */
   init: function() {
-    this.body = this.req.body;
     NOOT.defaults(this, Stack.DEFAULTS);
     NOOT.required(this, 'req', 'res', 'route', '__queryableParent');
-    this.resource = this.route.resource;
     this.computeQueryable();
+    this.resource = this.route.resource;
+    this.body = this.req.body;
     this.params = this.req.params;
   },
 
@@ -253,9 +276,9 @@ var Stack = NOOT.Object.extend(Queryable).extend({
   /**
    *
    *
-   *
-   * @param value
-   * @returns {Stack}
+   * @method addSelectable
+   * @param {String} value
+   * @chainable
    */
   addSelectable: function(value) {
     this._addAllowedFieldsForType('selectable', value);
@@ -265,9 +288,9 @@ var Stack = NOOT.Object.extend(Queryable).extend({
   /**
    *
    *
-   *
-   * @param value
-   * @returns {Stack}
+   * @method addFilterable
+   * @param {String} value
+   * @chainable
    */
   addFilterable: function(value) {
     this._addAllowedFieldsForType('filterable', value);
@@ -277,9 +300,9 @@ var Stack = NOOT.Object.extend(Queryable).extend({
   /**
    *
    *
-   *
-   * @param value
-   * @returns {Stack}
+   * @method addSortable
+   * @param {String} value
+   * @chainable
    */
   addSortable: function(value) {
     this._addAllowedFieldsForType('sortable', value);
@@ -289,9 +312,9 @@ var Stack = NOOT.Object.extend(Queryable).extend({
   /**
    *
    *
-   *
-   * @param value
-   * @returns {Stack}
+   * @method addWritable
+   * @param {String} value
+   * @chainable
    */
   addWritable: function(value) {
     this._addAllowedFieldsForType('writable', value);
@@ -301,9 +324,9 @@ var Stack = NOOT.Object.extend(Queryable).extend({
   /**
    *
    *
-   *
-   * @param value
-   * @returns {Stack}
+   * @method removeSelectable
+   * @param {String} value
+   * @chainable
    */
   removeSelectable: function(value) {
     this._removeAllowedFieldsForType('selectable', value);
@@ -313,9 +336,9 @@ var Stack = NOOT.Object.extend(Queryable).extend({
   /**
    *
    *
-   *
-   * @param value
-   * @returns {Stack}
+   * @method removeFilterable
+   * @param {String} value
+   * @chainable
    */
   removeFilterable: function(value) {
     this._removeAllowedFieldsForType('filterable', value);
@@ -325,9 +348,9 @@ var Stack = NOOT.Object.extend(Queryable).extend({
   /**
    *
    *
-   *
-   * @param value
-   * @returns {Stack}
+   * @method removeSortable
+   * @param {String} value
+   * @chainable
    */
   removeSortable: function(value) {
     this._removeAllowedFieldsForType('sortable', value);
@@ -337,9 +360,9 @@ var Stack = NOOT.Object.extend(Queryable).extend({
   /**
    *
    *
-   *
-   * @param value
-   * @returns {Stack}
+   * @method removeWritable
+   * @param {String} value
+   * @chainable
    */
   removeWritable: function(value) {
     this._removeAllowedFieldsForType('writable', value);
@@ -349,9 +372,9 @@ var Stack = NOOT.Object.extend(Queryable).extend({
   /**
    *
    *
-   *
-   * @param value
-   * @returns {Stack}
+   * @method setSelectable
+   * @param {String} value
+   * @chainable
    */
   setSelectable: function(value) {
     this._setAllowedFieldsForType('selectable', value);
@@ -361,9 +384,9 @@ var Stack = NOOT.Object.extend(Queryable).extend({
   /**
    *
    *
-   *
-   * @param value
-   * @returns {Stack}
+   * @method setFilterable
+   * @param {String} value
+   * @chainable
    */
   setFilterable: function(value) {
     this._setAllowedFieldsForType('filterable', value);
@@ -373,9 +396,9 @@ var Stack = NOOT.Object.extend(Queryable).extend({
   /**
    *
    *
-   *
-   * @param value
-   * @returns {Stack}
+   * @method setSortable
+   * @param {String} value
+   * @chainable
    */
   setSortable: function(value) {
     this._setAllowedFieldsForType('sortable', value);
@@ -385,9 +408,9 @@ var Stack = NOOT.Object.extend(Queryable).extend({
   /**
    *
    *
-   *
-   * @param value
-   * @returns {Stack}
+   * @method setWritable
+   * @param {String} value
+   * @chainable
    */
   setWritable: function(value) {
     this._setAllowedFieldsForType('writable', value);
@@ -502,8 +525,9 @@ var Stack = NOOT.Object.extend(Queryable).extend({
 }, {
 
   /**
-   *
-   *
+   * @property DEFAULTS
+   * @type Object
+   * @static
    */
   DEFAULTS: {
     package: {
@@ -513,6 +537,13 @@ var Stack = NOOT.Object.extend(Queryable).extend({
     headers: null
   },
 
+  /**
+   * List of reserved words to be used in query string.
+   *
+   * @property QUERY_STRING_RESERVED_WORDS
+   * @type Array of String
+   * @static
+   */
   QUERY_STRING_RESERVED_WORDS: ['select', 'sort', 'limit', 'offset']
 
 });

@@ -22,7 +22,7 @@ var RoutesSorter = NOOT.Namespace.create({
   _PATH_WEIGHTS: { FIXED: 3, PARAM: 2, OPTIONAL: 1, BLANK: 0 },
 
   /**
-   *
+   * Sort an array of routes to avoid conflicts.
    *
    * @method compute
    * @param {Array} routes
@@ -51,7 +51,7 @@ var RoutesSorter = NOOT.Namespace.create({
   },
 
   /**
-   *
+   * Compute routes for a method (called after routes are grouped by method).
    *
    * @method _computeMethodRoutes
    * @param {Array} routes
@@ -89,7 +89,7 @@ var RoutesSorter = NOOT.Namespace.create({
   },
 
   /**
-   *
+   * Get `_PATH_WEIGHTS` corresponding value for `str`.
    *
    * @method _getPathWeight
    * @param {String} str
@@ -103,7 +103,7 @@ var RoutesSorter = NOOT.Namespace.create({
   },
 
   /**
-   *
+   * Ensures that `arr` is `length` long by filling it with `_PATH_WEIGHTS.BLANK`.
    *
    * @method _fillPartsArray
    * @param {Array} arr

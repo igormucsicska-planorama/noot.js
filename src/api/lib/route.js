@@ -64,7 +64,13 @@ var Route = NOOT.Object.extend(Authable).extend(Queryable).extend({
    */
   isDetail: false,
 
-
+  /**
+   * Is this route a "writable" one ? `true` is route's method is "put", "patch" or "post".
+   *
+   * @property isWritable
+   * @type Boolean
+   * @readOnly
+   */
   get isWritable() { return _.contains(['put', 'patch', 'post'], this.method); },
 
   /**
@@ -99,7 +105,7 @@ var Route = NOOT.Object.extend(Authable).extend(Queryable).extend({
     }
 
     var pre = _.compact([
-      this._createStack.bind(this),
+      this.createStack.bind(this),
 
       this.resource.api.authentication && this.resource.api.authentication.bind(this.resource.api),
       this.resource.authentication && this.resource.authentication.bind(this.resource),
@@ -159,15 +165,14 @@ var Route = NOOT.Object.extend(Authable).extend(Queryable).extend({
   },
 
   /**
+   * Middleware. In charge of creating a new instance of NOOT.API.Stack and attach it to `req.nootApiStack`.
    *
-   *
-   *
-   * @param req
-   * @param res
-   * @param next
-   * @returns {*}
+   * @method createStack
+   * @param {Request} req
+   * @param {Response} res
+   * @param {Function} next
    */
-  _createStack: function(req, res, next) {
+  createStack: function(req, res, next) {
     req.nootApiStack = Stack.create({
       req: req,
       res: res,
@@ -179,6 +184,13 @@ var Route = NOOT.Object.extend(Authable).extend(Queryable).extend({
     return next();
   },
 
+  /**
+   * Middleware. In charge of calling stack's `parseQueryString()` method.
+   *
+   * @method _parseQueryString
+   * @param {NOOT.API.Stack} stack
+   * @private
+   */
   _parseQueryString: function(stack) {
     stack.parseQueryString();
     return stack.next();
@@ -188,11 +200,11 @@ var Route = NOOT.Object.extend(Authable).extend(Queryable).extend({
    * Validate body against JSON schema.
    *
    * @method _validateSchema
-   * @async
-   * @private
    * @param {Request} req
    * @param {Response} res
    * @param {Function} next
+   * @async
+   * @private
    */
   _validateSchema: function(req, res, next) {
     return Route.validateSchema(req.body, this.schema, function(err) {
@@ -203,10 +215,25 @@ var Route = NOOT.Object.extend(Authable).extend(Queryable).extend({
 
 }, {
 
+  /**
+   * @property DEFAULTS
+   * @type Object
+   * @static
+   */
   DEFAULTS: {
     method: 'get'
   },
 
+  /**
+   * Validate a JSON schema.
+   *
+   * @method validateSchema
+   * @param {Object} obj
+   * @param {Object} schema
+   * @param {Function} callback
+   * @async
+   * @static
+   */
   validateSchema: function(obj, schema, callback) {
     return callback();
   }
