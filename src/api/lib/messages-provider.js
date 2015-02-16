@@ -7,11 +7,12 @@ var NOOT = require('../../../')('object');
  * @class MessagesProvider
  * @extends NOOT.Object
  * @namespace NOOT.API
+ * @constructor
  **********************************************************************************************************************/
 var MessagesProvider = NOOT.Object.extend({
 
   /**
-   *
+   * Function to be used for generating a default message for internal server errors. Use it in your error handler.
    *
    * @method defaultInternalServerError
    * @return {String}

@@ -36,28 +36,54 @@ var API = NOOT.Object.extend(Authable).extend({
   server: null,
 
   /**
-   * @property _resources
-   * @type Array
+   * Map of resources.
+   *
+   * @property resources
+   * @type Object
    */
   resources: null,
 
   /**
-   * @property _routes
+   * Array of routes, contains all routes for all resources.
+   *
+   * @property routes
    * @type Array
    */
   routes: null,
 
+  /**
+   * Instance of NOOT.API.MessagesProvider. Define your own by extending the root class or let NOOT create one for you.
+   *
+   * @property messagesProvider
+   * @type NOOT.API.MessagesProvider
+   */
   messagesProvider: null,
 
   /**
+   * Defines whether or not internal server errors (500) messages should be overriden. If `true`,
+   * `messagesProvider.defaultInternalServerError()` will be used by `errorHandler`.
    *
+   * @property shouldOverrideInternalServerErrorsMessages
+   * @type Boolean
+   * @default false
    */
-  requestsLogger: false,
-
   shouldOverrideInternalServerErrorsMessages: false,
 
   /**
+   * Shortcut for `routes` paths.
    *
+   * @property routesPaths
+   * @type Array of String
+   * @readOnly
+   */
+  get routesPaths() { return this.routes.map(function(route) { return route.path; }); },
+
+  /**
+   * Express style error handler. Takes care of calling `stack.resource.sendResponse()` with proper response format. You
+   * can define your own or set it null if you prefer using an external handler.
+   *
+   * @property errorHandler
+   * @type Function
    */
   /* jshint unused: false */
   errorHandler: function(err, req, res, next) {
@@ -76,13 +102,6 @@ var API = NOOT.Object.extend(Authable).extend({
   },
   /* jshint unused: true */
 
-  /**
-   *
-   * @property routesPaths
-   * @type Array of String
-   * @readOnly
-   */
-  get routesPaths() { return this.routes.map(function(route) { return route.path; }); },
 
   /**
    * Constructor
@@ -126,10 +145,10 @@ var API = NOOT.Object.extend(Authable).extend({
    * Register a single resource.
    *
    * @method registerResource
-   * @chainable
    * @param {String} name Name of the resource to register
    * @param {Class} resource A {{#crossLink "NOOT.API.Resource"}}{{/crossLink}} **class** that will be
    * instantiated by the API
+   * @chainable
    */
   registerResource: function(name, resource) {
     if (this.resources[name]) throw new Error('A resource `' + name + '` is already registered');
@@ -145,8 +164,8 @@ var API = NOOT.Object.extend(Authable).extend({
    * Register multiple resources.
    *
    * @method registerResources
-   * @chainable
    * @param {Object} resources Map of resources ({{#crossLink "NOOT.API.Resource"}}{{/crossLink}} **classes**)
+   * @chainable
    */
   registerResources: function(resources) {
     for (var name in resources) {
@@ -158,11 +177,12 @@ var API = NOOT.Object.extend(Authable).extend({
 }, {
 
   /**
+   * Shortcut for accessing NOOT.API.RoutesSorter.
    *
    * @method sortRoutes
-   * @static
    * @param {[NOOT.API.Route]} routes An array of NOOT.API.Route
    * @return {Array} The same array (same reference), sorted.
+   * @static
    */
   sortRoutes: function(routes) {
     return RoutesSorter.compute(routes);

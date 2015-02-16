@@ -12,6 +12,9 @@ var NOOT = require('../../../')('mixin');
 var Registerable = NOOT.Mixin.create({
 
   /**
+   * Safely register a new property in the class/namespace. If a property with the same name already exists, an error
+   * will be thrown.
+   *
    * @method register
    * @param {String} name
    * @param {*} value

@@ -19,6 +19,7 @@ fs.readdirSync(classesDirectory).forEach(function(fileName) {
  * Namespace for exposing NOOT.API.Field's.
  *
  * @class Fields
+ * @uses NOOT.Mixins.Registerable
  * @namespace NOOT.API
  * @static
  * @extends NOOT.Namespace
