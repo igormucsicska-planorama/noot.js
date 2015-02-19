@@ -14,6 +14,7 @@ var Get = Route.extend({
 
   method: 'get',
   path: '/',
+  isDetailable: true,
 
   handler: function(stack) {
     var id = stack.params.id;

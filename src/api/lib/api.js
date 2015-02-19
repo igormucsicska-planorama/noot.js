@@ -6,11 +6,42 @@ var _ = require('lodash');
 
 var Resource = require('./resources/lib/resource');
 var RoutesSorter = require('./routes-sorter');
-var Authable = require('./interfaces/authable');
+var Authable = require('./mixins/authable');
 var MessagesProvider = require('./messages-provider');
 
 
 /***********************************************************************************************************************
+ * A tastypie like APIs manager.
+ *
+ * **Basic example**
+ *
+ * ```javascript
+ * var mongoose = require('mongoose');
+ * var express = require('express');
+ * var http = require('http');
+ * var NOOT = require('noot')('api');
+ *
+ * var app = express();
+ *
+ * var User = mongoose.model('User', {
+ *  firstName: String,
+ *  lastName: String,
+ *  email: { type: String, required: true },
+ *  password: { type: String, required: true }
+ * );
+ *
+ *
+ * NOOT.API.create({ name: 'my-api', server: app })
+ *   .registerResource('User', NOOT.API.MongooseResource.extend({
+ *     model: User,
+ *     nonSelectable: ['password']
+ *   ))
+ *   .launch();
+ *
+ * http.createServer(app).listen(process.env.PORT || '8888');
+ * ```
+ *
+ *
  * @class API
  * @constructor
  * @namespace NOOT

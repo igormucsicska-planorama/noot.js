@@ -25,6 +25,8 @@ var Delete = Route.extend({
    */
   path: '/',
 
+  isDetailable: true,
+
   /**
    * @property handler
    * @type middleware

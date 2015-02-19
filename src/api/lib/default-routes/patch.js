@@ -14,6 +14,7 @@ var Patch = Route.extend({
 
   method: 'patch',
   path: '/',
+  isDetailable: true,
 
   handler: function(stack) {
     var id = stack.params.id;

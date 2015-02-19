@@ -13,8 +13,8 @@ module.exports = _.extend(require('./lib/api'), {
 
   Stack: require('./lib/stack'),
 
-  Authable: require('./lib/interfaces/authable'),
-  Queryable: require('./lib/interfaces/queryable'),
+  Authable: require('./lib/mixins/authable'),
+  Queryable: require('./lib/mixins/queryable'),
 
   RoutesSorter: require('./lib/routes-sorter'),
   FilterModes: require('./lib/filter-modes'),
