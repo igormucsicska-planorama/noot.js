@@ -10,6 +10,7 @@ var qs = require('querystring');
 
 var db;
 var app = express();
+var server;
 app.use(bodyParser());
 
 
@@ -29,7 +30,7 @@ describe('NOOT.API - Basic example', function() {
         db = Utils.DB.create({ drop: true, name: 'noot-api-basic-example' }, cb);
       },
       server: function(cb) {
-        return http.createServer(app).listen(8888, cb);
+        server = http.createServer(app).listen(8888, cb);
       }
     }, done);
   });
@@ -192,6 +193,10 @@ describe('NOOT.API - Basic example', function() {
           });
         });
     });
+  });
+
+  after(function(done) {
+    server.close(done);
   });
 
 });

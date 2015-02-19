@@ -66,18 +66,14 @@ var Stack = NOOT.Object.extend(Queryable).extend({
 
   body: null,
 
-  route: null,
-
-  resource: null,
 
   /**
    * Constructor
    */
   init: function() {
     NOOT.defaults(this, Stack.DEFAULTS);
-    NOOT.required(this, 'req', 'res', 'route', '__queryableParent');
+    NOOT.required(this, 'req', 'res', '__queryableParent');
     this.computeQueryable();
-    this.resource = this.route.resource;
     this.body = this.req.body;
     this.params = this.req.params;
   },
