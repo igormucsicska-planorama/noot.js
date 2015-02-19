@@ -118,7 +118,7 @@ var API = NOOT.Object.extend(Authable).extend({
    */
   /* jshint unused: false */
   errorHandler: function(err, req, res, next) {
-    var stack = req.nootApiStack;
+    var stack = req.noot.stack;
     stack.append({ error: true });
     if (err.statusCode) stack.setStatus(err.statusCode);
     if (err.code) stack.append({ code: err.code });
@@ -126,10 +126,9 @@ var API = NOOT.Object.extend(Authable).extend({
       if (this.shouldOverrideInternalServerErrorsMessages) {
         err.message = this.messagesProvider.defaultInternalServerError();
       }
-      console.log(err.stack); // TODO remove this line
     }
     if (err.message) stack.pushMessage(err.message);
-    return stack.resource.sendResponse(stack);
+    return req.noot.resource.sendResponse(stack);
   },
   /* jshint unused: true */
 

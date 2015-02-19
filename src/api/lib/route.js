@@ -137,7 +137,7 @@ var Route = NOOT.Object.extend(Authable).extend(Queryable).extend({
     handlers = pre.concat(handlers).concat(post).map(function(handler) {
       if (handler.length > 2) return handler;
       return function(req, res, next) {
-        var stack = req.nootApiStack;
+        var stack = req.noot.stack;
         stack.next = next;
         return handler(stack);
       };
@@ -173,13 +173,16 @@ var Route = NOOT.Object.extend(Authable).extend(Queryable).extend({
    * @param {Function} next
    */
   createStack: function(req, res, next) {
-    req.nootApiStack = this.constructor.Stack.create({
-      req: req,
-      res: res,
+    req.noot = {
+      stack: this.constructor.Stack.create({
+        req: req,
+        res: res,
+        startedOn: moment(),
+        __queryableParent: this
+      }),
       route: this,
-      startedOn: moment(),
-      __queryableParent: this
-    });
+      resource: this.resource
+    };
 
     return next();
   },
