@@ -15,7 +15,7 @@ var Put = Route.extend({
   method: 'put',
   path: '/',
 
-  allowMany: true,
+  isDetailable: false,
 
   handler: function(stack) {
     return this.resource.upsert(stack);

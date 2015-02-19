@@ -7,8 +7,8 @@ var async = require('async');
 var flatten = require('flat');
 
 var Operators = require('./../../operators/index');
-var Authable = require('./../../interfaces/authable');
-var Queryable = require('./../../interfaces/queryable');
+var Authable = require('./../../mixins/authable');
+var Queryable = require('./../../mixins/queryable');
 var DefaultRoutes = require('./../../default-routes/index');
 var Route = require('./../../route');
 
@@ -137,7 +137,7 @@ var Resource = NOOT.Object.extend(Authable).extend(Queryable).extend({
     var routes = this.routes || [];
 
     this.detailMethods.forEach(function(method) {
-      routes.push(DefaultRoutes[method].extend({ isDetail: true }));
+      if (DefaultRoutes[method].prototype.isDetailable) routes.push(DefaultRoutes[method].extend({ isDetail: true }));
     });
 
     this.manyMethods.forEach(function(method) {
@@ -342,12 +342,15 @@ var Resource = NOOT.Object.extend(Authable).extend(Queryable).extend({
     var writable = stack.writable;
     callback = callback || stack.next;
     var isValid = true;
+    var body = NOOT.isArray(stack.body) ? stack.body : [stack.body];
 
-    Object.keys(flatten(stack.body, { safe: true })).forEach(function(key) {
-      if (!_.contains(writable, key)) {
-        isValid = false;
-        stack.pushMessage(self.api.messagesProvider.forbiddenField(key, 'write'));
-      }
+    body.forEach(function(item) {
+      Object.keys(flatten(item, { safe: true })).forEach(function(key) {
+        if (!_.contains(writable, key)) {
+          isValid = false;
+          stack.pushMessage(self.api.messagesProvider.forbiddenField(key, 'write'));
+        }
+      });
     });
 
     return callback(isValid ? null : new NOOT.Errors.Forbidden());

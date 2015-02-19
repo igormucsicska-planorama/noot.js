@@ -7,7 +7,7 @@ var flatten = require('flat');
 var qs = require('querystring');
 
 var Utils = require('./utils');
-var Queryable = require('./interfaces/queryable');
+var Queryable = require('./mixins/queryable');
 var FilterModes = require('./filter-modes');
 
 /***********************************************************************************************************************

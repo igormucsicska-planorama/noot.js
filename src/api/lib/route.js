@@ -6,8 +6,8 @@ var _ = require('lodash');
 var moment = require('moment');
 
 var Stack = require('./stack');
-var Authable = require('./interfaces/authable');
-var Queryable = require('./interfaces/queryable');
+var Authable = require('./mixins/authable');
+var Queryable = require('./mixins/queryable');
 
 /***********************************************************************************************************************
  * @class Route
@@ -173,7 +173,7 @@ var Route = NOOT.Object.extend(Authable).extend(Queryable).extend({
    * @param {Function} next
    */
   createStack: function(req, res, next) {
-    req.nootApiStack = Stack.create({
+    req.nootApiStack = this.constructor.Stack.create({
       req: req,
       res: res,
       route: this,
@@ -223,6 +223,15 @@ var Route = NOOT.Object.extend(Authable).extend(Queryable).extend({
   DEFAULTS: {
     method: 'get'
   },
+
+  /**
+   * Redefine this property if you want to add custom behaviors to the Stack class. The route uses this property for
+   * created its Stack instance.
+   *
+   * @property Stack
+   * @type Class
+   */
+  Stack: Stack,
 
   /**
    * Validate a JSON schema.

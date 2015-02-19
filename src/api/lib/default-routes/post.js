@@ -13,6 +13,7 @@ var Route = require('../route');
 var Post = Route.extend({
   method: 'post',
   path: '/',
+  isDetailable: false,
 
   handler: function(stack) {
     return this.resource.create(stack);
