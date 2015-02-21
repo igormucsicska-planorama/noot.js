@@ -30,17 +30,19 @@ var Task = NOOT.Object.extend(_.extend({
   /**
    * Run task
    */
-  run: function() {
+  run: function(callback) {
     var self = this;
     var domain = Domain.create();
     domain.on('error', function(err) {
+      if (callback) callback(err);
       return self.emit('error', err);
     });
     domain.run(function() {
       self.emit('start', new Date());
-      self.job.call(self, function(err) {
+      self.job.call(self, function(err, results) {
         if (err) throw err; // Will be handled by domain
-        return self.emit.apply(self, ['done'].concat(NOOT.makeArray(arguments).slice(1)));
+        if (callback) callback(null, results);
+        return self.emit('done', results);
       });
     });
   },
