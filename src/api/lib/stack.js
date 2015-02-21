@@ -62,8 +62,14 @@ var Stack = NOOT.Object.extend(Queryable).extend({
    */
   query: null,
 
+  /**
+   *
+   */
   params: null,
 
+  /**
+   *
+   */
   body: null,
 
 
@@ -185,7 +191,7 @@ var Stack = NOOT.Object.extend(Queryable).extend({
    *
    * @param obj
    */
-  append: function(obj) {
+  extend: function(obj) {
     _.extend(this.package, obj);
     return this;
   },
@@ -240,7 +246,7 @@ var Stack = NOOT.Object.extend(Queryable).extend({
    */
   getManyMetaNavLink: function(limit, offset) {
     var queryString = qs.stringify(_.extend({}, this.query.raw, { limit: limit, offset: offset }));
-    return this.req._parsedUrl.path + '?' + qs.unescape(queryString);
+    return this.req._parsedUrl.pathname + '?' + qs.unescape(queryString);
   },
 
   /**

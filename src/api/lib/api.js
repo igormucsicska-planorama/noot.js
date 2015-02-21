@@ -119,9 +119,9 @@ var API = NOOT.Object.extend(Authable).extend({
   /* jshint unused: false */
   errorHandler: function(err, req, res, next) {
     var stack = req.noot.stack;
-    stack.append({ error: true });
+    stack.extend({ error: true });
     if (err.statusCode) stack.setStatus(err.statusCode);
-    if (err.code) stack.append({ code: err.code });
+    if (err.code) stack.extend({ code: err.code });
     if (stack.statusCode === NOOT.HTTP.InternalServerError) {
       if (this.shouldOverrideInternalServerErrorsMessages) {
         err.message = this.messagesProvider.defaultInternalServerError();
