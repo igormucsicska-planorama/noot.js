@@ -2,13 +2,11 @@
  * Dependencies
  */
 var _ = require('lodash');
-var NOOT = require('../../../')('object', 'http');
-var flatten = require('flat');
+var NOOT = require('../../../')('object', 'http', 'math');
 var qs = require('querystring');
 
 var Utils = require('./utils');
 var Queryable = require('./mixins/queryable');
-var FilterModes = require('./filter-modes');
 
 /***********************************************************************************************************************
  * @class Stack
@@ -78,7 +76,7 @@ var Stack = NOOT.Object.extend(Queryable).extend({
    */
   init: function() {
     NOOT.defaults(this, Stack.DEFAULTS);
-    NOOT.required(this, 'req', 'res', '__queryableParent');
+    NOOT.required(this, 'req', 'res');
     this.computeQueryable();
     this.body = this.req.body;
     this.params = this.req.params;
@@ -88,6 +86,7 @@ var Stack = NOOT.Object.extend(Queryable).extend({
    *
    *
    * @method parseQueryString
+   * @chainable
    */
   parseQueryString: function() {
     var query = this.req.query || {};
@@ -97,9 +96,11 @@ var Stack = NOOT.Object.extend(Queryable).extend({
       select: query.select ? Utils.parseFieldsList(query.select) : this.selectable,
       filter: _.omit(query, Stack.QUERY_STRING_RESERVED_WORDS),
       sort: query.sort ? Utils.parseFieldsList(query.sort) : [],
-      limit: Math.min(parseInt(query.limit, 10) || this.defaultGetLimit, this.maxGetLimit) || 0,
-      offset: parseInt(query.offset, 10) || 0
+      limit: Math.min(NOOT.Math.positive(parseInt(query.limit, 10)) || this.defaultGetLimit, this.maxGetLimit),
+      offset: NOOT.Math.positive(parseInt(query.offset, 10))
     };
+
+    return this;
   },
 
   /**
@@ -231,7 +232,7 @@ var Stack = NOOT.Object.extend(Queryable).extend({
     var prevOffset = offset - limit;
 
     if (nextOffset < total) next = this.getManyMetaNavLink(limit, nextOffset);
-    if (prevOffset >= 0) prev = this.getManyMetaNavLink(limit, prevOffset);
+    if (prevOffset >= 0 && prevOffset < total) prev = this.getManyMetaNavLink(limit, prevOffset);
 
     return { next: next, prev: prev };
   },
@@ -423,75 +424,6 @@ var Stack = NOOT.Object.extend(Queryable).extend({
    *
    *
    *
-   * @param properties
-   * @param filterMode
-   * @returns {*}
-   */
-  getInvalidProperties: function(properties, filterMode) {
-    if (!FilterModes.hasValue(filterMode)) throw new Error('Invalid filter mode: ' + filterMode);
-    if (properties && properties.toJSON) properties = properties.toJSON();
-
-    var validFields;
-
-    switch (filterMode) {
-      case FilterModes.READ: validFields = this.selectable; break;
-      case FilterModes.SELECT: validFields = this.selectable; break;
-      case FilterModes.WRITE: validFields = this.writable; break;
-      case FilterModes.FILTER: validFields = this.filterable; break;
-      case FilterModes.SORT: validFields = this.sortable; break;
-    }
-
-    var paths = NOOT.isPlainObject(properties) ?
-      Object.keys(flatten(properties), { safe: true }) :
-      NOOT.isArray(properties) ?
-        properties :
-        [];
-
-    return _.difference(paths, validFields);
-  },
-
-
-  /**
-   * Filter fields depending on query mode (read, write, select, sort...)
-   *
-   * @method filterProperties
-   * @param {Array|Object} properties
-   * @param {NOOT.API.FilterMode} filterMode
-   * @return {Array|Object}
-   */
-  filterProperties: function(properties, filterMode) {
-    if (!FilterModes.hasValue(filterMode)) throw new Error('Invalid filter mode: ' + filterMode);
-    if (properties && properties.toJSON) properties = properties.toJSON();
-
-    switch (filterMode) {
-      case FilterModes.READ: return NOOT.pickProperties(properties, this.selectable);
-      case FilterModes.SELECT: return this.parseFieldsList(properties, this.selectable);
-      case FilterModes.WRITE: return NOOT.pickProperties(properties, this.writable);
-      case FilterModes.FILTER: return _.pick(properties, this.filterable);
-      case FilterModes.SORT: return this.parseFieldsList(properties, this.sortable);
-    }
-  },
-
-  /**
-   * Parse fields from a comma separated list
-   *
-   * @method parseFieldsList
-   * @param {String} fieldsStr
-   * @param {Array} allowedFields
-   * @returns {String}
-   */
-  parseFieldsList: function(fieldsStr, allowedFields) {
-    return (fieldsStr || '')
-      .toString()
-      .split(/\s*,\s*/)
-      .filter(function(field) { return ~allowedFields.indexOf(field.replace(/^(\+|-)/, '')); })
-      .join(' ');
-  },
-
-  /**
-   *
-   *
-   *
    * @param type
    * @param fields
    */
@@ -521,7 +453,7 @@ var Stack = NOOT.Object.extend(Queryable).extend({
    */
   _setAllowedFieldsForType: function(type, fields) {
     // TODO make fields unique and check existence in `fields`
-    this['_' + type] = fields;
+    this['_' + type] = _.uniq(fields);
   }
 
 }, {
