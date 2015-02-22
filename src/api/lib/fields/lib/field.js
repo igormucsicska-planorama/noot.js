@@ -5,7 +5,7 @@ var NOOT = require('../../../../../')('object');
 var _ = require('lodash');
 
 /***********************************************************************************************************************
- * Base Field class
+ * Base Field class.
  *
  * @class Field
  * @namespace NOOT.API
