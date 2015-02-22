@@ -1,7 +1,7 @@
 var NOOT = nootrequire('api');
 
 
-describe('NOOT.API.fields.Integer', function() {
+describe('NOOT.API.Fields.Integer', function() {
 
   var field = NOOT.API.Fields.Integer.create({ path: 'foo' });
 
