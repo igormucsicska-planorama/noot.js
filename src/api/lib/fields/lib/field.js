@@ -1,3 +1,6 @@
+/**
+ * Dependencies
+ */
 var NOOT = require('../../../../../')('object');
 var _ = require('lodash');
 
@@ -45,7 +48,6 @@ var Field = NOOT.Object.extend({
    */
   isReferenceArray: false,
 
-
   /**
    * Internal path to access the field.
    *
@@ -56,13 +58,21 @@ var Field = NOOT.Object.extend({
   path: null,
 
   /**
+   * Getter that needs to return the resource that the field is referencing.
+   *
+   * @property reference
+   * @type NOOT.API.Resource
+   */
+  reference: null,
+
+  /**
    * List of operators supported by this field.
    *
    * @property supportedOperators
    * @type Array of String
    * @default []
    */
-  supportedOperators: [],
+  supportedOperators: null,
 
   /**
    * Public path to access the field.
@@ -80,6 +90,7 @@ var Field = NOOT.Object.extend({
    */
   init: function() {
     NOOT.required(this, 'path');
+    NOOT.defaults(this, this.constructor.DEFAULTS);
   },
 
   /**
@@ -114,30 +125,37 @@ var Field = NOOT.Object.extend({
   },
 
   /**
-   * Method that needs to return the resource that the field is referencing.
-   *
-   * @method getReference
-   * @return NOOT.API.Resource
-   */
-  reference: null,
-
-  /**
-   * Check if `value` is a valid. You must set `isValue` in order to make the system aware of the field's validity,
-   * otherwise the field will be considered as valid in further operations. For convenience, returns `isValid`. Default
-   * method returns the value of `isValid` for convenience. You may want to keep this behavior when overriding this
-   * method.
+   * Check if value is valid. By default, simply checks if the "required" behavior is respected.
    *
    * @method validate
-   * @return {Boolean} isValid
+   * @return {Boolean}
    */
   validate: function(value) {
-    if (this.isRequired && NOOT.isNone(value)) return false;
-    return true;
+    return !(this.isRequired && NOOT.isNone(value));
   },
 
+  /**
+   * Check if operator is valid/supported.
+   *
+   * @method validateOperator
+   * @param {String} operator
+   * @return {Boolean}
+   */
   validateOperator: function(operator) {
     if (!operator) return true;
     return _.contains(this.supportedOperators, operator);
+  }
+
+}, {
+
+  /**
+   * Default values for Fields class.
+   *
+   * @property DEFAULTS
+   * @type Object
+   */
+  DEFAULTS: {
+    get supportedOperators() { return []; }
   }
 
 });
