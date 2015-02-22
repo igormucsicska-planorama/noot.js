@@ -23,86 +23,96 @@ describe('NOOT.API.Operators', function() {
   });
 
   describe('.ne', function() {
-    it('should return value as it was (noop parser)', function(done) {
-      Operators.eq.parseFromQueryString('value', function(val) { return val; }, function(err, value) {
-        if (err) return done(err);
-        value.should.eql('value');
-        return done();
+    describe('.parseFromQueryString()', function() {
+      it('should return value as it was (noop parser)', function(done) {
+        Operators.eq.parseFromQueryString('value', function(val) { return val; }, function(err, value) {
+          if (err) return done(err);
+          value.should.eql('value');
+          return done();
+        });
       });
-    });
-    it('should return value as a number', function(done) {
-      Operators.eq.parseFromQueryString('5', function(val) { return parseInt(val); }, function(err, value) {
-        if (err) return done(err);
-        value.should.eql(5);
-        return done();
+      it('should return value as a number', function(done) {
+        Operators.eq.parseFromQueryString('5', function(val) { return parseInt(val); }, function(err, value) {
+          if (err) return done(err);
+          value.should.eql(5);
+          return done();
+        });
       });
     });
   });
 
   describe('.gt', function() {
-    it('should return value as it was (noop parser)', function(done) {
-      Operators.eq.parseFromQueryString('value', function(val) { return val; }, function(err, value) {
-        if (err) return done(err);
-        value.should.eql('value');
-        return done();
+    describe('.parseFromQueryString()', function() {
+      it('should return value as it was (noop parser)', function(done) {
+        Operators.eq.parseFromQueryString('value', function(val) { return val; }, function(err, value) {
+          if (err) return done(err);
+          value.should.eql('value');
+          return done();
+        });
       });
-    });
-    it('should return value as a number', function(done) {
-      Operators.eq.parseFromQueryString('5', function(val) { return parseInt(val); }, function(err, value) {
-        if (err) return done(err);
-        value.should.eql(5);
-        return done();
+      it('should return value as a number', function(done) {
+        Operators.eq.parseFromQueryString('5', function(val) { return parseInt(val); }, function(err, value) {
+          if (err) return done(err);
+          value.should.eql(5);
+          return done();
+        });
       });
     });
   });
 
   describe('.gte', function() {
-    it('should return value as it was (noop parser)', function(done) {
-      Operators.eq.parseFromQueryString('value', function(val) { return val; }, function(err, value) {
-        if (err) return done(err);
-        value.should.eql('value');
-        return done();
+    describe('.parseFromQueryString()', function() {
+      it('should return value as it was (noop parser)', function(done) {
+        Operators.eq.parseFromQueryString('value', function(val) { return val; }, function(err, value) {
+          if (err) return done(err);
+          value.should.eql('value');
+          return done();
+        });
       });
-    });
-    it('should return value as a number', function(done) {
-      Operators.eq.parseFromQueryString('5', function(val) { return parseInt(val); }, function(err, value) {
-        if (err) return done(err);
-        value.should.eql(5);
-        return done();
-      });
-    });
-  });
-
-  describe('.lt', function() {
-    it('should return value as it was (noop parser)', function(done) {
-      Operators.eq.parseFromQueryString('value', function(val) { return val; }, function(err, value) {
-        if (err) return done(err);
-        value.should.eql('value');
-        return done();
-      });
-    });
-    it('should return value as a number', function(done) {
-      Operators.eq.parseFromQueryString('5', function(val) { return parseInt(val); }, function(err, value) {
-        if (err) return done(err);
-        value.should.eql(5);
-        return done();
+      it('should return value as a number', function(done) {
+        Operators.eq.parseFromQueryString('5', function(val) { return parseInt(val); }, function(err, value) {
+          if (err) return done(err);
+          value.should.eql(5);
+          return done();
+        });
       });
     });
   });
 
   describe('.lt', function() {
-    it('should return value as it was (noop parser)', function(done) {
-      Operators.eq.parseFromQueryString('value', function(val) { return val; }, function(err, value) {
-        if (err) return done(err);
-        value.should.eql('value');
-        return done();
+    describe('.parseFromQueryString()', function() {
+      it('should return value as it was (noop parser)', function(done) {
+        Operators.eq.parseFromQueryString('value', function(val) { return val; }, function(err, value) {
+          if (err) return done(err);
+          value.should.eql('value');
+          return done();
+        });
+      });
+      it('should return value as a number', function(done) {
+        Operators.eq.parseFromQueryString('5', function(val) { return parseInt(val); }, function(err, value) {
+          if (err) return done(err);
+          value.should.eql(5);
+          return done();
+        });
       });
     });
-    it('should return value as a number', function(done) {
-      Operators.eq.parseFromQueryString('5', function(val) { return parseInt(val); }, function(err, value) {
-        if (err) return done(err);
-        value.should.eql(5);
-        return done();
+  });
+
+  describe('.lt', function() {
+    describe('.parseFromQueryString()', function() {
+      it('should return value as it was (noop parser)', function(done) {
+        Operators.eq.parseFromQueryString('value', function(val) { return val; }, function(err, value) {
+          if (err) return done(err);
+          value.should.eql('value');
+          return done();
+        });
+      });
+      it('should return value as a number', function(done) {
+        Operators.eq.parseFromQueryString('5', function(val) { return parseInt(val); }, function(err, value) {
+          if (err) return done(err);
+          value.should.eql(5);
+          return done();
+        });
       });
     });
   });
