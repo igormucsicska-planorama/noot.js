@@ -24,5 +24,7 @@ module.exports = _.extend(require('./lib/api'), {
 
   Operator: require('./lib/operators/lib/operator'),
   ListOperator: require('./lib/operators/lib/list-operator'),
-  Operators: require('./lib/operators')
+  Operators: require('./lib/operators'),
+
+  MessagesProvider: require('./lib/messages-provider')
 });
