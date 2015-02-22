@@ -22,9 +22,10 @@ var MessagesProvider = NOOT.Object.extend({
   },
 
   /**
-   *
+   * Parameter is missing.
    *
    * @method missingParameter
+   * @param {String} property
    * @return {String}
    */
   missingParameter: function(property) {
@@ -35,9 +36,12 @@ var MessagesProvider = NOOT.Object.extend({
   },
 
   /**
-   *
+   * Value is not in enum.
    *
    * @method notInEnum
+   * @param {String} property
+   * @param {Array} enumeration
+   * @param {*} currentValue
    * @return {String}
    */
   notInEnum: function(property, enumeration, currentValue) {
@@ -51,9 +55,12 @@ var MessagesProvider = NOOT.Object.extend({
   },
 
   /**
-   *
+   * Value has wrong type.
    *
    * @method badType
+   * @param {String} property
+   * @param {String} expectedType
+   * @param {String} currentType
    * @return {String}
    */
   badType: function(property, expectedType, currentType) {
@@ -67,9 +74,11 @@ var MessagesProvider = NOOT.Object.extend({
   },
 
   /**
-   *
+   * Operator is not allowed.
    *
    * @method forbiddenOperator
+   * @param {String} property
+   * @param {String} operator
    * @return {String}
    */
   forbiddenOperator: function(property, operator) {
@@ -82,9 +91,10 @@ var MessagesProvider = NOOT.Object.extend({
   },
 
   /**
-   *
+   * Operator is not supported.
    *
    * @method unsupportedOperator
+   * @param {String} operator
    * @return {String}
    */
   unsupportedOperator: function(operator) {
@@ -96,9 +106,11 @@ var MessagesProvider = NOOT.Object.extend({
   },
 
   /**
-   *
+   * Field is not allowed.
    *
    * @method forbiddenField
+   * @param {String} property
+   * @param {String} [verb] Verb to be used for building the message
    * @return {String}
    */
   forbiddenField: function(property, verb) {
@@ -115,9 +127,10 @@ var MessagesProvider = NOOT.Object.extend({
   },
 
   /**
-   *
+   * Response type is not supported.
    *
    * @method unsupportedResponseType
+   * @param {String} type
    * @return {String}
    */
   unsupportedResponseType: function(type) {
@@ -129,9 +142,10 @@ var MessagesProvider = NOOT.Object.extend({
   },
 
   /**
+   * Util method to highlight fields names in messages.
    *
-   *
-   * @method
+   * @method highlight
+   * @param {String} str
    * @return {String}
    */
   highlight: function(str) {
