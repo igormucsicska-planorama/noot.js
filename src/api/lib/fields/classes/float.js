@@ -1,11 +1,19 @@
+/**
+ * Dependencies
+ */
 var NumberField = require('./number');
 
-var FloatField = NumberField.extend({
+/***********************************************************************************************************************
+ * Float field class.
+ *
+ * @class Float
+ * @namespace NOOT.API.Fields
+ * @constructor
+ * @extends NOOT.API.Fields.Number
+ **********************************************************************************************************************/
+var FloatField = NumberField.extend({});
 
-  parseFromQueryString: function(value) {
-    return parseFloat(value);
-  }
-
-});
-
+/**
+ * @exports
+ */
 module.exports = FloatField;
