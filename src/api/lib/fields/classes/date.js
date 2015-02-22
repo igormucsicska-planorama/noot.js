@@ -10,6 +10,7 @@ var Field = require('./../lib/field');
  *
  * @class Date
  * @namespace NOOT.API.Fields
+ * @extends NOOT.API.Field
  * @constructor
  **********************************************************************************************************************/
 var DateField = Field.extend({
@@ -26,14 +27,16 @@ var DateField = Field.extend({
    *
    * @method parseFromQueryString
    * @param {String} value
-   * @return {Date}
+   * @return {Date|NaN}
    */
   parseFromQueryString: function(value) {
-    return this.isTimestamp(value) ? new Date(value) : Date.parse(value);
+    return value ?
+      this.isTimestamp(value) ? new Date(parseInt(value, 10)) : new Date(Date.parse(value)) :
+      NaN;
   },
 
   /**
-   * Checks if parameter string can represent a timestamp. 
+   * Checks if parameter string can represent a timestamp.
    *
    * @method isTimestamp
    * @param {String} value
@@ -52,7 +55,7 @@ var DateField = Field.extend({
    */
   validate: function(value) {
     if (!this._super(value)) return false;
-    return !NOOT.isDate(value);
+    return NOOT.isValidDate(value);
   }
 });
 

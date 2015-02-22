@@ -3,8 +3,6 @@
  */
 var _ = require('lodash');
 
-var STRIP_COMMENTS = /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/mg;
-var ARGUMENT_NAMES = /([^\s,]+)/g;
 
 var Utils = {
 
@@ -84,11 +82,6 @@ var Utils = {
    */
   noop: function() { return this; },
 
-
-  throwableCallback: function(err) {
-    if (err) throw err;
-  },
-
   /**
    * Escape a string to be RegExp compliant.
    *
@@ -103,24 +96,14 @@ var Utils = {
   },
 
   /**
+   * Deeply set a value. Nested objects are created if they don't exist.
    *
-   *
-   *
-   * @param fn
-   * @returns {Array|{index: number, input: string}|Array}
-   */
-  getArgumentsNames: function(fn) {
-    var fnStr = fn.toString().replace(STRIP_COMMENTS, '');
-    return fnStr.slice(fnStr.indexOf('(') + 1, fnStr.indexOf(')')).match(ARGUMENT_NAMES) || [];
-  },
-
-  /**
-   *
-   *
-   *
-   * @param obj
-   * @param path
-   * @param value
+   * @for NOOT
+   * @method trySet
+   * @static
+   * @param {Object} obj
+   * @param {String} path
+   * @param {*} value
    */
   trySet: function(obj, path, value) {
     var parts = path.split('.');
@@ -155,12 +138,14 @@ var Utils = {
   },
 
   /**
+   * Deeply get a value.
    *
-   *
-   *
-   * @param obj
-   * @param path
-   * @returns {*}
+   * @for NOOT
+   * @method tryGet
+   * @static
+   * @param {Object} obj
+   * @param {String} path
+   * @return {*}
    */
   tryGet: function(obj, path) {
     var parts = path.split('.');
@@ -179,12 +164,14 @@ var Utils = {
   },
 
   /**
+   * Pick properties
    *
-   *
+   * @for NOOT
+   * @static
    * @method pickProperties
    * @param {Object} obj
    * @param {Array} fields
-   * @return {{}}
+   * @return {Object}
    */
   pickProperties: function(obj, fields) {
     var ret = {};
@@ -197,8 +184,32 @@ var Utils = {
     return ret;
   },
 
+  /**
+   * Makes `prop` a read only property. If no value is provided, the current value of `prop` will be used.
+   *
+   * @for NOOT
+   * @static
+   * @method makeReadOnly
+   * @param {Object} obj
+   * @param {String} prop
+   * @param {*} [value]
+   */
   makeReadOnly: function(obj, prop, value) {
-    return Object.defineProperty(obj, prop, { get: function() { return value; } });
+    if (arguments.length < 3) value = this.tryGet(obj, prop);
+    return Object.defineProperty(obj, prop, { value: value, writable: false });
+  },
+
+  /**
+   * Check if date is valid.
+   *
+   * @for NOOT
+   * @static
+   * @method isValidDate
+   * @param {Date} value
+   * @return {Boolean}
+   */
+  isValidDate: function(value) {
+    return _.isDate(value) && !isNaN(+value);
   }
 
 };
