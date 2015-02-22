@@ -9,6 +9,7 @@ var _ = require('lodash');
  *
  * @class Field
  * @namespace NOOT.API
+ * @extends NOOT.Object
  * @constructor
  **********************************************************************************************************************/
 var Field = NOOT.Object.extend({
@@ -79,7 +80,7 @@ var Field = NOOT.Object.extend({
    *
    * @property publicPath
    * @type String
-   * @default path
+   * @default `path`
    */
   _publicPath: null,
   get publicPath() { return this._publicPath || this.path; },
@@ -153,6 +154,7 @@ var Field = NOOT.Object.extend({
    *
    * @property DEFAULTS
    * @type Object
+   * @static
    */
   DEFAULTS: {
     get supportedOperators() { return []; }
