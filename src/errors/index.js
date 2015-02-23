@@ -99,8 +99,8 @@ var Errors = NOOT.Namespace.create({
   fromStatusCode: function() {
     var args = NOOT.makeArray(arguments);
     var statusCode = args.shift();
-    var ErrorClass = _.find(this, function(item) { return item.prototype.statusCode === statusCode; }) ||
-      this.InternalServerError;
+    var ErrorClass = _.find(Errors, function(item) { return item.prototype.statusCode === statusCode; }) ||
+      Errors.InternalServerError;
 
     return (function() {
       function Wrapper() { return ErrorClass.apply(this, args); }
