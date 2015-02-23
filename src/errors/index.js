@@ -2,11 +2,20 @@
  * Dependencies
  */
 var NOOT = require('../../')('namespace', 'error', 'http');
-var mongoose = require('mongoose');
 var _ = require('lodash');
 
-var ValidationError = mongoose.Error.ValidationError;
-var CastError = mongoose.Error.CastError;
+var mongoose;
+var ValidationError;
+var CastError;
+
+
+var defineMongoose = function() {
+  if (!mongoose) {
+    mongoose = require('mongoose');
+    ValidationError = mongoose.Error.ValidationError;
+    CastError = mongoose.Error.CastError;
+  }
+};
 
 /***********************************************************************************************************************
  * @class Errors
@@ -73,6 +82,7 @@ var Errors = NOOT.Namespace.create({
 
 
   fromMongooseError: function(err) {
+    defineMongoose();
     if (err instanceof ValidationError || err instanceof CastError) return new this.BadRequest(err.toString());
     else if (err.code === 11000) return new this.Conflict(err.message);
     return new this.InternalServerError(err.message);
