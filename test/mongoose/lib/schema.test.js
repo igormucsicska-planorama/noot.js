@@ -334,6 +334,13 @@ describe('NOOT.Mongoose.Schema', function() {
     return DeveloperSchema.__nootDef.schema.createdOn.should.deep.eql(Date);
   });
 
+  it('should inherit callQueue properties', function() {
+    DeveloperSchema.callQueue.length.should.be.eql(1);
+    DeveloperSchema.callQueue[0][0].should.be.eql('pre');
+    DeveloperSchema.callQueue[0][1][0].should.be.eql('save');
+    return DeveloperSchema.callQueue[0][1][1].should.be.a('function');
+  });
+
   it('should insert documents with right values', function(done) {
     return async.eachSeries([me, her, him, artist, singer, personLegacy, employeeLegacy, developerLegacy],
         function(item, cb) {
@@ -354,20 +361,30 @@ describe('NOOT.Mongoose.Schema', function() {
             retrievedLegacyPerson.name.should.be.eql('Carol Doe');
             retrievedLegacyPerson.age.should.be.eql(112);
 
+            retrievedMe.createdOn.should.be.a('date');
+            retrievedMe.updatedOn.should.be.a('date');
             retrievedMe.name.should.be.eql('Jean-Baptiste');
             retrievedMe.job.should.be.eql('Developer');
             retrievedMe.age.should.be.eql(28);
 
+            retrievedHim.createdOn.should.be.a('date');
+            retrievedHim.updatedOn.should.be.a('date');
             retrievedHim.name.should.be.eql('John Doe');
             retrievedHim.age.should.be.eql(42);
 
+            retrievedHer.createdOn.should.be.a('date');
+            retrievedHer.updatedOn.should.be.a('date');
             retrievedHer.name.should.be.eql('Jane Doe');
             retrievedHer.job.should.be.eql('Category expert');
             retrievedHer.age.should.be.eql(38);
 
+            retrievedArtist.createdOn.should.be.a('date');
+            retrievedArtist.updatedOn.should.be.a('date');
             retrievedArtist.name.should.be.eql('Alice Doe');
             retrievedArtist.age.should.be.eql(19);
 
+            retrievedSinger.createdOn.should.be.a('date');
+            retrievedSinger.updatedOn.should.be.a('date');
             retrievedSinger.name.should.be.eql('Frank Doe');
             retrievedSinger.type.should.be.eql('Rock');
             retrievedSinger.age.should.be.eql(26);

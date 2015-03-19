@@ -50,6 +50,7 @@ MongooseSchema.extend = function(definition, ownStatics) {
 
   var schema = new MongooseSchema(properties, _.merge({}, this.options || {}, definition.options));
 
+  NOOT.InternalUtils.buildSuper(schema.callQueue, this.callQueue || {}, null);
   NOOT.InternalUtils.buildSuper(schema.methods, this.methods || {}, definition.methods);
   NOOT.InternalUtils.buildSuper(schema.statics, this.statics || {}, definition.statics);
   NOOT.InternalUtils.buildSuper(schema, this, ownStatics);
