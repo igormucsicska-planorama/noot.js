@@ -236,11 +236,11 @@ describe('NOOT.Mongoose.Schema', function() {
     Developer.ensureIndexes();
     Artist.ensureIndexes();
     Singer.ensureIndexes();
-    done();
+    return done();
   });
 
   before(function(done) {
-    async.each([
+    return async.each([
       { name: TEST_DB_NAME + 'db1', reference: 'one' },
       { name: TEST_DB_NAME + 'db2', reference: 'two' }
     ], function(item, cb) {
@@ -306,7 +306,7 @@ describe('NOOT.Mongoose.Schema', function() {
       title: 'Object3'
     });
 
-    async.each([obj1, obj2, extendObj], function(item, cb) {
+    return async.each([obj1, obj2, extendObj], function(item, cb) {
       return item.save(cb);
     }, done);
 
@@ -373,21 +373,23 @@ describe('NOOT.Mongoose.Schema', function() {
   });
 
   it('should migrate Employee', function(done) {
-    Employee.migrate({ '__type' : 'Employee' }, function() {
-      Employee.findOne({ 'name' : 'Lisa Doe' }, function (err, item) {
+    return Employee.migrate({ '__type' : 'Employee' }, function() {
+      return Employee.findOne({ 'name' : 'Lisa Doe' }, function (err, item) {
+        if (err) return done(err);
         item.__t.should.be.eql('Employee');
         item.__ts.should.have.members(['Person', 'Employee']);
-        done();
+        return done();
       });
     });
   });
 
   it('should migrate Developer', function(done) {
-    Developer.migrate({ '__type' : 'Developer' }, function() {
-      Employee.findOne({ 'name' : 'Bryan Doe' }, function (err, item) {
+    return Developer.migrate({ '__type' : 'Developer' }, function() {
+      return Employee.findOne({ 'name' : 'Bryan Doe' }, function (err, item) {
+        if (err) return done(err);
         item.__t.should.be.eql('Developer');
         item.__ts.should.have.members(['Person', 'Employee', 'Developer']);
-        done();
+        return done();
       });
     });
   });
