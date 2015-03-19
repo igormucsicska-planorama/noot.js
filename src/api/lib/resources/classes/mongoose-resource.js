@@ -4,6 +4,7 @@
 var NOOT = require('../../../../../index')('http', 'errors');
 var _ = require('lodash');
 var Inflector = require('inflected');
+var mongoose = require('mongoose');
 
 var MongoResource = require('./../lib/mongo-resource');
 var Fields = require('./../../fields/index');
@@ -262,6 +263,10 @@ var MongooseResource = MongoResource.extend({
 
       case Boolean:
         FieldClass = Fields.Boolean;
+        break;
+
+      case mongoose.Schema.Types.Mixed:
+        FieldClass = Fields.Any;
         break;
 
       default:

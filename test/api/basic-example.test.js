@@ -7,6 +7,7 @@ var async = require('async');
 var Utils = require('../test-utils');
 var bodyParser = require('body-parser');
 var qs = require('querystring');
+var mongoose = require('mongoose');
 
 var db;
 var app = express();
@@ -15,9 +16,9 @@ app.use(bodyParser());
 
 
 var users = [
-  { firstName: 'John', lastName: 'Doe', email: 'john-doe@nootjs.com' },
-  { firstName: 'Jane', lastName: 'Doe', email: 'jane-doe@nootjs.com' },
-  { firstName: 'Bart', lastName: 'Doe', email: 'bart-doe@nootjs.com' },
+  { firstName: 'John', lastName: 'Doe', email: 'john-doe@nootjs.com', random: 12 },
+  { firstName: 'Jane', lastName: 'Doe', email: 'jane-doe@nootjs.com', random: ['12'] },
+  { firstName: 'Bart', lastName: 'Doe', email: 'bart-doe@nootjs.com', random: '12' },
   { firstName: 'Homer', lastName: 'Doe', email: 'homer-doe@nootjs.com' }
 ];
 
@@ -41,7 +42,8 @@ describe('NOOT.API - Basic example', function() {
       schema: {
         firstName: String,
         lastName: String,
-        email: { type: String, required: true, unique: true }
+        email: { type: String, required: true, unique: true },
+        random: mongoose.Schema.Types.Mixed
       }
     }));
 
@@ -89,9 +91,14 @@ describe('NOOT.API - Basic example', function() {
       .send(users.slice(1))
       .expect(201, function(err) {
         if (err) return done(err);
-        return db.model('User').count(function(err, count) {
+        return db.model('User').find(function(err, items) {
           if (err) return done(err);
-          count.should.eql(4);
+          items.length.should.eql(4);
+          items.forEach(function(item) {
+            item = item.toJSON();
+            var original = _.find(users, _.pick(item, 'email'));
+            _.pick(item, Object.keys(original)).should.deep.eql(original);
+          });
           return done();
         });
       });
