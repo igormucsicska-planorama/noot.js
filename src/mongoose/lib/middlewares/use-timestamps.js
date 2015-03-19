@@ -1,4 +1,5 @@
 
+var _ = require('lodash');
 var CREATED_ON = 'createdOn';
 var UPDATED_ON = 'updatedOn';
 
@@ -21,6 +22,8 @@ var useTimestamps = function(schema, options) {
 
   schema.add(createdOnProperty);
   schema.add(updatedOnProperty);
+
+  _.assign(schema.__nootDef.schema, createdOnProperty, updatedOnProperty);
 
   schema.pre('save', function(next) {
     var now = new Date();

@@ -57,7 +57,7 @@ var PersonSchema = Schema.extend({
     versionKey: false,
     autoIndex: false
   }
-});
+}).useTimestamps();
 
 /**
  * EmployeeSchema
@@ -327,6 +327,11 @@ describe('NOOT.Mongoose.Schema', function() {
   it('should inherit schema properties', function() {
     SingerSchema.__nootDef.schema.name.should.deep.eql({ type: String, required: true });
     return DeveloperSchema.__nootDef.schema.name.should.deep.eql({ type: String, required: true });
+  });
+
+  it('should inherit schema properties from useTimestamps', function() {
+    DeveloperSchema.__nootDef.schema.updatedOn.should.deep.eql(Date);
+    return DeveloperSchema.__nootDef.schema.createdOn.should.deep.eql(Date);
   });
 
   it('should insert documents with right values', function(done) {
