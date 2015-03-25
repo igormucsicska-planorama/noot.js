@@ -118,7 +118,7 @@ var API = NOOT.Object.extend(Authable).extend({
    */
   /* jshint unused: false */
   errorHandler: function(err, req, res, next) {
-    if (!req.noot) return next();
+    if (!req.noot) return next(err);
     var stack = req.noot.stack;
     stack.extend({ error: true });
     if (err.statusCode) stack.setStatus(err.statusCode);
