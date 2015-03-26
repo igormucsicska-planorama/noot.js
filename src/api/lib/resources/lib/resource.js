@@ -218,6 +218,7 @@ var Resource = NOOT.Object.extend(Authable).extend(Queryable).extend({
       var publicPath = split[0];
       var operatorName = split[1] || self.constructor.EQUALITY_OPERATOR;
 
+      var operator = Operators[operatorName];
       var field = _.find(fields, function(field) { return publicPath === field.publicPath; });
 
       if (!field) {
@@ -229,8 +230,6 @@ var Resource = NOOT.Object.extend(Authable).extend(Queryable).extend({
         stack.pushMessage(self.api.messagesProvider.forbiddenOperator(publicPath, operatorName));
         return callback(new NOOT.Errors.Forbidden());
       }
-
-      var operator = Operators[operatorName];
 
       if (!operator) {
         stack.pushMessage(self.api.messagesProvider.unsupportedOperator(publicPath, operatorName));
@@ -249,8 +248,9 @@ var Resource = NOOT.Object.extend(Authable).extend(Queryable).extend({
 
       for (var path in map) {
         var pathFilter = map[path];
-        if (pathFilter.hasOwnProperty(self.constructor.EQUALITY_OPERATOR)) ret[path] = pathFilter.eq;
-        else ret[path] = pathFilter;
+        var unwildcardedPath = self.constructor.removeWildcardsFromPath(path);
+        if (pathFilter.hasOwnProperty(self.constructor.EQUALITY_OPERATOR)) ret[unwildcardedPath] = pathFilter.eq;
+        else ret[unwildcardedPath] = pathFilter;
       }
 
       stack.query.filter = ret;
@@ -288,7 +288,7 @@ var Resource = NOOT.Object.extend(Authable).extend(Queryable).extend({
           final = final.concat(childs);
         } else {
           if (_.contains(selectable, rawFieldName)) {
-            final.push(fieldName);
+            final.push(self.constructor.removeWildcardsFromPath(fieldName));
           } else {
             isValid = false;
             stack.pushMessage(self.api.messagesProvider.forbiddenField(rawFieldName, 'select'));
@@ -345,8 +345,15 @@ var Resource = NOOT.Object.extend(Authable).extend(Queryable).extend({
     var body = NOOT.isArray(stack.body) ? stack.body : [stack.body];
 
     body.forEach(function(item) {
-      Object.keys(flatten(item, { safe: true })).forEach(function(key) {
-        if (!_.contains(writable, key)) {
+      Object.keys(flatten(item)).forEach(function(key) {
+        var wildcarded = self.constructor.replaceReferenceWithWildcard(key);
+        var unaddressed = key.replace(/\.\d+$/, '');
+
+        if (
+          !_.contains(writable, key) &&
+          !_.contains(writable, wildcarded) &&
+          !_.contains(writable, unaddressed)
+        ) {
           isValid = false;
           stack.pushMessage(self.api.messagesProvider.forbiddenField(key, 'write'));
         }
@@ -392,6 +399,13 @@ var Resource = NOOT.Object.extend(Authable).extend(Queryable).extend({
   EXCLUSION_CHARACTER: '-',
 
   /**
+   * @property WILDCARD
+   * @type String
+   * @static
+   */
+  WILDCARD: '$',
+
+  /**
    * Validates an HTTP method against those that are supported by NOOT.API.DefaultRoutes. If the parameter method is not
    * supported, an error will be thrown.
    *
@@ -403,6 +417,39 @@ var Resource = NOOT.Object.extend(Authable).extend(Queryable).extend({
     if (!_.contains(DefaultRoutes.supportedMethods, method.toLowerCase())) {
       throw new Error('Invalid method for auto generated route: ' + method);
     }
+  },
+
+  /**
+   * Append the wildcard with separators to the path
+   *
+   * @method appendWildcardToPath
+   * @param {String} path
+   * @return {String}
+   */
+  appendWildcardToPath: function (path) {
+    return [path, '.', this.WILDCARD, '.'].join('');
+  },
+
+  /**
+   * Remove wildcards from the given path
+   *
+   * method removeWildcardsFromPath
+   * @param {String} path
+   * @return {String}
+   */
+  removeWildcardsFromPath: function (path) {
+    return path.replace(new RegExp('.' + '\\' + this.WILDCARD + '.'), '.');
+  },
+
+  /**
+   * Remove references coming from flattening (eg. key.0.value) and replace with the wildcard (eg. key.$.value)
+   *
+   * @method replaceReferenceWithWildcard
+   * @param {String} path
+   * @return {String}
+   */
+  replaceReferenceWithWildcard: function (path) {
+    return path.replace(/\.\d+\./, '.' + this.WILDCARD + '.');
   }
 
 });

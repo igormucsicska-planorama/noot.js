@@ -8,9 +8,6 @@ var http = require('http');
 var qs = require('querystring');
 
 
-
-
-
 var API = NOOT.API;
 var Route = NOOT.API.Route;
 var MongooseResource = NOOT.API.MongooseResource;
@@ -24,7 +21,6 @@ var Schema = NOOT.Mongoose.Schema.extend({
 
 
 var db;
-
 var app = express();
 app.use(require('body-parser')());
 
@@ -52,7 +48,8 @@ UserSchema = Schema.extend({
     password: { type: String, required: true },
     blogs: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Blog' }],
     oldEnough: { type: Boolean, default: false },
-    hobbies: [{ type: String, default: function() { return []; } }]
+    hobbies: [{ type: String, default: function() { return []; } }],
+    secondaryEmails: [{ value: { type: String, required: true }, created: { type: Date, default: Date.now() } }]
   }
 });
 
@@ -152,7 +149,8 @@ describe('NOOT.API - Complete test', function() {
       name: { first: 'Jane', last: 'Doe' },
       password: 'youllnotfind',
       email: 'janedoe@nootjs.com',
-      hobbies: ['ping-pong']
+      hobbies: ['ping-pong'],
+      secondaryEmails: [{ value: 'janedoe2@nootjs.com' }]
     };
     him = { name: { first: 'John', last: 'Estevez' }, password: 'youllnotfind', email: 'johndoe@nootjs.com' };
 
@@ -232,6 +230,23 @@ describe('NOOT.API - Complete test', function() {
     }, done);
   });
 
+  it('should retrieve user by a query on an embedded dpcument', function(done) {
+    return supertest(app)
+      .get('/private/users?' + qs.stringify({
+        'secondaryEmails.value': her.secondaryEmails[0].value
+      }))
+      .expect(200)
+      .end(function(err, res) {
+        if (err) return done(err);
+        var body = res.body.data[0];
+
+        body.name.first.should.eql(her.name.first);
+        body.name.last.should.eql(her.name.last);
+
+        return done();
+      });
+  });
+
   it('should retrieve user info', function(done) {
     return User.findOne({ email: 'se@nootjs.com' }, '_id name', function(err, user) {
       if (err) return done(err);
@@ -275,6 +290,21 @@ describe('NOOT.API - Complete test', function() {
         return User.findOne({ email: 'johndoe@nootjs.com' }, 'age', function(err, user) {
           if (err) done(err);
           user.age.should.eql(23);
+          return done();
+        });
+      });
+  });
+
+  it('should update user by filter, working with embedded documents', function(done) {
+    return supertest(app)
+      .patch('/private/users?' + qs.stringify({ 'secondaryEmails.value': her.secondaryEmails[0].value }))
+      .send({ age: 23, secondaryEmails: [her.secondaryEmails[0], { value: 'other_secondary@email.for.her' }] })
+      .expect(204, function(err) {
+        if (err) return done(err);
+        return User.findOne({ email: her.email }, function(err, user) {
+          if (err) done(err);
+          user.age.should.eql(23);
+          user.secondaryEmails.should.have.length(2);
           return done();
         });
       });
