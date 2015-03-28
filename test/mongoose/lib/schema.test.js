@@ -68,12 +68,22 @@ var EmployeeSchema = PersonSchema.extend({
   },
 
   methods: {
+
+    save: function() {
+      return this._super.apply(this, arguments);
+    },
+
     sayHello: function() {
       return this._super() + ', I work as a ' + this.job;
     }
   },
 
   statics: {
+
+    create: function() {
+      return this._super.apply(this, arguments);
+    },
+
     joinCompany: function () {
       return this._super();
     }
@@ -90,6 +100,14 @@ var EmployeeSchema = PersonSchema.extend({
 var DeveloperSchema = EmployeeSchema.extend({
   schema: {
     job: { type: String, default: 'Developer' }
+  },
+
+  methods: {
+
+    save: function() {
+      return this._super.apply(this, arguments);
+    }
+
   }
 });
 
@@ -99,6 +117,14 @@ var DeveloperSchema = EmployeeSchema.extend({
 var ArtistSchema = PersonSchema.extend({
   schema: {
     developer: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Singer' }]
+  },
+
+  methods: {
+
+    save: function() {
+      return this._super.apply(this, arguments);
+    }
+
   }
 });
 
@@ -107,7 +133,17 @@ var ArtistSchema = PersonSchema.extend({
  */
 var SingerSchema = ArtistSchema.extend({
   schema: {
-    type: { type: String }
+    type: { type: String },
+    fans: { type: Number }
+  },
+
+  methods: {
+
+    save: function() {
+      this.fans = 10;
+      return this._super.apply(this, arguments);
+    }
+
   }
 });
 
@@ -366,6 +402,7 @@ describe('NOOT.Mongoose.Schema', function() {
             retrievedSinger.name.should.be.eql('Frank Doe');
             retrievedSinger.type.should.be.eql('Rock');
             retrievedSinger.age.should.be.eql(26);
+            retrievedSinger.fans.should.be.eql(10); // Make sure overriden `save` has added value for `fans`
 
             return done();
           });

@@ -22,12 +22,70 @@ var oldInit = Model.prototype.init;
 var oldModel = mongoose.model;
 
 
+
 /***********************************************************************************************************************
  * @class Schema
  * @constructor
  * @namespace NOOT.Mongoose
  **********************************************************************************************************************/
 
+/**
+ * Override findOne method to handle inheritance and find the right document based on the modelName
+ */
+Model.findOne = function() {
+  return oldFindOne.apply(this, parseArguments.apply(this, arguments));
+};
+
+
+/**
+ * Override find method to handle inheritance and find the right documents based on the modelName
+ */
+Model.find = function() {
+  return oldFind.apply(this, parseArguments.apply(this, arguments));
+};
+
+
+/**
+ * Set the prototype based on the discriminator __t
+ *
+ * @param {Object} doc
+ * @param {Object} query
+ * @param {function} fn
+ * @returns {*}
+ */
+
+Model.prototype.init = function(doc, query, fn) {
+
+  if (doc.__t) {
+    var model = this.db.model(doc.__t);
+    var newFn = function() {
+      process.nextTick(function() {
+        fn.apply(this, arguments);
+      });
+    };
+    this.schema = model.schema;
+    var obj = oldInit.call(this, doc, query, newFn);
+    obj.__proto__ = model.prototype;
+    return obj;
+  }
+
+  return oldInit.apply(this, arguments);
+
+};
+
+/**
+ * Allow inheritance for native statics
+ */
+var OVERRIDABLE_MODEL_STATICS = _.pick(Model, function(obj, prop) {
+  return NOOT.isFunction(Model[prop]);
+});
+
+/**
+ * Allow inheritance for native methods
+ */
+var OVERRIDABLE_MODEL_METHODS = _.pick(Model.prototype, function(obj, prop) {
+  return NOOT.isFunction(Model.prototype[prop]);
+});
 
 /**
  * Extend schema, define discriminator, create model
@@ -50,8 +108,12 @@ MongooseSchema.extend = function(definition, ownStatics) {
 
   var schema = new MongooseSchema(properties, _.merge({}, this.options || {}, definition.options));
 
-  NOOT.InternalUtils.buildSuper(schema.methods, this.methods || {}, definition.methods);
-  NOOT.InternalUtils.buildSuper(schema.statics, this.statics || {}, definition.statics);
+  _.defaults(this, { methods: {}, statics: {} });
+  _.defaults(this.methods, OVERRIDABLE_MODEL_METHODS);
+  _.defaults(this.statics, OVERRIDABLE_MODEL_STATICS);
+
+  NOOT.InternalUtils.buildSuper(schema.methods, this.methods, definition.methods || {});
+  NOOT.InternalUtils.buildSuper(schema.statics, this.statics, definition.statics || {});
   NOOT.InternalUtils.buildSuper(schema, this, ownStatics);
 
   for (var virtual in this.virtuals) {
@@ -119,51 +181,6 @@ var parseArguments = function(conditions, fields, options, callback) {
     if (options.strict) conditions.__t = { $exists : false };
   }
   return [conditions, fields, options, callback];
-};
-
-
-/**
- * Override findOne method to handle inheritance and find the right document based on the modelName
- */
-Model.findOne = function() {
-  return oldFindOne.apply(this, parseArguments.apply(this, arguments));
-};
-
-
-/**
- * Override find method to handle inheritance and find the right documents based on the modelName
- */
-Model.find = function() {
-  return oldFind.apply(this, parseArguments.apply(this, arguments));
-};
-
-
-/**
- * Set the prototype based on the discriminator __t
- *
- * @param {Object} doc
- * @param {Object} query
- * @param {function} fn
- * @returns {*}
- */
-
-Model.prototype.init = function(doc, query, fn) {
-
-  if (doc.__t) {
-    var model = this.db.model(doc.__t);
-    var newFn = function() {
-      process.nextTick(function() {
-        fn.apply(this, arguments);
-      });
-    };
-    this.schema = model.schema;
-    var obj = oldInit.call(this, doc, query, newFn);
-    obj.__proto__ = model.prototype;
-    return obj;
-  }
-
-  return oldInit.apply(this, arguments);
-
 };
 
 
