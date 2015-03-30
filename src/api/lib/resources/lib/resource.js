@@ -348,12 +348,11 @@ var Resource = NOOT.Object.extend(Authable).extend(Queryable).extend({
       Object.keys(flatten(item)).forEach(function(key) {
         var wildcarded = self.constructor.replaceReferenceWithWildcard(key);
         var unaddressed = key.replace(/\.\d+$/, '');
+        var isValidField = _.contains(writable, key) ||
+          _.contains(writable, wildcarded) ||
+          _.contains(writable, unaddressed);
 
-        if (
-          !_.contains(writable, key) &&
-          !_.contains(writable, wildcarded) &&
-          !_.contains(writable, unaddressed)
-        ) {
+        if (!isValidField) {
           isValid = false;
           stack.pushMessage(self.api.messagesProvider.forbiddenField(key, 'write'));
         }
