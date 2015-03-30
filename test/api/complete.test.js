@@ -230,7 +230,7 @@ describe('NOOT.API - Complete test', function() {
     }, done);
   });
 
-  it('should retrieve user by a query on an embedded dpcument', function(done) {
+  it('should retrieve user by a query on an embedded document', function(done) {
     return supertest(app)
       .get('/private/users?' + qs.stringify({
         'secondaryEmails.value': her.secondaryEmails[0].value

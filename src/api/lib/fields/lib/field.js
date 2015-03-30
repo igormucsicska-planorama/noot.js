@@ -80,10 +80,12 @@ var Field = NOOT.Object.extend({
    *
    * @property publicPath
    * @type String
-   * @default `path`
+   * @default `path` without wildcards
    */
   _publicPath: null,
-  get publicPath() { return this._publicPath || this.path; },
+  get publicPath() {
+    return this._publicPath || this.constructor.removeWildcardsFromPath(this.path);
+  },
   set publicPath(value) { this._publicPath = value; },
 
   /**
@@ -158,6 +160,24 @@ var Field = NOOT.Object.extend({
    */
   DEFAULTS: {
     get supportedOperators() { return []; }
+  },
+
+  /**
+   * @property WILDCARD
+   * @type String
+   * @static
+   */
+  WILDCARD: '$',
+
+  /**
+   * Remove wildcards from the given path
+   *
+   * method removeWildcardsFromPath
+   * @param {String} path
+   * @return {String}
+   */
+  removeWildcardsFromPath: function (path) {
+    return path.replace(new RegExp('.' + '\\' + this.WILDCARD + '.'), '.');
   }
 
 });

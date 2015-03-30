@@ -236,10 +236,11 @@ var Resource = NOOT.Object.extend(Authable).extend(Queryable).extend({
         return callback(new NOOT.Errors.BadRequest());
       }
 
-      map[field.path] = map[field.path] || {};
+      map[field.publicPath] = map[field.publicPath] || {};
       operator.parseFromQueryString(filter[filterName], field.parseFromQueryString, function(err, value) {
         if (err) return cb(err);
-        map[field.path][operatorName] = value;
+
+        map[field.publicPath][operatorName] = value;
         return cb();
       });
 
@@ -248,9 +249,8 @@ var Resource = NOOT.Object.extend(Authable).extend(Queryable).extend({
 
       for (var path in map) {
         var pathFilter = map[path];
-        var unwildcardedPath = self.constructor.removeWildcardsFromPath(path);
-        if (pathFilter.hasOwnProperty(self.constructor.EQUALITY_OPERATOR)) ret[unwildcardedPath] = pathFilter.eq;
-        else ret[unwildcardedPath] = pathFilter;
+        if (pathFilter.hasOwnProperty(self.constructor.EQUALITY_OPERATOR)) ret[path] = pathFilter.eq;
+        else ret[path] = pathFilter;
       }
 
       stack.query.filter = ret;
