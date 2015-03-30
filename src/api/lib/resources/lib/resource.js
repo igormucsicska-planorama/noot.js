@@ -219,7 +219,7 @@ var Resource = NOOT.Object.extend(Authable).extend(Queryable).extend({
       var operatorName = split[1] || self.constructor.EQUALITY_OPERATOR;
 
       var operator = Operators[operatorName];
-      var field = _.find(fields, function(field) { return publicPath === field.publicPath; });
+      var field = _.find(fields, function(field) { return publicPath === field.plainPath; });
 
       if (!field) {
         stack.pushMessage(self.api.messagesProvider.forbiddenField(publicPath));

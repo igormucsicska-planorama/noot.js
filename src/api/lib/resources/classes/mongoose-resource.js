@@ -232,7 +232,7 @@ var MongooseResource = MongoResource.extend({
   toAPIField: function(mongoosePath, resource, parentPath) {
     var path = (parentPath ? parentPath : '') + mongoosePath.path;
     var options = {
-      _publicPath: this.removeWildcardsFromPath(path),
+      _plainPath: this.removeWildcardsFromPath(path),
       path: path,
       isRequired: !!mongoosePath.isRequired
     };

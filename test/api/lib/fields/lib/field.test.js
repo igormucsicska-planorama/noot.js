@@ -5,17 +5,17 @@ var Field = NOOT.API.Field;
 describe('NOOT.API.Field', function() {
 
   var field = Field.create({ path: 'foo' });
-  var requiredField = Field.create({ path: 'foo', isRequired: true, supportedOperators: ['in'], publicPath: 'baz' });
+  var requiredField = Field.create({ path: 'foo', isRequired: true, supportedOperators: ['in'], plainPath: 'baz' });
 
   describe('.create()', function() {
     it('should create an instance with default values', function() {
       field.path.should.eql('foo');
-      field.publicPath.should.eql('foo');
+      field.plainPath.should.eql('foo');
       field.isRequired.should.eql(false);
       field.isReference.should.eql(false);
       field.isReferenceArray.should.eql(false);
       field.supportedOperators.should.deep.eql([]);
-      requiredField.publicPath.should.eql('baz');
+      requiredField.plainPath.should.eql('baz');
     });
     it('should not create an instance (missing `path`)', function() {
       (function() { Field.create(); }).should.throw(/path/);

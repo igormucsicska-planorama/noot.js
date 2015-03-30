@@ -76,15 +76,16 @@ var Field = NOOT.Object.extend({
   supportedOperators: null,
 
   /**
-   * Public path to access the field.
+   * Plain path to access the field.
+   * It should never contains wildcards.
    *
-   * @property publicPath
+   * @property plainPath
    * @type String
    * @default `path`
    */
-  _publicPath: null,
-  get publicPath() { return this._publicPath || this.path; },
-  set publicPath(value) { this._publicPath = value; },
+  _plainPath: null,
+  get plainPath() { return this._plainPath || this.path; },
+  set plainPath(value) { this._plainPath = value; },
 
   /**
    * @constructor
