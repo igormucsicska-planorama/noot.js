@@ -8,6 +8,7 @@ var mongoose = require('mongoose');
 
 var MongoResource = require('./../lib/mongo-resource');
 var Fields = require('./../../fields/index');
+var Field = require('./../../fields/lib/field');
 
 
 /***********************************************************************************************************************
@@ -194,22 +195,31 @@ var MongooseResource = MongoResource.extend({
    * Builds a list of fields based on the `model`'s mongoose schema.
    *
    * @method getFields
+   * @param {Object} [schema]
+   * @param {String} [parentPath]
    * @return {Object}
    */
-  getFields: function() {
-    var ret = {};
+  getFields: function(schema, parentPath) {
+    schema = schema || this.model.schema;
+    parentPath = parentPath || '';
 
-    var paths = this.model.schema.paths;
+    var ret = {};
+    var paths = schema.paths;
 
     for (var pathName in paths) {
-      ret[pathName] = this.constructor.toAPIField(paths[pathName], this);
+      var mongoosePath = paths[pathName];
+
+      if (mongoosePath.schema) {
+        _.extend(ret, this.getFields(mongoosePath.schema, Field.appendWildcardToPath(pathName)));
+      } else {
+        ret[parentPath + pathName] = this.constructor.toAPIField(paths[pathName], this, parentPath);
+      }
     }
 
     return ret;
   }
 
 }, {
-
   /**
    * Transforms a mongoose schema property to a NOOT compatible one.
    *
@@ -217,11 +227,13 @@ var MongooseResource = MongoResource.extend({
    * @static
    * @param {Object} mongoosePath
    * @param {NOOT.API.Resource} resource
+   * @param {String} [parentPath]
    * @return {NOOT.API.Field}
    */
-  toAPIField: function(mongoosePath, resource) {
+  toAPIField: function(mongoosePath, resource, parentPath) {
+    var path = (parentPath ? parentPath : '') + mongoosePath.path;
     var options = {
-      path: mongoosePath.path,
+      path: path,
       isRequired: !!mongoosePath.isRequired
     };
 

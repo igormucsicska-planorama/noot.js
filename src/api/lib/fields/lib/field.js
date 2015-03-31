@@ -80,10 +80,12 @@ var Field = NOOT.Object.extend({
    *
    * @property publicPath
    * @type String
-   * @default `path`
+   * @default `path` without wildcards
    */
   _publicPath: null,
-  get publicPath() { return this._publicPath || this.path; },
+  get publicPath() {
+    return this._publicPath || this.constructor.removeWildcardsFromPath(this.path);
+  },
   set publicPath(value) { this._publicPath = value; },
 
   /**
@@ -158,6 +160,46 @@ var Field = NOOT.Object.extend({
    */
   DEFAULTS: {
     get supportedOperators() { return []; }
+  },
+
+  /**
+   * @property WILDCARD
+   * @type String
+   * @static
+   */
+  WILDCARD: '$',
+
+  /**
+   * Append the wildcard with separators to the path
+   *
+   * @method appendWildcardToPath
+   * @param {String} path
+   * @return {String}
+   */
+  appendWildcardToPath: function (path) {
+    return [path, '.', this.WILDCARD, '.'].join('');
+  },
+
+  /**
+   * Remove wildcards from the given path
+   *
+   * method removeWildcardsFromPath
+   * @param {String} path
+   * @return {String}
+   */
+  removeWildcardsFromPath: function (path) {
+    return path.replace(new RegExp(NOOT.toRegExpString('.' + this.WILDCARD + '.')), '.');
+  },
+
+  /**
+   * Remove references coming from flattening (eg. key.0.value) and replace with the wildcard (eg. key.$.value)
+   *
+   * @method replaceReferenceWithWildcard
+   * @param {String} path
+   * @return {String}
+   */
+  replaceReferenceWithWildcard: function (path) {
+    return path.replace(/\.\d+\./, '.' + this.WILDCARD + '.');
   }
 
 });

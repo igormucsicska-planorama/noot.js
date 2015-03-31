@@ -11,6 +11,7 @@ var Authable = require('./../../mixins/authable');
 var Queryable = require('./../../mixins/queryable');
 var DefaultRoutes = require('./../../default-routes/index');
 var Route = require('./../../route');
+var Field = require('./../../fields/lib/field');
 
 /***********************************************************************************************************************
  * @class Resource
@@ -218,6 +219,7 @@ var Resource = NOOT.Object.extend(Authable).extend(Queryable).extend({
       var publicPath = split[0];
       var operatorName = split[1] || self.constructor.EQUALITY_OPERATOR;
 
+      var operator = Operators[operatorName];
       var field = _.find(fields, function(field) { return publicPath === field.publicPath; });
 
       if (!field) {
@@ -230,17 +232,16 @@ var Resource = NOOT.Object.extend(Authable).extend(Queryable).extend({
         return callback(new NOOT.Errors.Forbidden());
       }
 
-      var operator = Operators[operatorName];
-
       if (!operator) {
         stack.pushMessage(self.api.messagesProvider.unsupportedOperator(publicPath, operatorName));
         return callback(new NOOT.Errors.BadRequest());
       }
 
-      map[field.path] = map[field.path] || {};
+      map[field.publicPath] = map[field.publicPath] || {};
       operator.parseFromQueryString(filter[filterName], field.parseFromQueryString, function(err, value) {
         if (err) return cb(err);
-        map[field.path][operatorName] = value;
+
+        map[field.publicPath][operatorName] = value;
         return cb();
       });
 
@@ -288,7 +289,7 @@ var Resource = NOOT.Object.extend(Authable).extend(Queryable).extend({
           final = final.concat(childs);
         } else {
           if (_.contains(selectable, rawFieldName)) {
-            final.push(fieldName);
+            final.push(Field.removeWildcardsFromPath(fieldName));
           } else {
             isValid = false;
             stack.pushMessage(self.api.messagesProvider.forbiddenField(rawFieldName, 'select'));
@@ -345,8 +346,14 @@ var Resource = NOOT.Object.extend(Authable).extend(Queryable).extend({
     var body = NOOT.isArray(stack.body) ? stack.body : [stack.body];
 
     body.forEach(function(item) {
-      Object.keys(flatten(item, { safe: true })).forEach(function(key) {
-        if (!_.contains(writable, key)) {
+      Object.keys(flatten(item)).forEach(function(key) {
+        var wildcarded = Field.replaceReferenceWithWildcard(key);
+        var unaddressed = key.replace(/\.\d+$/, '');
+        var isValidField = _.contains(writable, key) ||
+          _.contains(writable, wildcarded) ||
+          _.contains(writable, unaddressed);
+
+        if (!isValidField) {
           isValid = false;
           stack.pushMessage(self.api.messagesProvider.forbiddenField(key, 'write'));
         }
