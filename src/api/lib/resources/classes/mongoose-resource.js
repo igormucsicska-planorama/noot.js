@@ -8,6 +8,7 @@ var mongoose = require('mongoose');
 
 var MongoResource = require('./../lib/mongo-resource');
 var Fields = require('./../../fields/index');
+var Field = require('./../../fields/lib/field');
 
 
 /***********************************************************************************************************************
@@ -209,7 +210,7 @@ var MongooseResource = MongoResource.extend({
       var mongoosePath = paths[pathName];
 
       if (mongoosePath.schema) {
-        _.extend(ret, this.getFields(mongoosePath.schema, this.constructor.appendWildcardToPath(pathName)));
+        _.extend(ret, this.getFields(mongoosePath.schema, Field.appendWildcardToPath(pathName)));
       } else {
         ret[parentPath + pathName] = this.constructor.toAPIField(paths[pathName], this, parentPath);
       }

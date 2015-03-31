@@ -11,6 +11,7 @@ var Authable = require('./../../mixins/authable');
 var Queryable = require('./../../mixins/queryable');
 var DefaultRoutes = require('./../../default-routes/index');
 var Route = require('./../../route');
+var Field = require('./../../fields/lib/field');
 
 /***********************************************************************************************************************
  * @class Resource
@@ -288,7 +289,7 @@ var Resource = NOOT.Object.extend(Authable).extend(Queryable).extend({
           final = final.concat(childs);
         } else {
           if (_.contains(selectable, rawFieldName)) {
-            final.push(self.constructor.removeWildcardsFromPath(fieldName));
+            final.push(Field.removeWildcardsFromPath(fieldName));
           } else {
             isValid = false;
             stack.pushMessage(self.api.messagesProvider.forbiddenField(rawFieldName, 'select'));
@@ -346,7 +347,7 @@ var Resource = NOOT.Object.extend(Authable).extend(Queryable).extend({
 
     body.forEach(function(item) {
       Object.keys(flatten(item)).forEach(function(key) {
-        var wildcarded = self.constructor.replaceReferenceWithWildcard(key);
+        var wildcarded = Field.replaceReferenceWithWildcard(key);
         var unaddressed = key.replace(/\.\d+$/, '');
         var isValidField = _.contains(writable, key) ||
           _.contains(writable, wildcarded) ||
@@ -398,13 +399,6 @@ var Resource = NOOT.Object.extend(Authable).extend(Queryable).extend({
   EXCLUSION_CHARACTER: '-',
 
   /**
-   * @property WILDCARD
-   * @type String
-   * @static
-   */
-  WILDCARD: '$',
-
-  /**
    * Validates an HTTP method against those that are supported by NOOT.API.DefaultRoutes. If the parameter method is not
    * supported, an error will be thrown.
    *
@@ -416,39 +410,6 @@ var Resource = NOOT.Object.extend(Authable).extend(Queryable).extend({
     if (!_.contains(DefaultRoutes.supportedMethods, method.toLowerCase())) {
       throw new Error('Invalid method for auto generated route: ' + method);
     }
-  },
-
-  /**
-   * Append the wildcard with separators to the path
-   *
-   * @method appendWildcardToPath
-   * @param {String} path
-   * @return {String}
-   */
-  appendWildcardToPath: function (path) {
-    return [path, '.', this.WILDCARD, '.'].join('');
-  },
-
-  /**
-   * Remove wildcards from the given path
-   *
-   * method removeWildcardsFromPath
-   * @param {String} path
-   * @return {String}
-   */
-  removeWildcardsFromPath: function (path) {
-    return path.replace(new RegExp('.' + '\\' + this.WILDCARD + '.'), '.');
-  },
-
-  /**
-   * Remove references coming from flattening (eg. key.0.value) and replace with the wildcard (eg. key.$.value)
-   *
-   * @method replaceReferenceWithWildcard
-   * @param {String} path
-   * @return {String}
-   */
-  replaceReferenceWithWildcard: function (path) {
-    return path.replace(/\.\d+\./, '.' + this.WILDCARD + '.');
   }
 
 });

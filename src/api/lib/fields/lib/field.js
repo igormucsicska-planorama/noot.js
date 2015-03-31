@@ -170,6 +170,17 @@ var Field = NOOT.Object.extend({
   WILDCARD: '$',
 
   /**
+   * Append the wildcard with separators to the path
+   *
+   * @method appendWildcardToPath
+   * @param {String} path
+   * @return {String}
+   */
+  appendWildcardToPath: function (path) {
+    return [path, '.', this.WILDCARD, '.'].join('');
+  },
+
+  /**
    * Remove wildcards from the given path
    *
    * method removeWildcardsFromPath
@@ -177,7 +188,18 @@ var Field = NOOT.Object.extend({
    * @return {String}
    */
   removeWildcardsFromPath: function (path) {
-    return path.replace(new RegExp('.' + '\\' + this.WILDCARD + '.'), '.');
+    return path.replace(new RegExp(NOOT.toRegExpString('.' + this.WILDCARD + '.')), '.');
+  },
+
+  /**
+   * Remove references coming from flattening (eg. key.0.value) and replace with the wildcard (eg. key.$.value)
+   *
+   * @method replaceReferenceWithWildcard
+   * @param {String} path
+   * @return {String}
+   */
+  replaceReferenceWithWildcard: function (path) {
+    return path.replace(/\.\d+\./, '.' + this.WILDCARD + '.');
   }
 
 });
