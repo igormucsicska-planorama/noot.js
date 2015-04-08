@@ -1,6 +1,6 @@
 {
   "name": "noot",
-  "version": "0.6.7",
+  "version": "0.6.8",
   "description": "High quality, well tested, lightweight object oriented toolset for Node.js",
   "main": "index.js",
   "directories": {
