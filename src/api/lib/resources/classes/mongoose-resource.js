@@ -87,8 +87,10 @@ var MongooseResource = MongoResource.extend({
    */
   create: function(stack, callback) {
     callback = callback || stack.next;
+    var isMultiple = NOOT.isArray(stack.body);
     return this.model.create(stack.body, function(err, items) {
       if (err) return callback(NOOT.Errors.fromMongooseError(err));
+      if (isMultiple) items = NOOT.makeArray(arguments).slice(1);
       stack.setData(items).setStatus(NOOT.HTTP.Created);
       return callback();
     });

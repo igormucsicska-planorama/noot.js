@@ -89,8 +89,9 @@ describe('NOOT.API - Basic example', function() {
     supertest(app)
       .post('/my-api/users')
       .send(users.slice(1))
-      .expect(201, function(err) {
+      .expect(201, function(err, res) {
         if (err) return done(err);
+        res.body.data.length.should.equal(users.slice(1).length);
         return db.model('User').find(function(err, items) {
           if (err) return done(err);
           items.length.should.eql(4);
