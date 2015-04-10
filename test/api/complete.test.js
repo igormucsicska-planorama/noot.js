@@ -49,7 +49,8 @@ UserSchema = Schema.extend({
     blogs: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Blog' }],
     oldEnough: { type: Boolean, default: false },
     hobbies: [{ type: String, default: function() { return []; } }],
-    secondaryEmails: [{ value: { type: String, required: true }, created: { type: Date, default: Date.now() } }]
+    secondaryEmails: [{ value: { type: String, required: true }, created: { type: Date, default: Date.now() } }],
+    nested: [{ values: [{type: Number }], created: { type: Date, default: Date.now() } }]
   }
 });
 
@@ -364,6 +365,25 @@ describe('NOOT.API - Complete test', function() {
           user.age.should.eql(29);
           return done();
         });
+      });
+  });
+
+  it('should create user with nested documents', function(done) {
+    var nested = {
+      name: { first: 'deeper', last: 'test' },
+      password: 'pw',
+      email: 'my@email.com',
+      nested: [{ values: [0, 1, 2]}, { values: [3, 4, 5] }]
+    };
+
+    return supertest(app)
+      .post('/private/users/register')
+      .send(nested)
+      .expect(201, function(err, res) {
+        if (err) return done(err);
+        var body = res.body.data;
+        body.nested[0].values.should.have.length(3);
+        return done();
       });
   });
 
