@@ -212,7 +212,7 @@ var MongooseResource = MongoResource.extend({
       var mongoosePath = paths[pathName];
 
       if (mongoosePath.schema) {
-        _.extend(ret, this.getFields(mongoosePath.schema, Field.appendWildcardToPath(pathName)));
+        _.extend(ret, this.getFields(mongoosePath.schema, Field.appendWildcardToPath(parentPath + pathName)));
       } else {
         ret[parentPath + pathName] = this.constructor.toAPIField(paths[pathName], this, parentPath);
       }

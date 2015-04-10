@@ -50,7 +50,7 @@ UserSchema = Schema.extend({
     oldEnough: { type: Boolean, default: false },
     hobbies: [{ type: String, default: function() { return []; } }],
     secondaryEmails: [{ value: { type: String, required: true }, created: { type: Date, default: Date.now() } }],
-    nested: [{ values: [{type: Number }], created: { type: Date, default: Date.now() } }]
+    nested: [{ values: [{type: Number }], nestedOfNested: [{ values: [String] }], created: { type: Date, default: Date.now() } }]
   }
 });
 
@@ -373,7 +373,11 @@ describe('NOOT.API - Complete test', function() {
       name: { first: 'deeper', last: 'test' },
       password: 'pw',
       email: 'my@email.com',
-      nested: [{ values: [0, 1, 2]}, { values: [3, 4, 5] }]
+      nested: [
+        { values: [0, 1, 2]},
+        { values: [3, 4, 5] },
+        { values: [6, 7, 8], nestedOfNested: [{ values: [9, 10] }, { values: [11, 12] }] }
+      ]
     };
 
     return supertest(app)
