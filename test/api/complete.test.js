@@ -45,6 +45,7 @@ UserSchema = Schema.extend({
     name: { first: String, last: String },
     age: Number,
     email: { type: String, required: true, unique: true },
+    createdOn: { type: Date, default: Date.now() },
     password: { type: String, required: true },
     blogs: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Blog' }],
     oldEnough: { type: Boolean, default: false },
@@ -152,7 +153,7 @@ describe('NOOT.API - Complete test', function() {
       hobbies: ['ping-pong'],
       secondaryEmails: [{ value: 'janedoe2@nootjs.com' }]
     };
-    him = { name: { first: 'John', last: 'Estevez' }, password: 'youllnotfind', email: 'johndoe@nootjs.com' };
+    him = { name: { first: 'John', last: 'Doe' }, password: 'youllnotfind', email: 'johndoe@nootjs.com' };
 
     return async.eachSeries([me, her, him], function(item, cb) {
       return supertest(app)
@@ -228,6 +229,20 @@ describe('NOOT.API - Complete test', function() {
           });
       });
     }, done);
+  });
+
+  it('should retrieve 3 users created within the last hour', function(done) {
+    return supertest(app)
+      .get('/private/users?' + qs.stringify({
+        'createdOn__gte': Date.now() - 3600000
+      }))
+      .expect(200)
+      .end(function(err, res) {
+        if (err) return done(err);
+        var body = res.body.data;
+        body.should.have.length(3);
+        return done();
+      });
   });
 
   it('should retrieve user by a query on an embedded document', function(done) {
