@@ -188,7 +188,7 @@ var Field = NOOT.Object.extend({
    * @return {String}
    */
   removeWildcardsFromPath: function (path) {
-    return path.replace(new RegExp(NOOT.toRegExpString('.' + this.WILDCARD + '.')), '.');
+    return path.replace(new RegExp(NOOT.toRegExpString('.' + this.WILDCARD + '.'), 'g'), '.');
   },
 
   /**
@@ -199,7 +199,7 @@ var Field = NOOT.Object.extend({
    * @return {String}
    */
   replaceReferenceWithWildcard: function (path) {
-    return path.replace(/\.\d+\./, '.' + this.WILDCARD + '.');
+    return path.replace(/\.\d+\./g, '.' + this.WILDCARD + '.');
   }
 
 });
