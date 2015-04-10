@@ -238,7 +238,7 @@ var Resource = NOOT.Object.extend(Authable).extend(Queryable).extend({
       }
 
       map[field.publicPath] = map[field.publicPath] || {};
-      operator.parseFromQueryString(filter[filterName], field.parseFromQueryString, function(err, value) {
+      operator.parseFromQueryString(filter[filterName], field.parseFromQueryString.bind(field), function(err, value) {
         if (err) return cb(err);
 
         map[field.publicPath][operatorName] = value;
