@@ -354,7 +354,7 @@ var Resource = NOOT.Object.extend(Authable).extend(Queryable).extend({
           _.contains(writable, unaddressed) ||
           !!_.find(self.fields, function (field) {
             if (field.isAny) {
-              return (new RegExp('^' + NOOT.toRegExpString(field.publicPath))).test(unaddressed);
+              return (new RegExp('^' + NOOT.toRegExpString(field.path))).test(unaddressed);
             }
           });
 

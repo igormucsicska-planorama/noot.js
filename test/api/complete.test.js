@@ -60,7 +60,14 @@ UserSchema = Schema.extend({
       created: { type: Date, default: Date.now() }
     }],
     mixed: mongoose.Schema.Types.Mixed,
-    collectionOfMixed: [{ type: mongoose.Schema.Types.Mixed }]
+    collectionOfMixed: [{ type: mongoose.Schema.Types.Mixed }],
+    embeddedMixed: [{ value: { type: mongoose.Schema.Types.Mixed } }],
+    deeplyEmbedded: {
+      value: [{
+        value: [{ type: mongoose.Schema.Types.Mixed }],
+        strictValue: { value: Number }
+      }]
+    }
   }
 });
 
@@ -421,7 +428,19 @@ describe('NOOT.API - Complete test', function() {
       password: 'pw',
       email: 'my2nd@email.com',
       mixed: { some: 'value', many: ['values', 0, 1, 2] },
-      collectionOfMixed: [{ some: 'value' }, [0, 1]]
+      collectionOfMixed: [{ some: 'value' }, [0, 1]],
+      embeddedMixed: [
+        { value: [0, 1] },
+        { value: { some: { custom: 'value' } } },
+        { value: [{ value: 0 }] },
+        { value: [{ value: [[{ value: 0 }]] }] },
+      ],
+      deeplyEmbedded: {
+        value: [
+          { value: [{ value: 0 }, [{ value: 0, value2: [[0]] }]], strictValue: { value: 0 } },
+          { value: [{ value: 0 }, [{ value: 0, value2: [[0]] }], 0, 'something'], strictValue: { value: 0 } }
+        ]
+      }
     };
 
     return supertest(app)
