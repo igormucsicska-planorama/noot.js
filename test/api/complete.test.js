@@ -58,7 +58,16 @@ UserSchema = Schema.extend({
       values: [{ type: Number }],
       nestedOfNested: [{ values: [String] }],
       created: { type: Date, default: Date.now() }
-    }]
+    }],
+    mixed: mongoose.Schema.Types.Mixed,
+    collectionOfMixed: [{ type: mongoose.Schema.Types.Mixed }],
+    embeddedMixed: [{ value: { type: mongoose.Schema.Types.Mixed } }],
+    deeplyEmbedded: {
+      value: [{
+        value: [{ type: mongoose.Schema.Types.Mixed }],
+        strictValue: { value: Number }
+      }]
+    }
   }
 });
 
@@ -409,6 +418,38 @@ describe('NOOT.API - Complete test', function() {
         if (err) return done(err);
         var body = res.body.data;
         body.nested[0].values.should.have.length(3);
+        return done();
+      });
+  });
+
+  it('should create user with using fields with Mixed type', function(done) {
+    var nested = {
+      name: { first: 'deeper', last: 'test' },
+      password: 'pw',
+      email: 'my2nd@email.com',
+      mixed: { some: 'value', many: ['values', 0, 1, 2] },
+      collectionOfMixed: [{ some: 'value' }, [0, 1]],
+      embeddedMixed: [
+        { value: [0, 1] },
+        { value: { some: { custom: 'value' } } },
+        { value: [{ value: 0 }] },
+        { value: [{ value: [[{ value: 0 }]] }] },
+      ],
+      deeplyEmbedded: {
+        value: [
+          { value: [{ value: 0 }, [{ value: 0, value2: [[0]] }]], strictValue: { value: 0 } },
+          { value: [{ value: 0 }, [{ value: 0, value2: [[0]] }], 0, 'something'], strictValue: { value: 0 } }
+        ]
+      }
+    };
+
+    return supertest(app)
+      .post('/private/users/register')
+      .send(nested)
+      .expect(201, function(err, res) {
+        if (err) return done(err);
+        var body = res.body.data;
+        body.collectionOfMixed[1].should.have.length(2);
         return done();
       });
   });

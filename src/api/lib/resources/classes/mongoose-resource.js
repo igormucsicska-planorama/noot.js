@@ -242,6 +242,7 @@ var MongooseResource = MongoResource.extend({
     var FieldClass;
     var instance = mongoosePath.instance ||
       (mongoosePath.caster && mongoosePath.caster.instance) ||
+      (mongoosePath.casterConstructor) ||
       (mongoosePath.options && mongoosePath.options.type);
 
     switch (instance) {
@@ -281,6 +282,7 @@ var MongooseResource = MongoResource.extend({
 
       case mongoose.Schema.Types.Mixed:
         FieldClass = Fields.Any;
+        _.extend(options, { isAny: true });
         break;
 
       default:
