@@ -242,6 +242,7 @@ var MongooseResource = MongoResource.extend({
     var FieldClass;
     var instance = mongoosePath.instance ||
       (mongoosePath.caster && mongoosePath.caster.instance) ||
+      (mongoosePath.casterConstructor) ||
       (mongoosePath.options && mongoosePath.options.type);
 
     switch (instance) {
