@@ -282,6 +282,7 @@ var MongooseResource = MongoResource.extend({
 
       case mongoose.Schema.Types.Mixed:
         FieldClass = Fields.Any;
+        _.extend(options, { isAny: true });
         break;
 
       default:

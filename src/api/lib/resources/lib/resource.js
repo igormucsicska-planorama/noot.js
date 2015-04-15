@@ -351,7 +351,12 @@ var Resource = NOOT.Object.extend(Authable).extend(Queryable).extend({
         var unaddressed = Field.replaceReferenceWithWildcard(key).replace(/\.\d+$/, '');
         var isValidField = _.contains(writable, key) ||
           _.contains(writable, wildcarded) ||
-          _.contains(writable, unaddressed);
+          _.contains(writable, unaddressed) ||
+          !!_.find(self.fields, function (field) {
+            if (field.isAny) {
+              return (new RegExp('^' + NOOT.toRegExpString(field.publicPath))).test(unaddressed);
+            }
+          });
 
         if (!isValidField) {
           isValid = false;
