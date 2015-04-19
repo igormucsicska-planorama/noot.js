@@ -6,14 +6,10 @@ var events = require('events');
 var Domain = require('domain');
 var _ = require('lodash');
 
-
 /***********************************************************************************************************************
- * NOOT.TasksRunner.Task
- ***********************************************************************************************************************
- *
- *
- *
- *
+ * @class Task
+ * @namespace NOOT.TasksRunner
+ * @constructor
  **********************************************************************************************************************/
 var Task = NOOT.Object.extend(_.extend({
   job: null,
@@ -60,6 +56,6 @@ var Task = NOOT.Object.extend(_.extend({
 
 
 /**
- * @module
+ * @exports
  */
 module.exports = Task;

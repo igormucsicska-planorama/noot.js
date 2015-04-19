@@ -5,12 +5,12 @@ var NOOT = require('../../')('core-object');
 var path = require('path');
 
 /***********************************************************************************************************************
- * NOOT.CustomRequire
- ***********************************************************************************************************************
  *
  *
  *
- *
+ * @class CustomRequire
+ * @constructor
+ * @namespace NOOT
  **********************************************************************************************************************/
 var CustomRequire = NOOT.CoreObject.extend({
   root: null,
@@ -47,6 +47,6 @@ var CustomRequire = NOOT.CoreObject.extend({
 });
 
 /**
- * @module
+ * @exports
  */
 module.exports = CustomRequire;

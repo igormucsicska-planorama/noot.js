@@ -1,5 +1,5 @@
 # NOOT.js [![Build Status](https://travis-ci.org/planorama/noot.js.svg?branch=master)](https://travis-ci.org/planorama/noot.js) [![Coverage Status](https://img.shields.io/coveralls/planorama/noot.js.svg)](https://coveralls.io/r/planorama/noot.js?branch=master) [![NPM version](https://badge.fury.io/js/noot.svg)](http://badge.fury.io/js/noot) [![Code Climate](https://codeclimate.com/github/planorama/noot.js/badges/gpa.svg)](https://codeclimate.com/github/planorama/noot.js) (under development)
-**High quality, well tested, lightweight object oriented toolset for Node.js.**
+**Robust, well tested, lightweight object oriented toolset for Node.js.**
 
 
 ## Installation
@@ -10,6 +10,18 @@ $ npm install noot --save
 ## Philosophy
 NOOT is not a framework, it is a toolset designed to help developers starting projects with a common base of modules.
 
+
+## Recent news
+NOOT@0.6.0 has just been released and contains a bunch a new modules, such as :
+- NOOT.API : a tastypie like, storage agnostic APIs manager
+- NOOT.Enum : simple modle to deal with enumerations
+- NOOT.HTTP : enumeration of existing HTTP codes to make their usage more human friendly
+- NOOT.Mixin : a simple implementation of mixins behavior
+- NOOT.Mixins : namespace to contain various useful mixins
+- Lot of new utils and
+
+## Production usage
+All modules except NOOT.API are fully tested can be used in production. We're in the process of testing and improving the APIs module in our own systems and won't recommend it to be used before we are absolutely happy with the implementation.
 
 ## Usage
 
@@ -52,48 +64,12 @@ require('noot')('coreObject');
 In addition to modules, NOOT also provides several useful methods such as custom `typeOf`, jQuery's style `makeArray`... Complete list and documentation to be found [here](src/noot/utils/README.md). Those methods are directly attached to the NOOT namespace :
 
 ```javascript
-var NOOT = require('noot')('object');
+var NOOT = require('noot')();
 
-var Person = NOOT.Object.extend({
-  firstName: null,
-  init: function() {
-    if (NOOT.isString(this.firstName)) console.log('Hi, my name is', this.firstName);
-  }
-});
+NOOT.isString('foo'); // true
+NOOT.makeReadOnly({}, 'foo', 'bar');
+...
 ```
 
-## Modules
 
-#### [NOOT](src/noot/utils/README.md) *Namespace*
-Main Noot namespace.
-
-#### [NOOT.CoreObject](src/core-object/README.md) *Class*
-Core piece of this toolset, all NOOT modules are based on this object factory. With an Ember/Backbone style implementation, it allows you to create classes using prototypal inheritance and has a cool `_super()` feature.
-
-#### [NOOT.Object](src/core-object/README.md) *Class*
-For now, same as NOOT.CoreObject. In the future, this class will implement compted properties.
-
-#### [NOOT.Namespace](src/namespace/README.md) *Class*
-
-#### [NOOT.Configurator](src/configurator/README.md) *Class*
-Lightweight module to deal with environments configurations.
-
-#### [NOOT.Logger](src/logger/README.md) *Class*
-Simple logger that supports level configuration and custom/multiple transport methods.
-
-#### [NOOT.Url](src/url/README.md) *Namespace*
-
-#### [NOOT.Time](src/time/README.md) *Namespace*
-Time related utils such as time constants.
-
-#### [NOOT.CustomRequire](src/custom-require/README.md) *Factory*
-Create a custom `require` function to avoid dealing with relative paths.
-
-#### [NOOT.TasksRunner](src/tasks-runner/README.md) *Class*
-Croned tasks for your applicaton and workers.
-
-#### [NOOT.Mongoose.Schema](src/mongoose/README.md) *Class*
-Implement schema inheritance for Mongoose.
-
-##License
-Copyright (c) 2014 CDVM Solutions, released under the MIT license.
+## Documentation

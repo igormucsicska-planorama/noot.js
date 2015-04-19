@@ -5,14 +5,20 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-mocha-cov');
   grunt.loadNpmTasks('grunt-blanket');
 
+  var args = require('minimist')(process.argv, {
+    strings: ['file']
+  });
 
   var TO_IGNORE = [
     '**/*.js',
-    '!**/node_modules/**'
+    '!**/node_modules/**',
+    '!**/docs/**'
   ];
 
 
   grunt.initConfig({
+
+    pkg: grunt.file.readJSON('package.json'),
 
     /**
      * Git pre-commit hook
@@ -56,7 +62,7 @@ module.exports = function(grunt) {
             'test/common.js'
           ]
         },
-        src: ['test/**/*.test.js']
+        src: args.file ? args.file : ['test/**/*.test.js']
       },
       coveralls: {
         options: {

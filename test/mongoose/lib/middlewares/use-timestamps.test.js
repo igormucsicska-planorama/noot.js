@@ -1,11 +1,11 @@
 var NOOT = nootrequire('mongoose');
-var mongoose = require('mongoose');
-var _ = require('lodash');
+var Utils = require('../../../test-utils');
 
 var Schema = NOOT.Mongoose.Schema;
 
 var TEST_DB_NAME = 'noot-mongoose-middlewares-test';
 var TEST_COLLECTION_NAME = 'use_timestamps';
+var db;
 
 
 var UseTimestamps;
@@ -14,24 +14,15 @@ var UseTimestamps;
 describe('NOOT.Mongoose.useTimestamps()', function() {
 
   before(function(done) {
-    var schema = Schema
-      .extend({
+    db = Utils.DB.create({ name: TEST_DB_NAME, drop: true }, function(err) {
+      if (err) return done(err);
+      UseTimestamps = db.model('UseTimestamps', Schema.extend({
         schema: { foo: String, bar: Number },
         options: { collection: TEST_COLLECTION_NAME }
       })
-      .useTimestamps();
+      .useTimestamps());
 
-    UseTimestamps = mongoose.model('UseTimestamps', schema);
-
-    return mongoose.connect('mongodb://localhost:27017/' + TEST_DB_NAME, function() {
-      return mongoose.connection.db.collectionNames(function(err, names) {
-        if (err) done(err);
-        if (_.find(names, { name: TEST_DB_NAME + '.' + TEST_COLLECTION_NAME })) {
-          return mongoose.connection.collection(TEST_COLLECTION_NAME).drop(done);
-        } else {
-          return done();
-        }
-      });
+      return done();
     });
   });
 
@@ -45,7 +36,7 @@ describe('NOOT.Mongoose.useTimestamps()', function() {
 
     NOOT.Mongoose.useTimestamps(schema);
 
-    var UseTimestampsNamespace = mongoose.model('UseTimestampsAllNamespace', schema);
+    var UseTimestampsNamespace = db.model('UseTimestampsAllNamespace', schema);
 
     var now = Date.now();
     var delta = 100;
@@ -66,7 +57,7 @@ describe('NOOT.Mongoose.useTimestamps()', function() {
       .extend({ options: { collection: TEST_COLLECTION_NAME } })
       .useTimestamps();
 
-    var UseTimestampsSchema = mongoose.model('UseTimestampsSchema', schema);
+    var UseTimestampsSchema = db.model('UseTimestampsSchema', schema);
 
     var now = Date.now();
     var delta = 100;
@@ -107,7 +98,7 @@ describe('NOOT.Mongoose.useTimestamps()', function() {
       .extend({ options: { collection: TEST_COLLECTION_NAME } })
       .useTimestamps({ createdOn: 'creaOn', updatedOn: 'modOn' });
 
-    var UseTimestampsOptions = mongoose.model('UseTimestampsOptions', schema);
+    var UseTimestampsOptions = db.model('UseTimestampsOptions', schema);
 
     return UseTimestampsOptions.create({}, function(err, doc) {
       if (err) return done(err);
@@ -118,7 +109,7 @@ describe('NOOT.Mongoose.useTimestamps()', function() {
   });
 
   after(function(done) {
-    return mongoose.connection.close(done);
+    return db.close(done);
   });
 
 });

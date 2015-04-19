@@ -6,7 +6,8 @@ var changeCase = require('change-case');
 
 var DependenciesManager = {
   IRREGULAR_PROPERTY_NAMES: [
-    { reg: /^rest$/i, name: 'REST' }
+    { reg: /^api$/i, name: 'API' },
+    { reg: /^http$/i, name: 'HTTP' }
   ],
 
   /**
@@ -96,6 +97,6 @@ var DependenciesManager = {
 };
 
 /**
- * @module
+ * @exports
  */
 module.exports = DependenciesManager;

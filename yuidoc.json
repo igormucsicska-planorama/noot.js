@@ -1,0 +1,12 @@
+{
+  "name": "NOOT.js",
+  "description": "NOOT.js: Object oriented toolset for Node.js",
+  "url": "http://nootjs.com",
+  "logo": "/%2E%2E/yuidoc/images/logo.png",
+  "options": {
+    "paths": "./",
+    "exclude": "node_modules,test",
+    "outdir": "docs",
+    "tabtospace": 2
+  }
+}

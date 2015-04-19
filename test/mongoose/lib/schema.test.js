@@ -3,12 +3,17 @@
  */
 var NOOT = nootrequire('mongoose');
 var Schema = NOOT.Mongoose.Schema;
-var mongoose = require('mongoose');
 var async = require('async');
-var _ = require('lodash');
+var mongoose = require('mongoose');
+var Utils = require('../../test-utils');
 
 var TEST_DB_NAME = 'noot-mongoose-schema-test';
 
+var dbs = {
+  main: null,
+  one: null,
+  two: null
+};
 
 /**
  * PersonMongooseSchema
@@ -63,12 +68,22 @@ var EmployeeSchema = PersonSchema.extend({
   },
 
   methods: {
+
+    save: function() {
+      return this._super.apply(this, arguments);
+    },
+
     sayHello: function() {
       return this._super() + ', I work as a ' + this.job;
     }
   },
 
   statics: {
+
+    create: function() {
+      return this._super.apply(this, arguments);
+    },
+
     joinCompany: function () {
       return this._super();
     }
@@ -85,20 +100,50 @@ var EmployeeSchema = PersonSchema.extend({
 var DeveloperSchema = EmployeeSchema.extend({
   schema: {
     job: { type: String, default: 'Developer' }
+  },
+
+  methods: {
+
+    save: function() {
+      return this._super.apply(this, arguments);
+    }
+
   }
 });
 
 /**
  * ArtistSchema
  */
-var ArtistSchema = PersonSchema.extend({});
+var ArtistSchema = PersonSchema.extend({
+  schema: {
+    developer: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Singer' }]
+  },
+
+  methods: {
+
+    save: function() {
+      return this._super.apply(this, arguments);
+    }
+
+  }
+});
 
 /**
  * SingerSchema
  */
 var SingerSchema = ArtistSchema.extend({
   schema: {
-    type: { type: String }
+    type: { type: String },
+    fans: { type: Number }
+  },
+
+  methods: {
+
+    save: function() {
+      this.fans = 10;
+      return this._super.apply(this, arguments);
+    }
+
   }
 });
 
@@ -106,70 +151,24 @@ var SingerSchema = ArtistSchema.extend({
 /**
  * Models
  */
-var PersonLegacy = mongoose.model('PersonLegacy', PersonLegacySchema);
-var Person = mongoose.model('Person', PersonSchema);
-var Employee = mongoose.model('Employee', EmployeeSchema);
-var Developer = mongoose.model('Developer', DeveloperSchema);
-
-var Artist = mongoose.model('Artiste', ArtistSchema);
-var Singer = mongoose.model('Singer', SingerSchema);
-
+var Person;
+var Employee;
+var Developer;
+var PersonLegacy;
+var Artist;
+var Singer;
 
 /**
- * @type {PersonLegacy}
+ * Instances
  */
-var personLegacy = new PersonLegacy ({
-  name: 'Carol Doe',
-  age: 112
-});
-
-var employeeLegacy = new PersonLegacy ({
-  name: 'Lisa Doe',
-  age: 35,
-  __type: 'Employee'
-});
-
-var developerLegacy = new PersonLegacy ({
-  name: 'Bryan Doe',
-  age: 34,
-  __type: 'Developer'
-});
-
-/**
- * @type {Person}
- */
-var him = new Person({
-  name: 'John Doe',
-  age: 42
-});
-
-/**
- * @type {Employee}
- */
-var her = new Employee({
-  name: 'Jane Doe',
-  job: 'Category expert',
-  age: 38
-});
-
-/**
- * @type {Developer}
- */
-var me = new Developer({
-  name: 'Jean-Baptiste',
-  age: 28
-});
-
-var artist = new Artist({
-  name: 'Alice Doe',
-  age: 19
-});
-
-var singer = new Singer({
-  name: 'Frank Doe',
-  type: 'Rock',
-  age: 26
-});
+var him;
+var her;
+var me;
+var artist;
+var singer;
+var personLegacy;
+var employeeLegacy;
+var developerLegacy;
 
 
 var getItemFromList = function(item, list) {
@@ -182,25 +181,87 @@ var getItemFromList = function(item, list) {
 
 describe('NOOT.Mongoose.Schema', function() {
 
-  var dbs = {
-    one: null,
-    two: null
-  };
-
-  var Obj1Schema, Obj2Schema, ExtendObjSchema;
-  var Obj1, Obj2, ExtendObj;
-  var obj1, obj2, extendObj;
+  var Obj1Schema;
+  var Obj2Schema;
+  var ExtendObjSchema;
+  var Obj1;
+  var Obj2;
+  var ExtendObj;
+  var obj1;
+  var obj2;
+  var extendObj;
 
   before(function(done) {
-    return mongoose.connect('mongodb://localhost:27017/' + TEST_DB_NAME, function() {
-      return mongoose.connection.db.collectionNames(function(err, names) {
-        if (err) done(err);
-        if (_.find(names, { name: TEST_DB_NAME + '.' + 'person' })) {
-          return mongoose.connection.collection('person').drop(done);
-        } else {
-          return done();
-        }
+    dbs.main = Utils.DB.create({ name: TEST_DB_NAME, drop: true }, function(err) {
+      if (err) return done(err);
+
+      /**
+       * Models
+       */
+      Person = dbs.main.model('Person', PersonSchema);
+      Employee = dbs.main.model('Employee', EmployeeSchema);
+      Developer = dbs.main.model('Developer', DeveloperSchema);
+      PersonLegacy = dbs.main.model('PersonLegacy', PersonLegacySchema);
+      Artist = dbs.main.model('Artiste', ArtistSchema);
+      Singer = dbs.main.model('Singer', SingerSchema);
+
+      /**
+       * @type {Person}
+       */
+      him = new Person({
+        name: 'John Doe',
+        age: 42
       });
+
+      /**
+       * @type {Employee}
+       */
+      her = new Employee({
+        name: 'Jane Doe',
+        job: 'Category expert',
+        age: 38
+      });
+
+      /**
+       * @type {Developer}
+       */
+      me = new Developer({
+        name: 'Jean-Baptiste',
+        age: 28
+      });
+
+      artist = new Artist({
+        name: 'Alice Doe',
+        age: 19
+      });
+
+      singer = new Singer({
+        name: 'Frank Doe',
+        type: 'Rock',
+        age: 26
+      });
+
+      /**
+       * @type {PersonLegacy}
+       */
+      personLegacy = new PersonLegacy ({
+        name: 'Carol Doe',
+        age: 112
+      });
+
+      employeeLegacy = new PersonLegacy ({
+        name: 'Lisa Doe',
+        age: 35,
+        __type: 'Employee'
+      });
+
+      developerLegacy = new PersonLegacy ({
+        name: 'Bryan Doe',
+        age: 34,
+        __type: 'Developer'
+      });
+
+      return done();
     });
   });
 
@@ -219,16 +280,7 @@ describe('NOOT.Mongoose.Schema', function() {
       { name: TEST_DB_NAME + 'db1', reference: 'one' },
       { name: TEST_DB_NAME + 'db2', reference: 'two' }
     ], function(item, cb) {
-      dbs[item.reference] = mongoose.createConnection('mongodb://localhost:27017/' + item.name, function () {
-        return dbs[item.reference].db.collectionNames(function (err, names) {
-          if (err) done(err);
-          if (_.find(names, { name: item.name + '.' + 'obj' })) {
-            return dbs[item.reference].collection('obj').drop(cb);
-          } else {
-            return cb();
-          }
-        });
-      });
+      dbs[item.reference] = Utils.DB.create({ name: item.name, drop: true }, cb);
     }, done);
   });
 
@@ -267,7 +319,7 @@ describe('NOOT.Mongoose.Schema', function() {
      */
     Obj1 = dbs.one.model('Obj', Obj1Schema);
     Obj2 = dbs.two.model('Obj', Obj2Schema);
-    ExtendObj = dbs.one.model('extendObj', ExtendObjSchema);
+    ExtendObj = dbs.one.model('ExtendObj', ExtendObjSchema);
 
     /**
      * @type {Obj1}
@@ -291,10 +343,7 @@ describe('NOOT.Mongoose.Schema', function() {
     });
 
     async.each([obj1, obj2, extendObj], function(item, cb) {
-      item.save(function(err) {
-        if (err) done(err);
-        return cb();
-      });
+      return item.save(cb);
     }, done);
 
   });
@@ -317,7 +366,7 @@ describe('NOOT.Mongoose.Schema', function() {
   });
 
   it('should insert documents with right values', function(done) {
-    return async.each([me, her, him, artist, singer, personLegacy, employeeLegacy, developerLegacy],
+    return async.eachSeries([me, her, him, artist, singer, personLegacy, employeeLegacy, developerLegacy],
         function(item, cb) {
           return item.save(cb);
         }, function(err) {
@@ -353,6 +402,7 @@ describe('NOOT.Mongoose.Schema', function() {
             retrievedSinger.name.should.be.eql('Frank Doe');
             retrievedSinger.type.should.be.eql('Rock');
             retrievedSinger.age.should.be.eql(26);
+            retrievedSinger.fans.should.be.eql(10); // Make sure overriden `save` has added value for `fans`
 
             return done();
           });
@@ -551,8 +601,8 @@ describe('NOOT.Mongoose.Schema', function() {
   });
 
   after(function(done) {
-    return async.each([mongoose, dbs.one, dbs.two], function(db, cb) {
-      return (db.connection || db).close(cb);
+    return async.each([dbs.main, dbs.one, dbs.two], function(db, cb) {
+      return db.close(cb);
     }, done);
   });
 
