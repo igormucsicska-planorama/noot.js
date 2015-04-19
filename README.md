@@ -12,9 +12,9 @@ NOOT is not a framework, it is a toolset designed to help developers starting pr
 
 
 ## Recent news
-NOOT@0.6.0 has just been released and contains a bunch a new modules, such as :
-- NOOT.API : a tastypie like, storage agnostic APIs manager
-- NOOT.Enum : simple modle to deal with enumerations
+NOOT@0.6.x has just been released and contains a bunch a new modules, such as :
+- NOOT.API : a tastypie like, storage agnostic APIs and resources manager
+- NOOT.Enum : simple module to deal with enumerations
 - NOOT.HTTP : enumeration of existing HTTP codes to make their usage more human friendly
 - NOOT.Mixin : a simple implementation of mixins behavior
 - NOOT.Mixins : namespace to contain various useful mixins
@@ -61,15 +61,23 @@ require('noot')('coreObject');
 
 
 #### Useful methods
-In addition to modules, NOOT also provides several useful methods such as custom `typeOf`, jQuery's style `makeArray`... Complete list and documentation to be found [here](src/noot/utils/README.md). Those methods are directly attached to the NOOT namespace :
+In addition to modules, NOOT also provides several useful methods such as custom `typeOf`, jQuery's style `makeArray`...
 
 ```javascript
 var NOOT = require('noot')();
 
 NOOT.isString('foo'); // true
+NOOT.isNone(undefined); // true
+NOOT.isEmpty([]); // true
+NOOT.isEmpty({}); // true
 NOOT.makeReadOnly({}, 'foo', 'bar');
 ...
 ```
 
 
 ## Documentation
+
+- Install `yuidocjs` globally
+- `cd` to NOOT's directory
+- Run `yuidoc --server`
+- Go to `localhost:3000`
