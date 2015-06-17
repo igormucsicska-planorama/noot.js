@@ -15,8 +15,8 @@ var Post = Route.extend({
   path: '/',
   isDetailable: false,
 
-  handler: function(stack) {
-    return this.resource.create(stack);
+  handler: function(stack, callback) {
+    return this.resource.create(stack, callback);
   }
 
 });
