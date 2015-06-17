@@ -31,10 +31,10 @@ var Delete = Route.extend({
    * @property handler
    * @type middleware
    */
-  handler: function(stack) {
+  handler: function(stack, callback) {
     var id = stack.params.id;
     if (id) stack.primaryKey = id;
-    return id ? this.resource.delete(stack) : this.resource.deleteMany(stack);
+    return id ? this.resource.delete(stack, callback) : this.resource.deleteMany(stack, callback);
   }
 
 });
