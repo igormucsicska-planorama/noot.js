@@ -232,11 +232,10 @@ var Queryable = NOOT.Mixin.create({
     ['selectable', 'sortable', 'writable', 'filterable']
       .forEach(this._buildAllowedFieldsForType.bind(this));
 
-    ['maxGetLimit', 'defaultGetLimit', 'operatorSeparator', 'fieldsPaths']
-      .forEach(function(field) {
-          this['_' + field] = this[field];
-          this._defineBubbledProperty(field);
-      }.bind(this));
+    ['maxGetLimit', 'defaultGetLimit', 'operatorSeparator', 'fieldsPaths'].forEach(function(field) {
+      this['_' + field] = this[field];
+      this._defineBubbledProperty(field);
+    }.bind(this));
   },
 
   /**
