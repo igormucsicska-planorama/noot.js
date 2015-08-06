@@ -47,7 +47,7 @@ var MongooseResource = MongoResource.extend({
       if (err) return callback(NOOT.Errors.fromMongooseError(err));
       if (!item) return callback(new NOOT.Errors.NotFound());
       stack.setData(item).setStatus(NOOT.HTTP.OK);
-      return callback();
+      return callback(null, item);
     });
   },
 
@@ -73,7 +73,7 @@ var MongooseResource = MongoResource.extend({
         return self.getCount(query.filter, function(err, count) {
           if (err) return callback(NOOT.Errors.fromMongooseError(err));
           stack.createManyMeta(count).setData(items).setStatus(NOOT.HTTP.OK);
-          return callback();
+          return callback(null, items);
         });
       });
   },
@@ -92,7 +92,7 @@ var MongooseResource = MongoResource.extend({
       if (err) return callback(NOOT.Errors.fromMongooseError(err));
       if (isMultiple && !Array.isArray(items)) items = NOOT.makeArray(arguments).slice(1);
       stack.setData(items).setStatus(NOOT.HTTP.Created);
-      return callback();
+      return callback(null, items);
     });
   },
 
@@ -111,7 +111,7 @@ var MongooseResource = MongoResource.extend({
     return this.model.update({ _id: stack.primaryKey }, { $set: stack.body }, function(err, count) {
       if (err) return callback(NOOT.Errors.fromMongooseError(err));
       stack.pushMessage('Successfully updated', count, 'item').setStatus(NOOT.HTTP.NoContent);
-      return callback();
+      return callback(null, count);
     });
   },
 
@@ -128,7 +128,7 @@ var MongooseResource = MongoResource.extend({
     return this.model.update(stack.query.filter, { $set: stack.body }, { multi: true }, function(err, count) {
       if (err) return callback(NOOT.Errors.fromMongooseError(err));
       stack.pushMessage('Successfully updated', count, 'item(s)').setStatus(NOOT.HTTP.NoContent);
-      return callback();
+      return callback(null, count);
     });
   },
 
@@ -145,7 +145,7 @@ var MongooseResource = MongoResource.extend({
     return this.model.remove({ _id: stack.primaryKey }, function(err, count) {
       if (err) return callback(NOOT.Errors.fromMongooseError(err));
       stack.pushMessage('Successfully removed', count, 'item').setStatus(NOOT.HTTP.NoContent);
-      return callback();
+      return callback(null, count);
     });
   },
 
@@ -162,7 +162,7 @@ var MongooseResource = MongoResource.extend({
     return this.model.remove(stack.query.filter, function(err, count) {
       if (err) return callback(NOOT.Errors.fromMongooseError(err));
       stack.pushMessage('Successfully removed', count, 'item(s)').setStatus(NOOT.HTTP.NoContent);
-      return callback();
+      return callback(null, count);
     });
   },
 

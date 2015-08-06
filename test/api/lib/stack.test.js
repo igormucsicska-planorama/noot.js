@@ -42,7 +42,7 @@ var createStack = function(req, res, next) {
     writable: ['a', 'b', 'c'],
     sortable: ['a', 'b', 'c'],
     filterable: ['a', 'b', 'c'],
-    maxGetLimit: 100,
+    maxGetLimit: 111,
     defaultGetLimit: 20
   });
   return next();
@@ -101,10 +101,10 @@ describe('NOOT.API.Stack', function() {
       }, done);
     });
     it('should correctly parse limit (> maxGetLimit)', function(done) {
-      return test({ qs: { limit: 105 } }, function(req, res) {
+      return test({ qs: { limit: 120 } }, function(req, res) {
         var stack = req.stack;
         stack.parseQueryString();
-        stack.query.limit.should.eql(100);
+        stack.query.limit.should.eql(111);
         return res.sendStatus(204);
       }, done);
     });
