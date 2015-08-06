@@ -201,9 +201,9 @@ describe('NOOT.API.Operators', function() {
         });
       });
       it('should build a regex ', function(done) {
-        Operators.regex.parseFromQueryString('/abc(\.)*/g', null, function(err, value) {
+        Operators.regex.parseFromQueryString('/abc(\.)*/g', null, function(err, value) {  //jshint ignore:line
           if (err) return done(err);
-          value.should.deep.eql(new RegExp('abc(\.)*', 'g'));
+          value.should.deep.eql(new RegExp('abc(\.)*', 'g'));  //jshint ignore:line
           return done();
         });
       });
