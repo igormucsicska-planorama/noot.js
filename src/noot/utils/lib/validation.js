@@ -1,4 +1,5 @@
 var _ = require('lodash');
+var Types = require('./types');
 
 var ValidationUtils = {
 
@@ -10,13 +11,26 @@ var ValidationUtils = {
    * @static
    * @param {Object} obj Object against which to run the tests
    * @param {String} [str, ...] Properties names
+   * @param {Function} callback Optional
    */
   required: function() {
     var args = Array.prototype.slice.call(arguments, 0);
     var obj = args.shift();
-    return args.forEach(function(name) {
-      if (!obj[name]) throw new Error('`' + name + '` is mandatory');
+    var missings = [];
+
+    var _throw = function(err) {
+      if (err) throw err;
+    };
+
+    var callback = Types.isFunction(args[args.length - 1]) ? args.pop() : _throw;
+
+    args.forEach(function(name) {
+      if (Types.isNone(obj[name])) missings.push(name);
     });
+
+    if (!missings.length) return callback();
+    var err = new Error('Mandatory parameters: `' + missings.join('`, `') + '`');
+    return callback(err);
   },
 
   /**
