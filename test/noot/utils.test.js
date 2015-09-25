@@ -49,4 +49,40 @@ describe('NOOT (utils)', function() {
     });
   });
 
+  describe('.required()', function() {
+    var obj = {
+      book: 'JavaScript, The Good Parts',
+      by: 'Douglas Crockford',
+      promo: false
+    };
+
+    it('should throw an error', function() {
+      (function() {
+        return NOOT.required(obj, 'year', 'price');
+      }).should.throw(/Mandatory parameters: `year`, `price`/);
+    });
+
+    it('should not throw an error', function() {
+      (function() {
+        return NOOT.required(obj, 'book', 'by', 'promo');
+      }).should.not.throw();
+    });
+
+    it('should return a callback with an error', function(done) {
+      return NOOT.required(obj, 'year', 'price', function(err) {
+        err.message.should.match(/Mandatory parameters: `year`, `price`/);
+        return done();
+      });
+    });
+
+    it('should return a callback without an error', function(done) {
+      return NOOT.required(obj, 'book', 'by', 'promo', function(err) {
+        (err === undefined).should.be.equal(true);
+        return done();
+      });
+    });
+
+
+  });
+
 });
