@@ -16,6 +16,9 @@ describe('NOOT.API.Fields.Date', function() {
       var datetime = moment().format('YYYY/MM/DD HH:mm:ss');
       field.parseFromQueryString(datetime).should.deep.eql(new Date(Date.parse(datetime)));
     });
+    it('should return null', function() {
+      NOOT.isNull(field.parseFromQueryString('null')).should.eql(true);
+    });
     it('should not return a valid date (bad timestamp)', function() {
       isNaN(field.parseFromQueryString(Date.now().toString() + 'd')).should.eql(true);
     });
@@ -39,6 +42,9 @@ describe('NOOT.API.Fields.Date', function() {
     });
     it('should not validate an invalid date', function() {
       field.validate(new Date('foobarbaz')).should.eql(false);
+    });
+    it('should not validate null', function() {
+      field.validate(null).should.eql(true);
     });
     it('should return false (missing parameter)', function() {
       requiredField.validate().should.eql(false);

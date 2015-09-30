@@ -30,6 +30,7 @@ var DateField = Field.extend({
    * @return {Date|NaN}
    */
   parseFromQueryString: function(value) {
+    if (value === 'null') return null;
     return value ?
       this.isTimestamp(value) ? new Date(parseInt(value, 10)) : new Date(Date.parse(value)) :
       NaN;
@@ -55,7 +56,7 @@ var DateField = Field.extend({
    */
   validate: function(value) {
     if (!this._super(value)) return false;
-    return NOOT.isValidDate(value);
+    return NOOT.isNull(value) || NOOT.isValidDate(value);
   }
 });
 

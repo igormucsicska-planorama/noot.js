@@ -21,7 +21,7 @@ var IntegerField = NumberField.extend({
    * @return {Number}
    */
   parseFromQueryString: function(value) {
-    return parseInt(value, 10);
+    return (value === 'null') ? null : parseInt(value, 10);
   }
 
 });
