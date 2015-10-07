@@ -31,7 +31,7 @@ var StringField = Field.extend({
    */
   validate: function(value) {
     if (!this._super(value)) return false;
-    return NOOT.isString(value);
+    return NOOT.isNull(value) || NOOT.isString(value);
   }
 
 });

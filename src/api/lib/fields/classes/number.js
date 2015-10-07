@@ -30,7 +30,7 @@ var NumberField = Field.extend({
    * @return {Number}
    */
   parseFromQueryString: function(value) {
-    return parseFloat(value);
+    return (value === 'null') ? null : parseFloat(value);
   },
 
   /**
@@ -41,7 +41,7 @@ var NumberField = Field.extend({
    */
   validate: function(value) {
     if (!this._super(value)) return false;
-    return !isNaN(value) && NOOT.isNumber(value);
+    return NOOT.isNull(value) || !isNaN(value) && NOOT.isNumber(value);
   }
 });
 

@@ -15,6 +15,9 @@ describe('NOOT.API.Fields.Boolean', function() {
       field.parseFromQueryString(123).should.eql(false);
       field.parseFromQueryString('false').should.eql(false);
     });
+    it('should parse "null" as null', function() {
+      NOOT.isNull(field.parseFromQueryString('null')).should.eql(true);
+    });
   });
 
   describe('.prototype.validate()', function() {
@@ -24,6 +27,9 @@ describe('NOOT.API.Fields.Boolean', function() {
     });
     it('should not validate a number', function() {
       field.validate(123).should.eql(false);
+    });
+    it('should validate null', function() {
+      field.validate(null).should.eql(true);
     });
     it('should return false (missing parameter)', function() {
       requiredField.validate().should.eql(false);

@@ -15,11 +15,17 @@ describe('NOOT.API.Fields.Number', function() {
     it('should return NaN', function() {
       field.parseFromQueryString('d123d').should.eql(NaN);
     });
+    it('should return null', function() {
+      NOOT.isNull(field.parseFromQueryString('null')).should.eql(true);
+    });
   });
 
   describe('.prototype.validate()', function() {
     it('should validate a valid number', function() {
       field.validate(123).should.eql(true);
+    });
+    it('should validate null', function() {
+      field.validate(null).should.eql(true);
     });
     it('should not validate an invalid number', function() {
       field.validate(NaN).should.eql(false);

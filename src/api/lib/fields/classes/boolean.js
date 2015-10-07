@@ -30,7 +30,7 @@ var BooleanField = Field.extend({
    * @returns {Boolean}
    */
   parseFromQueryString: function(value) {
-    return value === 'true';
+    return (value === 'null') ? null : value === 'true';
   },
 
   /**
@@ -41,7 +41,8 @@ var BooleanField = Field.extend({
    * @return {Boolean}
    */
   validate: function(value) {
-    return this._super(value) && NOOT.isBoolean(value);
+    if (!this._super(value)) return false;
+    return NOOT.isNull(value) || NOOT.isBoolean(value);
   }
 
 });
