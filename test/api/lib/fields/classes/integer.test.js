@@ -13,6 +13,9 @@ describe('NOOT.API.Fields.Integer', function() {
     it('should return NaN', function() {
       field.parseFromQueryString('d123d').should.eql(NaN);
     });
+    it('should return null', function() {
+      NOOT.isNull(field.parseFromQueryString('null')).should.eql(true);
+    });
   });
 
 });

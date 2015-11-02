@@ -124,7 +124,7 @@ var Field = NOOT.Object.extend({
    * @return {*}
    */
   parseFromQueryString: function(value) {
-    return value;
+    return (value === 'null') ? null : value;
   },
 
   /**

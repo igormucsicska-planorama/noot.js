@@ -43,7 +43,8 @@ var MongooseResource = MongoResource.extend({
    */
   get: function(stack, callback) {
     callback = callback || stack.next;
-    return this.model.findOne({ _id: stack.primaryKey }, stack.query.select, function(err, item) {
+    var query = _.assign(stack.query.filter, { _id: stack.primaryKey });
+    return this.model.findOne(query, stack.query.select, function(err, item) {
       if (err) return callback(NOOT.Errors.fromMongooseError(err));
       if (!item) return callback(new NOOT.Errors.NotFound());
       stack.setData(item).setStatus(NOOT.HTTP.OK);

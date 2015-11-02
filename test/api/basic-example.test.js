@@ -16,7 +16,7 @@ app.use(bodyParser());
 
 
 var users = [
-  { firstName: 'John', lastName: 'Doe', email: 'john-doe@nootjs.com', random: 12 },
+  { firstName: 'John', lastName: 'Doe', email: 'john-doe@nootjs.com', random: 12, ca: 123 },
   { firstName: 'Jane', lastName: 'Doe', email: 'jane-doe@nootjs.com', random: ['12'] },
   { firstName: 'Bart', lastName: 'Doe', email: 'bart-doe@nootjs.com', random: '12' },
   { firstName: 'Homer', lastName: 'Doe', email: 'homer-doe@nootjs.com' }
@@ -43,7 +43,8 @@ describe('NOOT.API - Basic example', function() {
         firstName: String,
         lastName: String,
         email: { type: String, required: true, unique: true },
-        random: mongoose.Schema.Types.Mixed
+        random: mongoose.Schema.Types.Mixed,
+        ca: Number
       }
     }));
 
@@ -122,6 +123,28 @@ describe('NOOT.API - Basic example', function() {
           res.body.data.email.should.eql(user.email);
           return done();
         });
+    });
+  });
+
+  it('should find a user by id with a correct query string', function(done) {
+    return db.model('User').findOne({ ca: 123 }, function(err, user) {
+      if (err) return done(err);
+      return supertest(app)
+        .get('/my-api/users/' + user._id + '?' + qs.stringify({ ca: 123 }))
+        .expect(200, function(err, res) {
+          if (err) return done(err);
+          res.body.data.email.should.eql(user.email);
+          return done();
+        });
+    });
+  });
+
+  it('should not find a user by id with a wrong query string', function(done) {
+    return db.model('User').findOne({ ca: 123 }, function(err, user) {
+      if (err) return done(err);
+      return supertest(app)
+        .get('/my-api/users/' + user._id + '?' + qs.stringify({ ca: 124 }))
+        .expect(404, done);
     });
   });
 
