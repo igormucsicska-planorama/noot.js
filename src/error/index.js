@@ -33,15 +33,16 @@ var NOOTError = function(options) {
 /**
  * Inherit from Error
  */
-NOOTError.prototype = Error.prototype;
-NOOTError.prototype.constructor = NOOTError;
-
-
-/**
- * Default values
- */
-NOOTError.prototype.statusCode = 500;
-NOOTError.prototype.loggingLevel = 'error';
+NOOTError.prototype = Object.create(Error.prototype);
+_.extend(NOOTError.prototype, {
+  constructor: NOOTError,
+  /**
+   * Default values
+   */
+  statusCode : 500,
+  loggingLevel : 'error',
+  isNOOTError : true
+});
 
 
 /**
