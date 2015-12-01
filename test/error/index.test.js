@@ -25,6 +25,11 @@ describe('NOOT.Error', function() {
   describe('Class', function() {
     var TestError = NOOT.Error.extend({ statusCode: 404, name: 'TestError', loggingLevel: 'warn' });
 
+    it('a non NOOTError should not have isNOOTError', function() {
+      var err = new Error('Not a NOOTError');
+      global.should.not.exist(err.isNOOTError);
+    });
+
     it('should create an instance', function() {
       var err = new TestError('Error message');
       NOOT.isError(err).should.equal(true);
@@ -33,6 +38,7 @@ describe('NOOT.Error', function() {
       err.name.should.equal('TestError');
       err.code.should.equal('TestError');
       err.loggingLevel.should.equal('warn');
+      err.isNOOTError.should.equal(true);
     });
 
     it('should inherit properties from parent', function() {
@@ -44,6 +50,7 @@ describe('NOOT.Error', function() {
       err.name.should.equal('ChildError');
       err.code.should.equal('Error');
       err.loggingLevel.should.equal('warn');
+      err.isNOOTError.should.equal(true);
     });
   });
 
