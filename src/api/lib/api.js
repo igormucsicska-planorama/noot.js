@@ -163,10 +163,9 @@ var API = NOOT.Object.extend(Authable).extend({
     var routes = API.sortRoutes(allRoutes);
 
     routes.forEach(function(route) {
+      if (self.errorHandler) route.handlers.push(self.errorHandler.bind(self));
       server[route.method].apply(server, [route.path].concat(route.handlers));
     });
-
-    if (this.errorHandler) server.use(this.errorHandler);
 
     NOOT.makeReadOnly(this, 'resources', resources);
     NOOT.makeReadOnly(this, 'routes', routes);
