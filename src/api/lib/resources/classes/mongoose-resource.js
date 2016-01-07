@@ -246,8 +246,11 @@ var MongooseResource = MongoResource.extend({
       (mongoosePath.casterConstructor) ||
       (mongoosePath.options && mongoosePath.options.type);
 
-    switch (instance) {
+    if (instance === 'Array' && mongoosePath.caster && mongoosePath.caster.instance) {
+      instance = mongoosePath.caster.instance;
+    }
 
+    switch (instance) {
       case 'String':
         FieldClass = Fields.String;
         break;
@@ -273,15 +276,15 @@ var MongooseResource = MongoResource.extend({
         FieldClass = Fields.Number;
         break;
 
-      case Date:
+      case 'Date':
         FieldClass = Fields.Date;
         break;
 
-      case Boolean:
+      case 'Boolean':
         FieldClass = Fields.Boolean;
         break;
 
-      case mongoose.Schema.Types.Mixed:
+      case mongoose.Schema.Types.Mixed.schemaName:
         FieldClass = Fields.Any;
         _.extend(options, { isAny: true });
         break;
