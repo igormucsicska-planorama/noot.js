@@ -102,11 +102,7 @@ var Errors = NOOT.Namespace.create({
     var ErrorClass = _.find(Errors, function(item) { return item.prototype.statusCode === statusCode; }) ||
       Errors.InternalServerError;
 
-    return (function() {
-      function Wrapper() { return ErrorClass.apply(this, args); }
-      Wrapper.prototype = ErrorClass.prototype;
-      return new Wrapper();
-    })();
+    return new ErrorClass(args);
   }
 
 });
