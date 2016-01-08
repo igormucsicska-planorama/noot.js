@@ -84,8 +84,9 @@ describe('NOOT.API - Validation', function() {
   });
 
   testConfigList.forEach(function(testConfig) {
-    var desc = !testConfig.validationError ? 'should succeed if all data is valid' : 'should not succeed if any data ' +
-        'is not valid';
+    var desc = !testConfig.validationError ?
+      'should succeed if all data is valid' :
+      'should not succeed if any data is not valid';
 
     describe(testConfig.method + ' routes', function() {
       it(desc, function(done) {
