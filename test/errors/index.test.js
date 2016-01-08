@@ -87,5 +87,10 @@ describe('NOOT.Errors', function() {
     it('should have passed arguments to error class', function() {
       NOOT.Errors.fromStatusCode(409, 'Bad things happened').message.should.eql('Bad things happened');
     });
+    it('should be capable to handle when it is called with `apply`', function () {
+      var err = NOOT.Errors.fromStatusCode.apply(NOOT.Errors, [404, 'Not found - test']);
+      err.message.should.eql('Not found - test');
+      err.should.be.an.instanceOf(NOOT.Errors.NotFound);
+    });
   });
 });
