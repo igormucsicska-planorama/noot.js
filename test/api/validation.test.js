@@ -117,12 +117,11 @@ describe('NOOT.API - Validation', function() {
 
             if (!testConfig.validationError) {
               if (method === 'post') {
-                res.body.data.should.to.exist;
+                res.body.data.should.exist;
               }
             } else {
               res.body.error.should.to.be.true;
-              res.body.messages[0].should.to.contain('ValidationError');
-
+              res.body.messages[0].should.contain('ValidationError');
             }
 
             return done();
