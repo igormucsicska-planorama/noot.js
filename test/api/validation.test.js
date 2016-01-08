@@ -91,36 +91,28 @@ describe('NOOT.API - Validation', function() {
     describe(testConfig.method + ' routes', function() {
       it(desc, function(done) {
         var method = testConfig.method.toLowerCase();
-        var status;
-        var url;
-        var data;
+        var routes = {
+          post: {
+            status: 201,
+            url: '/my-api/users',
+            data: testConfig.data
+          },
+          put: {
+            status: 204,
+            url: '/my-api/users?' + qs.stringify({ _id: testUser._id.toString() }),
+            data: _.extend(_.omit(testUser, ['__v', '_id']), testConfig.data)
+          },
+          patch: {
+            status: 204,
+            url: '/my-api/users/' + testUser._id,
+            data: testConfig.data
+          }
+        };
 
-        switch (method) {
-          case 'post':
-            status = 201;
-            url = '/my-api/users';
-            data = testConfig.data;
-            break;
-          case 'put':
-            status = 204;
-            url = '/my-api/users?' + qs.stringify({ _id: testUser._id.toString() });
-            data = _.extend(_.omit(testUser, ['__v', '_id']), testConfig.data);
-            break;
-          case 'patch':
-            status = 204;
-            url = '/my-api/users/' + testUser._id;
-            data = testConfig.data;
-            break;
-        }
-
-        if (testConfig.validationError) {
-          status = 400;
-        }
-
-        supertest(app)
-          [method](url)
-          .send(data)
-          .expect(status, function(err, res) {
+        return supertest(app)
+          [method](routes[method].url)
+          .send(routes[method].data)
+          .expect(testConfig.validationError ? 400 : routes[method].status, function(err, res) {
             if (err) return done(err);
 
             if (!testConfig.validationError) {
