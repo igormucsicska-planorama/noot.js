@@ -68,9 +68,9 @@ describe('NOOT.API - Validation', function() {
     return async.series({
       db: function (cb) {
         User.create({ name: 'John Doe', age: 45, phone: '123-456-7890' }, function(err, data) {
-          if (err) cb(err);
+          if (err) return cb(err);
           testUser = data.toObject();
-          cb();
+          return cb();
         });
       },
       server: function (cb) {
@@ -78,7 +78,7 @@ describe('NOOT.API - Validation', function() {
           .registerResource('User', UserResource)
           .launch();
 
-        cb();
+        return cb();
       }
     }, done);
   });
@@ -132,7 +132,7 @@ describe('NOOT.API - Validation', function() {
 
             }
 
-            done();
+            return done();
           });
       });
     });
