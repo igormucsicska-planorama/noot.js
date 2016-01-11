@@ -109,11 +109,16 @@ var MongooseResource = MongoResource.extend({
   update: function(stack, callback) {
     // TODO use messages provider
     callback = callback || stack.next;
-    return this.model.update({ _id: stack.primaryKey }, { $set: stack.body }, function(err, count) {
-      if (err) return callback(NOOT.Errors.fromMongooseError(err));
-      stack.pushMessage('Successfully updated', count, 'item').setStatus(NOOT.HTTP.NoContent);
-      return callback(null, count);
-    });
+    return this.model.update(
+      { _id: stack.primaryKey },
+      { $set: stack.body },
+      { runValidators: true },
+      function(err, count) {
+        if (err) return callback(NOOT.Errors.fromMongooseError(err));
+        stack.pushMessage('Successfully updated', count, 'item').setStatus(NOOT.HTTP.NoContent);
+        return callback(null, count);
+      }
+    );
   },
 
   /**
@@ -126,11 +131,16 @@ var MongooseResource = MongoResource.extend({
   updateMany: function(stack, callback) {
     // TODO use messages provider
     callback = callback || stack.next;
-    return this.model.update(stack.query.filter, { $set: stack.body }, { multi: true }, function(err, count) {
-      if (err) return callback(NOOT.Errors.fromMongooseError(err));
-      stack.pushMessage('Successfully updated', count, 'item(s)').setStatus(NOOT.HTTP.NoContent);
-      return callback(null, count);
-    });
+    return this.model.update(
+      stack.query.filter,
+      { $set: stack.body },
+      { multi: true, runValidators: true },
+      function(err, count) {
+        if (err) return callback(NOOT.Errors.fromMongooseError(err));
+        stack.pushMessage('Successfully updated', count, 'item(s)').setStatus(NOOT.HTTP.NoContent);
+        return callback(null, count);
+      }
+    );
   },
 
   /**
@@ -246,8 +256,11 @@ var MongooseResource = MongoResource.extend({
       (mongoosePath.casterConstructor) ||
       (mongoosePath.options && mongoosePath.options.type);
 
-    switch (instance) {
+    if (instance === 'Array' && mongoosePath.caster && mongoosePath.caster.instance) {
+      instance = mongoosePath.caster.instance;
+    }
 
+    switch (instance) {
       case 'String':
         FieldClass = Fields.String;
         break;
@@ -273,15 +286,15 @@ var MongooseResource = MongoResource.extend({
         FieldClass = Fields.Number;
         break;
 
-      case Date:
+      case 'Date':
         FieldClass = Fields.Date;
         break;
 
-      case Boolean:
+      case 'Boolean':
         FieldClass = Fields.Boolean;
         break;
 
-      case mongoose.Schema.Types.Mixed:
+      case mongoose.Schema.Types.Mixed.schemaName:
         FieldClass = Fields.Any;
         _.extend(options, { isAny: true });
         break;
