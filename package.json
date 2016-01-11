@@ -1,6 +1,6 @@
 {
   "name": "noot",
-  "version": "0.6.20",
+  "version": "1.0.0",
   "description": "High quality, well tested, lightweight object oriented toolset for Node.js",
   "main": "index.js",
   "directories": {
@@ -77,6 +77,22 @@
     {
       "name": "Sylvain Estevez",
       "email": "sylvain.estevez@planorama.com"
+    },
+    {
+      "name": "Jean-Baptiste Brasselet",
+      "email": "jeanbaptiste.brasselet@planorama.com"
+    },
+    {
+      "name": "Tamas Hodi",
+      "email": "tamas.hodi@planorama.com"
+    },
+    {
+      "name": "Igor Mucsicska",
+      "email": "igor.mucsicska@planorama.com"
+    },
+    {
+      "name": "Szabolcs Szilagyi",
+      "email": "szabolcs.szilagyi@planorama.com"
     }
   ],
   "license": "MIT"
