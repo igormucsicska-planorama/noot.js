@@ -2,6 +2,7 @@
  * Dependencies
  */
 var Route = require('../route');
+var NOOT = require('../../../../index')('errors');
 
 /***********************************************************************************************************************
  * @class Delete
@@ -31,10 +32,20 @@ var Delete = Route.extend({
    * @property handler
    * @type middleware
    */
-  handler: function(stack, callback) {
+  handler: function(stack) {
     var id = stack.params.id;
-    if (id) stack.primaryKey = id;
-    return id ? this.resource.delete(stack, callback) : this.resource.deleteMany(stack, callback);
+
+    if (!id) {
+      if (!this.resource.allowMassDelete) {
+
+        return stack.next(new NOOT.Errors.NotFound());
+      }
+
+      return this.resource.deleteMany(stack);
+    }
+
+    stack.primaryKey = id;
+    return this.resource.delete(stack);
   }
 
 });

@@ -372,19 +372,6 @@ describe('NOOT.API - Complete test', function() {
     });
   });
 
-  it('should delete user by filter', function(done) {
-    return supertest(app)
-      .delete('/private/users?' + qs.stringify({ email: 'johndoe@nootjs.com' }))
-      .expect(204, function(err) {
-        if (err) return done(err);
-        return User.findOne({ email: 'johndoe@nootjs.com' }, function(err, user) {
-          if (err) done(err);
-          (user === null).should.eql(true);
-          return done();
-        });
-      });
-  });
-
   it('should put user (update)', function(done) {
     return supertest(app)
       .put('/private/users?' + qs.stringify({ email: 'se@nootjs.com' }))
