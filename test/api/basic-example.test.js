@@ -31,7 +31,7 @@ describe('NOOT.API - Basic example', function() {
         db = Utils.DB.create({ drop: true, name: 'noot-api-basic-example' }, cb);
       },
       server: function(cb) {
-        server = http.createServer(app).listen(8888, cb);
+        server = http.createServer(app).listen(18888, cb);
       }
     }, done);
   });

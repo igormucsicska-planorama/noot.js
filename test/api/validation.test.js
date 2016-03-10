@@ -40,7 +40,7 @@ describe('NOOT.API - Validation', function() {
         db = Utils.DB.create({ drop: true, name: 'noot-api-validation-test' }, cb);
       },
       server: function(cb) {
-        server = http.createServer(app).listen(8688, cb);
+        server = http.createServer(app).listen(18688, cb);
       }
     }, done);
   });

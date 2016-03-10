@@ -158,7 +158,7 @@ describe('NOOT.API - Complete test', function() {
   var him;
 
   before(function(done) {
-    return http.createServer(app).listen(8788, done);
+    return http.createServer(app).listen(18788, done);
   });
 
   it('should create 3 users', function(done) {
