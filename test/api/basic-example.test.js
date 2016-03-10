@@ -226,6 +226,19 @@ describe('NOOT.API - Basic example', function() {
     });
   });
 
+  it('should delete all users', function(done) {
+    return supertest(app)
+      .delete('/my-api/users')
+      .expect(204, function(err) {
+        if (err) return done(err);
+        return db.model('User').count(function(err, count) {
+          if (err) return done(err);
+          count.should.eql(0);
+          return done();
+        });
+      });
+  });
+
   after(function(done) {
     server.close(done);
   });
