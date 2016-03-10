@@ -16,10 +16,10 @@ var Patch = Route.extend({
   path: '/',
   isDetailable: true,
 
-  handler: function(stack, callback) {
+  handler: function(stack) {
     var id = stack.params.id;
     if (id) stack.primaryKey = id;
-    return id ? this.resource.update(stack, callback) : this.resource.updateMany(stack, callback);
+    return id ? this.resource.update(stack) : this.resource.updateMany(stack);
   }
 
 });
