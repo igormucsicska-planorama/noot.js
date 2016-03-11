@@ -17,8 +17,8 @@ var Put = Route.extend({
 
   isDetailable: false,
 
-  handler: function(stack, callback) {
-    return this.resource.upsert(stack, callback);
+  handler: function(stack) {
+    return this.resource.upsert(stack);
   }
 
 });

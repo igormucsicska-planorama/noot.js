@@ -64,7 +64,7 @@ describe('NOOT.API.Stack', function() {
         db = Utils.DB.create({ drop: true, name: 'noot-api-stack' }, cb);
       },
       server: function(cb) {
-        server = http.createServer(app).listen(8888, cb);
+        server = http.createServer(app).listen(18888, cb);
       }
     }, done);
   });

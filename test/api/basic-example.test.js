@@ -31,7 +31,7 @@ describe('NOOT.API - Basic example', function() {
         db = Utils.DB.create({ drop: true, name: 'noot-api-basic-example' }, cb);
       },
       server: function(cb) {
-        server = http.createServer(app).listen(8888, cb);
+        server = http.createServer(app).listen(18888, cb);
       }
     }, done);
   });
@@ -48,12 +48,24 @@ describe('NOOT.API - Basic example', function() {
       }
     }));
 
+    var Garbage = db.model('Garbage', NOOT.Mongoose.Schema.extend({
+      schema: {
+        weight: Number
+      }
+    }));
+
     var UserResource = NOOT.API.MongooseResource.extend({ model: User });
+    var GarbageResource = NOOT.API.MongooseResource.extend({ model: Garbage, allowMassDelete: true });
 
     NOOT.API.create({ name: 'my-api', server: app })
       .registerResource('User', UserResource)
+      .registerResource('Garbage', GarbageResource)
       .launch();
 
+  });
+
+  before(function(done) {
+    db.model('Garbage').insertMany([{ weight: 1 }, { weight: 5 }, { weight: 25 }, { weight: 100 }], done);
   });
 
   it('should have created routes for resource', function() {
@@ -224,6 +236,45 @@ describe('NOOT.API - Basic example', function() {
           });
         });
     });
+  });
+
+  it('should not allow to delete all users', function(done) {
+    return supertest(app)
+      .delete('/my-api/users')
+      .expect(404, function(err) {
+        if (err) return done(err);
+        return db.model('User').count(function(err, count) {
+          if (err) return done(err);
+          count.should.not.eql(0);
+          return done();
+        });
+      });
+  });
+
+  it('should allow to delete all garbage', function(done) {
+    return supertest(app)
+      .delete('/my-api/garbages')
+      .expect(204, function(err) {
+        if (err) return done(err);
+        return db.model('Garbage').count(function(err, count) {
+          if (err) return done(err);
+          count.should.eql(0);
+          return done();
+        });
+      });
+  });
+
+  it('should delete garbage by filter', function(done) {
+    return supertest(app)
+      .delete('/my-api/garbages?' + qs.stringify({ weight: 100 }))
+      .expect(204, function(err) {
+        if (err) return done(err);
+        return db.model('Garbage').findOne({ weight: 100 }, function(err, garbage) {
+          if (err) done(err);
+          (garbage === null).should.eql(true);
+          return done();
+        });
+      });
   });
 
   after(function(done) {

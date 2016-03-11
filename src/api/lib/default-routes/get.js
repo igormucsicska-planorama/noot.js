@@ -16,10 +16,10 @@ var Get = Route.extend({
   path: '/',
   isDetailable: true,
 
-  handler: function(stack, callback) {
+  handler: function(stack) {
     var id = stack.params.id;
     if (id) stack.primaryKey = id;
-    return id ? this.resource.get(stack, callback) : this.resource.getMany(stack, callback);
+    return id ? this.resource.get(stack) : this.resource.getMany(stack);
   }
 
 });
