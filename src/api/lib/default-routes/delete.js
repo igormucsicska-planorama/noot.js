@@ -32,16 +32,16 @@ var Delete = Route.extend({
    * @property handler
    * @type middleware
    */
-  handler: function(stack) {
+  handler: function(stack, callback) {
     var id = stack.params.id;
 
     if (!id) {
-      if (!this.resource.allowMassDelete) return stack.next(new NOOT.Errors.NotFound());
-      return this.resource.deleteMany(stack);
+      if (!this.resource.allowMassDelete) return (callback || stack.next)(new NOOT.Errors.NotFound());
+      return this.resource.deleteMany(stack, callback);
     }
 
     stack.primaryKey = id;
-    return this.resource.delete(stack);
+    return this.resource.delete(stack, callback);
   }
 
 });
