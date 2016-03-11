@@ -36,11 +36,7 @@ var Delete = Route.extend({
     var id = stack.params.id;
 
     if (!id) {
-      if (!this.resource.allowMassDelete) {
-
-        return stack.next(new NOOT.Errors.NotFound());
-      }
-
+      if (!this.resource.allowMassDelete) return stack.next(new NOOT.Errors.NotFound());
       return this.resource.deleteMany(stack);
     }
 
