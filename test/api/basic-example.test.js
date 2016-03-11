@@ -251,7 +251,7 @@ describe('NOOT.API - Basic example', function() {
       });
   });
 
-  it('should allow to delete all garbage', function(done) {
+  it('should allow to delete all garbage if allowMassDelete flag is set', function(done) {
     return supertest(app)
       .delete('/my-api/garbages')
       .expect(204, function(err) {
